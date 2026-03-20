@@ -6,7 +6,7 @@ interface Settings {
   showTabCount: boolean
   theme: 'system' | 'light' | 'dark'
   searchCurrentWindow: boolean
-  maxResults: string
+  alwaysShowTabUrl: boolean
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -14,7 +14,7 @@ const DEFAULT_SETTINGS: Settings = {
   showTabCount: false,
   theme: 'system',
   searchCurrentWindow: false,
-  maxResults: '10',
+  alwaysShowTabUrl: true,
 }
 
 export function App() {
@@ -39,27 +39,31 @@ export function App() {
   return (
     <div className="options-container">
       <header className="options-header">
-        <div className="options-title">
-          <div className="options-icon">📋</div>
-          <h1>Tab Tool Settings</h1>
+        <div className="header-icon">
+          <span>📋</span>
         </div>
-        <p className="options-description">Configure your tab management preferences</p>
+        <div className="header-text">
+          <h1>Tab Tool Settings</h1>
+          <p className="header-subtitle">Configure your tab management preferences</p>
+        </div>
       </header>
 
       {/* Keyboard Shortcuts */}
       <section className="options-section">
-        <h2 className="section-title">⌨️ Keyboard Shortcuts</h2>
+        <div className="section-header">
+          <svg className="section-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2" />
+            <path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10" />
+          </svg>
+          <h2 className="section-title">Keyboard Shortcuts</h2>
+        </div>
 
         <div className="setting-item">
           <div className="setting-info">
             <div className="setting-label">Toggle Search Panel</div>
             <div className="setting-desc">Open/close the global tab search panel</div>
           </div>
-          <div className="shortcuts">
-            <kbd>Ctrl</kbd>
-            <kbd>Shift</kbd>
-            <kbd>Z</kbd>
-          </div>
+          <div className="shortcut-keys">Ctrl   Shift   Z</div>
         </div>
 
         <div className="setting-item">
@@ -67,17 +71,19 @@ export function App() {
             <div className="setting-label">Open Extension Popup</div>
             <div className="setting-desc">Open the extension popup window</div>
           </div>
-          <div className="shortcuts">
-            <kbd>Ctrl</kbd>
-            <kbd>Shift</kbd>
-            <kbd>Y</kbd>
-          </div>
+          <div className="shortcut-keys">Ctrl   Shift   Y</div>
         </div>
       </section>
 
       {/* General Settings */}
       <section className="options-section">
-        <h2 className="section-title">⚙️ General Settings</h2>
+        <div className="section-header">
+          <svg className="section-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <h2 className="section-title">General Settings</h2>
+        </div>
 
         <div className="setting-item">
           <div className="setting-info">
@@ -128,12 +134,18 @@ export function App() {
 
       {/* Search Settings */}
       <section className="options-section">
-        <h2 className="section-title">🔍 Search Settings</h2>
+        <div className="section-header">
+          <svg className="section-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <h2 className="section-title">Search Settings</h2>
+        </div>
 
         <div className="setting-item">
           <div className="setting-info">
             <div className="setting-label">Search Current Window Only</div>
-            <div className="setting-desc">Limit search results to the current browser window</div>
+            <div className="setting-desc">Limit results to tabs from the active window</div>
           </div>
           <label className="toggle">
             <input
@@ -147,19 +159,17 @@ export function App() {
 
         <div className="setting-item">
           <div className="setting-info">
-            <div className="setting-label">Max Results</div>
-            <div className="setting-desc">Maximum number of results to display</div>
+            <div className="setting-label">Always Show Tab URL</div>
+            <div className="setting-desc">Keep URL visible in candidate rows</div>
           </div>
-          <select
-            className="setting-select"
-            value={settings.maxResults}
-            onChange={(e) => updateSetting('maxResults', e.target.value)}
-          >
-            <option value="5">5 results</option>
-            <option value="10">10 results</option>
-            <option value="20">20 results</option>
-            <option value="50">50 results</option>
-          </select>
+          <label className="toggle">
+            <input
+              type="checkbox"
+              checked={settings.alwaysShowTabUrl}
+              onChange={(e) => updateSetting('alwaysShowTabUrl', e.target.checked)}
+            />
+            <span className="toggle-slider" />
+          </label>
         </div>
       </section>
 
