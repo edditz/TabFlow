@@ -1,0 +1,11 @@
+/**
+ * AgentationWrapper 样式
+ * 确保 Agentation 元素具有最高的 z-index 层级
+ */
+
+/* Agentation 工具栏、弹窗、标记 - 最高层级 */
+[data-feedback-toolbar],
+[data-annotation-popup],
+[data-annotation-marker] {
+  z-index: 2147483647 !important;
+}
