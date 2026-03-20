@@ -21,7 +21,7 @@ function init() {
 
 function setupKeyboardListener() {
   keyboardListener = (e: KeyboardEvent) => {
-    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'F') {
+    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'Z') {
       toggle()
     }
   }

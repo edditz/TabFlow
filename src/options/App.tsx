@@ -58,7 +58,7 @@ export function App() {
           <div className="shortcuts">
             <kbd>Ctrl</kbd>
             <kbd>Shift</kbd>
-            <kbd>F</kbd>
+            <kbd>Z</kbd>
           </div>
         </div>
 

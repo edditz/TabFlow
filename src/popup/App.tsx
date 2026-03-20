@@ -25,7 +25,7 @@ export function App() {
         <button className="popup-btn" onClick={handleOpenSearch}>
           <span className="popup-btn-icon">🔍</span>
           <span className="popup-btn-text">Search Tabs</span>
-          <span className="popup-shortcut">Ctrl+Shift+F</span>
+          <span className="popup-shortcut">Ctrl+Shift+Z</span>
         </button>
 
         <button className="popup-btn" onClick={handleOpenOptions}>

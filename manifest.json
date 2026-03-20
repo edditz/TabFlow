@@ -47,8 +47,8 @@
     },
     "toggle-search-panel": {
       "suggested_key": {
-        "default": "Ctrl+Shift+F",
-        "mac": "Command+Shift+F"
+        "default": "Ctrl+Shift+Z",
+        "mac": "Command+Shift+Z"
       },
       "description": "Toggle global search panel"
     }
