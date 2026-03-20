@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import { useTranslation } from '../i18n'
 
 interface Settings {
   enableSearchPanel: boolean
@@ -28,6 +29,7 @@ function getActualTheme(themeSetting: 'system' | 'light' | 'dark'): 'light' | 'd
 }
 
 export function App() {
+  const { t } = useTranslation()
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS)
   const [saved, setSaved] = useState(false)
   const [actualTheme, setActualTheme] = useState<'light' | 'dark'>('light')
@@ -91,8 +93,8 @@ export function App() {
           <span>📋</span>
         </div>
         <div className="header-text">
-          <h1>Tab Tool Settings</h1>
-          <p className="header-subtitle">Configure your tab management preferences</p>
+          <h1>{t.settingsTitle}</h1>
+          <p className="header-subtitle">{t.settingsSubtitle}</p>
         </div>
       </header>
 
@@ -103,21 +105,21 @@ export function App() {
             <rect width="20" height="16" x="2" y="4" rx="2" />
             <path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10" />
           </svg>
-          <h2 className="section-title">Keyboard Shortcuts</h2>
+          <h2 className="section-title">{t.keyboardShortcuts}</h2>
         </div>
 
         <div className="setting-item">
           <div className="setting-info">
-            <div className="setting-label">Toggle Search Panel</div>
-            <div className="setting-desc">Open/close the global tab search panel</div>
+            <div className="setting-label">{t.toggleSearchPanel}</div>
+            <div className="setting-desc">{t.toggleSearchPanelDesc}</div>
           </div>
           <div className="shortcut-keys">Ctrl   Shift   Z</div>
         </div>
 
         <div className="setting-item">
           <div className="setting-info">
-            <div className="setting-label">Open Extension Popup</div>
-            <div className="setting-desc">Open the extension popup window</div>
+            <div className="setting-label">{t.openExtensionPopup}</div>
+            <div className="setting-desc">{t.openExtensionPopupDesc}</div>
           </div>
           <div className="shortcut-keys">Ctrl   Shift   Y</div>
         </div>
@@ -130,13 +132,13 @@ export function App() {
             <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
             <circle cx="12" cy="12" r="3" />
           </svg>
-          <h2 className="section-title">General Settings</h2>
+          <h2 className="section-title">{t.generalSettings}</h2>
         </div>
 
         <div className="setting-item">
           <div className="setting-info">
-            <div className="setting-label">Enable Search Panel</div>
-            <div className="setting-desc">Show the global search panel on any page</div>
+            <div className="setting-label">{t.enableSearchPanel}</div>
+            <div className="setting-desc">{t.enableSearchPanelDesc}</div>
           </div>
           <label className="toggle">
             <input
@@ -150,8 +152,8 @@ export function App() {
 
         <div className="setting-item">
           <div className="setting-info">
-            <div className="setting-label">Show Tab Count Badge</div>
-            <div className="setting-desc">Display the number of open tabs on the extension icon</div>
+            <div className="setting-label">{t.showTabCountBadge}</div>
+            <div className="setting-desc">{t.showTabCountBadgeDesc}</div>
           </div>
           <label className="toggle">
             <input
@@ -165,32 +167,32 @@ export function App() {
 
         <div className="setting-item">
           <div className="setting-info">
-            <div className="setting-label">Theme</div>
-            <div className="setting-desc">Choose the appearance of the search panel</div>
+            <div className="setting-label">{t.theme}</div>
+            <div className="setting-desc">{t.themeDesc}</div>
           </div>
           <select
             className="setting-select"
             value={settings.theme}
             onChange={(e) => updateSetting('theme', e.target.value as Settings['theme'])}
           >
-            <option value="system">System Default</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
+            <option value="system">{t.themeSystem}</option>
+            <option value="light">{t.themeLight}</option>
+            <option value="dark">{t.themeDark}</option>
           </select>
         </div>
 
         <div className="setting-item">
           <div className="setting-info">
-            <div className="setting-label">Language</div>
-            <div className="setting-desc">Choose the display language</div>
+            <div className="setting-label">{t.language}</div>
+            <div className="setting-desc">{t.languageDesc}</div>
           </div>
           <select
             className="setting-select"
             value={settings.language}
             onChange={(e) => updateSetting('language', e.target.value as Settings['language'])}
           >
-            <option value="en">English</option>
-            <option value="zh">中文</option>
+            <option value="en">{t.languageEn}</option>
+            <option value="zh">{t.languageZh}</option>
           </select>
         </div>
       </section>
@@ -202,13 +204,13 @@ export function App() {
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.3-4.3" />
           </svg>
-          <h2 className="section-title">Search Settings</h2>
+          <h2 className="section-title">{t.searchSettings}</h2>
         </div>
 
         <div className="setting-item">
           <div className="setting-info">
-            <div className="setting-label">Search Current Window Only</div>
-            <div className="setting-desc">Limit results to tabs from the active window</div>
+            <div className="setting-label">{t.searchCurrentWindowOnly}</div>
+            <div className="setting-desc">{t.searchCurrentWindowOnlyDesc}</div>
           </div>
           <label className="toggle">
             <input
@@ -222,8 +224,8 @@ export function App() {
 
         <div className="setting-item">
           <div className="setting-info">
-            <div className="setting-label">Always Show Tab URL</div>
-            <div className="setting-desc">Keep URL visible in candidate rows</div>
+            <div className="setting-label">{t.alwaysShowTabUrl}</div>
+            <div className="setting-desc">{t.alwaysShowTabUrlDesc}</div>
           </div>
           <label className="toggle">
             <input
@@ -240,7 +242,7 @@ export function App() {
         <span>Tab Tool v{chrome.runtime.getManifest().version}</span>
       </footer>
 
-      <div className={`save-indicator ${saved ? 'show' : ''}`}>Settings saved</div>
+      <div className={`save-indicator ${saved ? 'show' : ''}`}>{t.settingsSaved}</div>
     </div>
   )
 }

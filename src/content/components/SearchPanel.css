@@ -60,7 +60,7 @@
 /* Modal Container */
 .tt-container {
   position: relative;
-  max-width: 65%;
+  width: 65%;
   max-height: 70vh;
   background: var(--tt-card);
   border-radius: 30px;

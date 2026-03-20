@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import { SearchPanel } from './components/SearchPanel'
 import { createAgentationInstance, type Annotation } from '../shared'
+import type { Language } from '../i18n'
 import './styles.css'
 
 // Dev-only - uses custom VITE_DEV env var instead of built-in DEV
@@ -18,6 +19,7 @@ let agentationInstance: ReturnType<typeof createAgentationInstance> | null = nul
 let isVisible = false
 let keyboardListener: ((e: KeyboardEvent) => void) | null = null
 let currentTheme: 'system' | 'light' | 'dark' = 'system'
+let currentLanguage: Language = 'en'
 
 // Get actual theme based on setting and system preference
 function getActualTheme(): 'light' | 'dark' {
@@ -33,16 +35,21 @@ function init(): void {
   document.body.appendChild(searchContainer)
   searchRoot = createRoot(searchContainer)
 
-  // Load theme setting
-  chrome.storage.sync.get({ theme: 'system' }, (data) => {
+  // Load theme and language settings
+  chrome.storage.sync.get({ theme: 'system', language: 'en' }, (data) => {
     currentTheme = data.theme
+    currentLanguage = data.language
     render()
   })
 
-  // Listen for theme setting changes
+  // Listen for theme and language setting changes
   chrome.storage.onChanged.addListener((changes) => {
     if (changes.theme) {
       currentTheme = changes.theme.newValue
+      render()
+    }
+    if (changes.language) {
+      currentLanguage = changes.language.newValue
       render()
     }
   })
@@ -85,7 +92,7 @@ function render(): void {
   if (!searchRoot) return
 
   if (isVisible) {
-    searchRoot.render(<SearchPanel onClose={hide} theme={getActualTheme()} />)
+    searchRoot.render(<SearchPanel onClose={hide} theme={getActualTheme()} language={currentLanguage} />)
     // Show Agentation when SearchPanel opens
     if (isDev && agentationInstance) {
       agentationInstance.show()

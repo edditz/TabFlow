@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import type { KeyboardEvent } from 'react'
+import { translations, type Language } from '../../i18n'
 import './SearchPanel.css'
 
 interface TabResult {
@@ -12,6 +13,7 @@ interface TabResult {
 interface SearchPanelProps {
   onClose: () => void
   theme: 'light' | 'dark'
+  language: Language
 }
 
 // Extract domain from URL for display
@@ -27,7 +29,9 @@ function extractDomain(url: string): string {
 export function SearchPanel({
   onClose,
   theme,
+  language,
 }: SearchPanelProps) {
+  const t = translations[language]
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<TabResult[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -126,9 +130,9 @@ export function SearchPanel({
       >
         {/* Header */}
         <div className="tt-header">
-          <h2 className="tt-title">Search Tabs</h2>
+          <h2 className="tt-title">{t.searchTabs}</h2>
           <p className="tt-description">
-            Find and jump to any open browser tab.
+            {t.searchTabsDesc}
           </p>
         </div>
 
@@ -152,7 +156,7 @@ export function SearchPanel({
               ref={inputRef}
               type="text"
               className="tt-input"
-              placeholder="Search title, url, or domain..."
+              placeholder={t.searchPlaceholder}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -165,7 +169,7 @@ export function SearchPanel({
             onMouseLeave={() => setSelectedIndex(-1)}
           >
             {filteredResults.length === 0 ? (
-              <div className="tt-empty">No tabs found</div>
+              <div className="tt-empty">{t.noTabsFound}</div>
             ) : (
               filteredResults.map((tab, index) => (
                 <div
@@ -210,7 +214,7 @@ export function SearchPanel({
                       await chrome.runtime.sendMessage({ type: 'CLOSE_TAB', tabId: tab.id })
                       setResults((prev) => prev.filter((t) => t.id !== tab.id))
                     }}
-                    title="Close tab"
+                    title={t.closeTab}
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -233,13 +237,13 @@ export function SearchPanel({
         {/* Footer */}
         <div className="tt-footer">
           <div className="tt-footer-hint">
-            <span>↑↓ Navigate</span>
+            <span>↑↓ {t.navigate}</span>
             <span>•</span>
-            <span>Enter Open</span>
+            <span>Enter {t.open}</span>
           </div>
           <div className="tt-footer-hint">
             <kbd>Esc</kbd>
-            <span>Close</span>
+            <span>{t.close}</span>
           </div>
         </div>
       </div>
