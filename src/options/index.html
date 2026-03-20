@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab Tool - Settings</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9fafb;
+      min-height: 100vh;
+    }
+
+    .options-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .options-header {
+      margin-bottom: 32px;
+    }
+
+    .options-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .options-title-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 22px;
+    }
+
+    .options-description {
+      margin-top: 8px;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .options-section {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+
+    .setting-item + .setting-item {
+      border-top: 1px solid #f3f4f6;
+    }
+
+    .setting-info {
+      flex: 1;
+    }
+
+    .setting-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .setting-description {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .setting-control {
+      margin-left: 16px;
+    }
+
+    /* Toggle Switch */
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #d1d5db;
+      transition: 0.3s;
+      border-radius: 24px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background-color: #3b82f6;
+    }
+
+    .toggle input:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Select */
+    .select-wrapper {
+      position: relative;
+    }
+
+    .setting-select {
+      padding: 8px 32px 8px 12px;
+      font-size: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #ffffff;
+      cursor: pointer;
+      appearance: none;
+      min-width: 150px;
+    }
+
+    .select-wrapper::after {
+      content: "▼";
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      color: #6b7280;
+      pointer-events: none;
+    }
+
+    /* Shortcut Display */
+    .shortcut-display {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .shortcut-key {
+      padding: 4px 8px;
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: monospace;
+      color: #374151;
+    }
+
+    .options-footer {
+      text-align: center;
+      padding: 20px;
+      color: #9ca3af;
+      font-size: 12px;
+    }
+
+    .options-footer a {
+      color: #6b7280;
+      text-decoration: none;
+    }
+
+    .options-footer a:hover {
+      color: #3b82f6;
+    }
+
+    .save-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+
+    .save-indicator.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="options-container">
+    <div class="options-header">
+      <h1 class="options-title">
+        <div class="options-title-icon">📋</div>
+        Tab Tool Settings
+      </h1>
+      <p class="options-description">Configure your tab management preferences</p>
+    </div>
+
+    <!-- Keyboard Shortcuts Section -->
+    <div class="options-section">
+      <h2 class="section-title">⌨️ Keyboard Shortcuts</h2>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Toggle Search Panel</div>
+          <div class="setting-description">Open/close the global tab search panel</div>
+        </div>
+        <div class="setting-control">
+          <div class="shortcut-display">
+            <span class="shortcut-key">Ctrl</span>
+            <span class="shortcut-key">Shift</span>
+            <span class="shortcut-key">F</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Open Extension Popup</div>
+          <div class="setting-description">Open the extension popup window</div>
+        </div>
+        <div class="setting-control">
+          <div class="shortcut-display">
+            <span class="shortcut-key">Ctrl</span>
+            <span class="shortcut-key">Shift</span>
+            <span class="shortcut-key">Y</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- General Settings Section -->
+    <div class="options-section">
+      <h2 class="section-title">⚙️ General Settings</h2>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Enable Search Panel</div>
+          <div class="setting-description">Show the global search panel on any page</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle">
+            <input type="checkbox" id="enableSearchPanel" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Show Tab Count Badge</div>
+          <div class="setting-description">Display the number of open tabs on the extension icon</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle">
+            <input type="checkbox" id="showTabCount">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Theme</div>
+          <div class="setting-description">Choose the appearance of the search panel</div>
+        </div>
+        <div class="setting-control">
+          <div class="select-wrapper">
+            <select class="setting-select" id="theme">
+              <option value="system">System Default</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Settings Section -->
+    <div class="options-section">
+      <h2 class="section-title">🔍 Search Settings</h2>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Search Current Window Only</div>
+          <div class="setting-description">Limit search results to the current browser window</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle">
+            <input type="checkbox" id="searchCurrentWindow">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Max Results</div>
+          <div class="setting-description">Maximum number of results to display</div>
+        </div>
+        <div class="setting-control">
+          <div class="select-wrapper">
+            <select class="setting-select" id="maxResults">
+              <option value="5">5 results</option>
+              <option value="10" selected>10 results</option>
+              <option value="20">20 results</option>
+              <option value="50">50 results</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="options-footer">
+      <p>Tab Tool v1.0.0 | <a href="#">Report Issue</a> | <a href="#">View on GitHub</a></p>
+    </div>
+  </div>
+
+  <div class="save-indicator" id="saveIndicator">Settings saved</div>
+
+  <script type="module" src="./options.ts"></script>
+</body>
+</html>

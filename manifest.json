@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Tool",
+  "version": "1.0.0",
+  "description": "Enhanced tab management for Chrome and Edge",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "src/background/index.ts",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/index.ts"],
+      "css": ["src/content/styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "options_page": "src/options/index.html",
+  "permissions": [
+    "tabs",
+    "storage",
+    "activeTab",
+    "commands"
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "Open Tab Tool search panel"
+    },
+    "toggle-search-panel": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "Command+Shift+F"
+      },
+      "description": "Toggle global search panel"
+    }
+  }
+}
