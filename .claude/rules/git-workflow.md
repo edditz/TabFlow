@@ -1,5 +1,10 @@
 # Git Workflow
 
+## Rules
+
+- **No auto-commit**: Always ask user before committing code
+- **User confirmation required**: Never commit without explicit approval
+
 ## Commit Message Format (Conventional Commits 1.0.0)
 
 ```
