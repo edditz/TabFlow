@@ -26,6 +26,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true // Required for async response
   }
 
+  if (message.type === 'ACTIVATE_TAB') {
+    chrome.tabs.update(message.tabId, { active: true })
+    return false
+  }
+
+  if (message.type === 'CLOSE_TAB') {
+    chrome.tabs.remove(message.tabId, () => {
+      sendResponse({ success: true })
+    })
+    return true
+  }
+
   return false
 })
 

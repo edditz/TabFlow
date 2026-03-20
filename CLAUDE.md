@@ -5,6 +5,7 @@ See @README.md for project overview and @package.json for available npm commands
 ## 文档
 - @docs/ARCHITECTURE.md - 项目架构说明
 - @docs/COMPONENTS.md - 组件和工具的使用指南
+- @docs/THEME.md - 深浅色主题功能实现文档
 
 ## 代码规范
 - 遵循 @.claude/rules/git-workflow.md 中的 Git 工作流规范

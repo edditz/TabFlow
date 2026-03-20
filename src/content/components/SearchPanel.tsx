@@ -11,28 +11,7 @@ interface TabResult {
 
 interface SearchPanelProps {
   onClose: () => void
-  theme?: 'light' | 'dark'
-}
-
-// Hook to detect and respond to system theme changes
-function useSystemTheme(): 'light' | 'dark' {
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window === 'undefined') return 'light'
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light'
-  })
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = (e: MediaQueryListEvent) => {
-      setTheme(e.matches ? 'dark' : 'light')
-    }
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
-
-  return theme
+  theme: 'light' | 'dark'
 }
 
 // Extract domain from URL for display
@@ -47,45 +26,64 @@ function extractDomain(url: string): string {
 
 export function SearchPanel({
   onClose,
-  theme: propTheme,
+  theme,
 }: SearchPanelProps) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<TabResult[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Determine theme - use prop or system preference (reactive to changes)
-  const systemTheme = useSystemTheme()
-  const theme = propTheme ?? systemTheme
-
-  // Mock data for placeholder
+  // Prevent body scroll when panel is open
   useEffect(() => {
-    setResults([
-      {
-        id: 1,
-        title: 'GitHub - Project Repository',
-        url: 'https://github.com/user/project',
-        favIconUrl: '',
-      },
-      {
-        id: 2,
-        title: 'Documentation - Getting Started',
-        url: 'https://docs.example.com/getting-started',
-        favIconUrl: '',
-      },
-      {
-        id: 3,
-        title: 'Dashboard - Analytics Overview',
-        url: 'https://app.example.com/dashboard',
-        favIconUrl: '',
-      },
-    ])
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = originalOverflow
+    }
+  }, [])
+
+  // Fetch real tabs from all windows via background script
+  useEffect(() => {
+    const fetchTabs = async () => {
+      try {
+        const response = await chrome.runtime.sendMessage({ type: 'GET_ALL_TABS' })
+        if (response?.tabs) {
+          const tabResults: TabResult[] = response.tabs.map((tab: chrome.tabs.Tab) => ({
+            id: tab.id!,
+            title: tab.title || 'Untitled',
+            url: tab.url || '',
+            favIconUrl: tab.favIconUrl || '',
+          }))
+          setResults(tabResults)
+        }
+      } catch (error) {
+        setResults([])
+      }
+    }
+
+    fetchTabs()
   }, [])
 
   // Focus input on mount
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
+
+  // Filter results based on query
+  const filteredResults = results.filter((tab) => {
+    if (!query.trim()) return true
+    const lowerQuery = query.toLowerCase()
+    return (
+      tab.title.toLowerCase().includes(lowerQuery) ||
+      tab.url.toLowerCase().includes(lowerQuery) ||
+      extractDomain(tab.url).toLowerCase().includes(lowerQuery)
+    )
+  })
+
+  // Reset selected index when filtered results change
+  useEffect(() => {
+    setSelectedIndex(0)
+  }, [query])
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
@@ -95,25 +93,25 @@ export function SearchPanel({
           break
         case 'ArrowDown':
           e.preventDefault()
-          setSelectedIndex((prev) => (prev + 1) % results.length)
+          setSelectedIndex((prev) => (prev + 1) % filteredResults.length)
           break
         case 'ArrowUp':
           e.preventDefault()
           setSelectedIndex((prev) =>
-            prev - 1 >= 0 ? prev - 1 : results.length - 1
+            prev - 1 >= 0 ? prev - 1 : filteredResults.length - 1
           )
           break
         case 'Enter':
           e.preventDefault()
-          const selected = results[selectedIndex]
+          const selected = filteredResults[selectedIndex]
           if (selected) {
-            chrome.tabs.update(selected.id, { active: true })
+            chrome.runtime.sendMessage({ type: 'ACTIVATE_TAB', tabId: selected.id })
             onClose()
           }
           break
       }
     },
-    [results, selectedIndex, onClose]
+    [filteredResults, selectedIndex, onClose]
   )
 
   return (
@@ -166,16 +164,16 @@ export function SearchPanel({
             className="tt-results"
             onMouseLeave={() => setSelectedIndex(-1)}
           >
-            {results.length === 0 ? (
+            {filteredResults.length === 0 ? (
               <div className="tt-empty">No tabs found</div>
             ) : (
-              results.map((tab, index) => (
+              filteredResults.map((tab, index) => (
                 <div
                   key={tab.id}
                   className={`tt-result-item ${index === selectedIndex ? 'selected' : ''}`}
                   onMouseEnter={() => setSelectedIndex(index)}
                   onClick={() => {
-                    chrome.tabs.update(tab.id, { active: true })
+                    chrome.runtime.sendMessage({ type: 'ACTIVATE_TAB', tabId: tab.id })
                     onClose()
                   }}
                 >
@@ -207,9 +205,9 @@ export function SearchPanel({
                   </div>
                   <button
                     className="tt-result-delete"
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       e.stopPropagation()
-                      chrome.tabs.remove(tab.id)
+                      await chrome.runtime.sendMessage({ type: 'CLOSE_TAB', tabId: tab.id })
                       setResults((prev) => prev.filter((t) => t.id !== tab.id))
                     }}
                     title="Close tab"

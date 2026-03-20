@@ -17,12 +17,42 @@ let agentationInstance: ReturnType<typeof createAgentationInstance> | null = nul
 // State
 let isVisible = false
 let keyboardListener: ((e: KeyboardEvent) => void) | null = null
+let currentTheme: 'system' | 'light' | 'dark' = 'system'
+
+// Get actual theme based on setting and system preference
+function getActualTheme(): 'light' | 'dark' {
+  if (currentTheme === 'system') {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+  return currentTheme
+}
 
 function init(): void {
   searchContainer = document.createElement('div')
   searchContainer.id = 'tab-tool-root'
   document.body.appendChild(searchContainer)
   searchRoot = createRoot(searchContainer)
+
+  // Load theme setting
+  chrome.storage.sync.get({ theme: 'system' }, (data) => {
+    currentTheme = data.theme
+    render()
+  })
+
+  // Listen for theme setting changes
+  chrome.storage.onChanged.addListener((changes) => {
+    if (changes.theme) {
+      currentTheme = changes.theme.newValue
+      render()
+    }
+  })
+
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (currentTheme === 'system') {
+      render()
+    }
+  })
 
   // Initialize Agentation instance (dev only)
   if (isDev) {
@@ -55,7 +85,7 @@ function render(): void {
   if (!searchRoot) return
 
   if (isVisible) {
-    searchRoot.render(<SearchPanel onClose={hide} />)
+    searchRoot.render(<SearchPanel onClose={hide} theme={getActualTheme()} />)
     // Show Agentation when SearchPanel opens
     if (isDev && agentationInstance) {
       agentationInstance.show()

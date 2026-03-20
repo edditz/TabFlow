@@ -5,6 +5,7 @@ interface Settings {
   enableSearchPanel: boolean
   showTabCount: boolean
   theme: 'system' | 'light' | 'dark'
+  language: 'en' | 'zh'
   searchCurrentWindow: boolean
   alwaysShowTabUrl: boolean
 }
@@ -13,23 +14,70 @@ const DEFAULT_SETTINGS: Settings = {
   enableSearchPanel: true,
   showTabCount: false,
   theme: 'system',
+  language: 'en',
   searchCurrentWindow: false,
   alwaysShowTabUrl: true,
+}
+
+// Get actual theme based on setting and system preference
+function getActualTheme(themeSetting: 'system' | 'light' | 'dark'): 'light' | 'dark' {
+  if (themeSetting === 'system') {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+  return themeSetting
 }
 
 export function App() {
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS)
   const [saved, setSaved] = useState(false)
+  const [actualTheme, setActualTheme] = useState<'light' | 'dark'>('light')
 
+  // Apply theme to document
   useEffect(() => {
+    document.documentElement.setAttribute('data-theme', actualTheme)
+  }, [actualTheme])
+
+  // Load settings and setup listeners
+  useEffect(() => {
+    // Load initial settings
     chrome.storage.sync.get(DEFAULT_SETTINGS, (data) => {
-      setSettings(data as Settings)
+      const loadedSettings = data as Settings
+      setSettings(loadedSettings)
+      setActualTheme(getActualTheme(loadedSettings.theme))
     })
+
+    // Listen for settings changes
+    chrome.storage.onChanged.addListener((changes) => {
+      if (changes.theme) {
+        setActualTheme(getActualTheme(changes.theme.newValue))
+      }
+    })
+
+    // Listen for system theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleSystemThemeChange = () => {
+      chrome.storage.sync.get({ theme: 'system' }, (data) => {
+        if (data.theme === 'system') {
+          setActualTheme(getActualTheme('system'))
+        }
+      })
+    }
+    mediaQuery.addEventListener('change', handleSystemThemeChange)
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleSystemThemeChange)
+    }
   }, [])
 
   const updateSetting = <K extends keyof Settings>(key: K, value: Settings[K]) => {
     const newSettings = { ...settings, [key]: value }
     setSettings(newSettings)
+
+    // Update actual theme immediately when theme setting changes
+    if (key === 'theme') {
+      setActualTheme(getActualTheme(value as 'system' | 'light' | 'dark'))
+    }
+
     chrome.storage.sync.set(newSettings, () => {
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
@@ -128,6 +176,21 @@ export function App() {
             <option value="system">System Default</option>
             <option value="light">Light</option>
             <option value="dark">Dark</option>
+          </select>
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <div className="setting-label">Language</div>
+            <div className="setting-desc">Choose the display language</div>
+          </div>
+          <select
+            className="setting-select"
+            value={settings.language}
+            onChange={(e) => updateSetting('language', e.target.value as Settings['language'])}
+          >
+            <option value="en">English</option>
+            <option value="zh">中文</option>
           </select>
         </div>
       </section>
