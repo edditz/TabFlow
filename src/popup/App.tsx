@@ -17,7 +17,9 @@ export function App() {
   return (
     <div className="popup-container">
       <header className="popup-header">
-        <div className="popup-icon">📋</div>
+        <div className="popup-icon">
+          <img src="../../icons/icon48.png" alt="Tab Tool" />
+        </div>
         <h1 className="popup-title">Tab Tool</h1>
       </header>
 

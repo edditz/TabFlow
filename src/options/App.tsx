@@ -100,7 +100,7 @@ export function App() {
     <div className="options-container">
       <header className="options-header">
         <div className="header-icon">
-          <span>📋</span>
+          <img src="../../icons/icon128.png" alt="Tab Tool" />
         </div>
         <div className="header-text">
           <h1>{t.settingsTitle}</h1>
