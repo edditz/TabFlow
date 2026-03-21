@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { useTranslation } from '../i18n'
+import {
+  ShortcutSettings,
+  ShortcutConfig,
+  DEFAULT_SHORTCUTS,
+} from './components/ShortcutSettings'
 
 interface Settings {
   enableSearchPanel: boolean
@@ -9,6 +14,7 @@ interface Settings {
   language: 'en' | 'zh'
   searchCurrentWindow: boolean
   alwaysShowTabUrl: boolean
+  shortcuts: ShortcutConfig[]
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -18,6 +24,7 @@ const DEFAULT_SETTINGS: Settings = {
   language: 'en',
   searchCurrentWindow: false,
   alwaysShowTabUrl: true,
+  shortcuts: DEFAULT_SHORTCUTS,
 }
 
 // Get actual theme based on setting and system preference
@@ -108,21 +115,20 @@ export function App() {
           <h2 className="section-title">{t.keyboardShortcuts}</h2>
         </div>
 
-        <div className="setting-item">
-          <div className="setting-info">
-            <div className="setting-label">{t.toggleSearchPanel}</div>
-            <div className="setting-desc">{t.toggleSearchPanelDesc}</div>
-          </div>
-          <div className="shortcut-keys">Ctrl   Shift   Z</div>
-        </div>
-
-        <div className="setting-item">
-          <div className="setting-info">
-            <div className="setting-label">{t.openExtensionPopup}</div>
-            <div className="setting-desc">{t.openExtensionPopupDesc}</div>
-          </div>
-          <div className="shortcut-keys">Ctrl   Shift   Y</div>
-        </div>
+        <ShortcutSettings
+          shortcuts={settings.shortcuts.length === 2 ? settings.shortcuts : DEFAULT_SHORTCUTS}
+          onChange={(shortcuts) => updateSetting('shortcuts', shortcuts)}
+          labels={{
+            toggleSearchPanel: t.toggleSearchPanel,
+            toggleSearchPanelDesc: t.toggleSearchPanelDesc,
+            openExtensionPopup: t.openExtensionPopup,
+            openExtensionPopupDesc: t.openExtensionPopupDesc,
+            clickToRecord: t.clickToRecord,
+            recording: t.recording,
+            resetToDefault: t.resetToDefault,
+            shortcutConflict: t.shortcutConflict,
+          }}
+        />
       </section>
 
       {/* General Settings */}

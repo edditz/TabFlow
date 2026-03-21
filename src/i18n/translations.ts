@@ -11,6 +11,10 @@ export interface TranslationKeys {
   toggleSearchPanelDesc: string
   openExtensionPopup: string
   openExtensionPopupDesc: string
+  clickToRecord: string
+  recording: string
+  resetToDefault: string
+  shortcutConflict: string
 
   // General Settings Section
   generalSettings: string
@@ -61,6 +65,10 @@ export const translations: Record<Language, TranslationKeys> = {
     toggleSearchPanelDesc: 'Open/close the global tab search panel',
     openExtensionPopup: 'Open Extension Popup',
     openExtensionPopupDesc: 'Open the extension popup window',
+    clickToRecord: 'Click to record...',
+    recording: 'Recording...',
+    resetToDefault: 'Reset to Default',
+    shortcutConflict: 'This shortcut conflicts with another',
 
     // General Settings Section
     generalSettings: 'General Settings',
@@ -109,6 +117,10 @@ export const translations: Record<Language, TranslationKeys> = {
     toggleSearchPanelDesc: '打开/关闭全局标签页搜索面板',
     openExtensionPopup: '打开扩展弹窗',
     openExtensionPopupDesc: '打开扩展弹出窗口',
+    clickToRecord: '点击录入...',
+    recording: '录入中...',
+    resetToDefault: '恢复默认',
+    shortcutConflict: '快捷键冲突',
 
     // General Settings Section
     generalSettings: '常规设置',
