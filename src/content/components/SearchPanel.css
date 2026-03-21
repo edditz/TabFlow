@@ -100,14 +100,24 @@
 /* Header Section */
 .tt-header {
   padding: 22px 24px 14px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
   text-align: left;
   flex-shrink: 0;
   /* Entry animation - appears first */
   animation: tt-item-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
   opacity: 0;
+}
+
+.tt-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.tt-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .tt-title {
@@ -125,6 +135,28 @@
   letter-spacing: 0.05em;
   line-height: 1.45;
   margin: 0;
+}
+
+.tt-header-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.tt-stats-item {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--tt-muted-foreground);
+  background: var(--tt-accent);
+  padding: 6px 10px;
+  border-radius: var(--tt-radius-xs);
+  white-space: nowrap;
+}
+
+.tt-stats-divider {
+  margin: 0 6px;
+  opacity: 0.5;
 }
 
 /* Search Content */

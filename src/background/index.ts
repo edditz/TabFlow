@@ -29,6 +29,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true // Required for async response
   }
 
+  if (message.type === 'GET_TAB_STATS') {
+    chrome.tabs.query({}, (allTabs) => {
+      chrome.windows.getAll((windows) => {
+        chrome.tabs.query({ currentWindow: true }, (currentWindowTabs) => {
+          sendResponse({
+            totalTabs: allTabs.length,
+            totalWindows: windows.length,
+            currentWindowTabs: currentWindowTabs.length,
+          })
+        })
+      })
+    })
+    return true // Required for async response
+  }
+
   if (message.type === 'ACTIVATE_TAB') {
     // Get tab info to find its window, then focus both window and tab
     chrome.tabs.get(message.tabId, (tab) => {

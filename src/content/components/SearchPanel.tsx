@@ -44,6 +44,7 @@ export function SearchPanel({
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [isKeyboardNav, setIsKeyboardNav] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
+  const [stats, setStats] = useState<{ totalTabs: number; totalWindows: number; currentWindowTabs: number } | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const selectedItemRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -91,6 +92,21 @@ export function SearchPanel({
 
     fetchTabs()
   }, [searchCurrentWindow])
+
+  // Fetch tab statistics
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await chrome.runtime.sendMessage({ type: 'GET_TAB_STATS' })
+        if (response) {
+          setStats(response)
+        }
+      } catch (error) {
+        // Ignore errors
+      }
+    }
+    fetchStats()
+  }, [])
 
   // Focus input on mount
   useEffect(() => {
@@ -186,10 +202,34 @@ export function SearchPanel({
       >
         {/* Header */}
         <div className="tt-header">
-          <h2 className="tt-title">{t.searchTabs}</h2>
-          <p className="tt-description">
-            {t.searchTabsDesc}
-          </p>
+          <div className="tt-header-content">
+            <div className="tt-header-text">
+              <h2 className="tt-title">{t.searchTabs}</h2>
+              <p className="tt-description">
+                {t.searchTabsDesc}
+              </p>
+            </div>
+            {stats && (
+              <div className="tt-header-stats">
+                {searchCurrentWindow ? (
+                  <span className="tt-stats-item">
+                    {stats.currentWindowTabs} {t.tabs}
+                    <span className="tt-stats-divider">•</span>
+                    {t.currentWindowTabs}
+                  </span>
+                ) : (
+                  <>
+                    <span className="tt-stats-item">
+                      {stats.totalTabs} {t.tabs}
+                    </span>
+                    <span className="tt-stats-item">
+                      {stats.totalWindows} {t.windows}
+                    </span>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Search Content */}

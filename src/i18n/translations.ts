@@ -56,6 +56,9 @@ export interface TranslationKeys {
   close: string
   searchPanelDisabled: string
   searchPanelDisabledHint: string
+  tabs: string
+  windows: string
+  currentWindowTabs: string
 }
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -115,6 +118,9 @@ export const translations: Record<Language, TranslationKeys> = {
     close: 'Close',
     searchPanelDisabled: 'Search Panel is Disabled',
     searchPanelDisabledHint: 'Enable it in extension settings',
+    tabs: 'tabs',
+    windows: 'windows',
+    currentWindowTabs: 'current window',
   },
   zh: {
     // Header
@@ -172,5 +178,8 @@ export const translations: Record<Language, TranslationKeys> = {
     close: '关闭',
     searchPanelDisabled: '搜索面板已禁用',
     searchPanelDisabledHint: '请在扩展设置中启用',
+    tabs: '个标签页',
+    windows: '个窗口',
+    currentWindowTabs: '当前窗口',
   },
 }
