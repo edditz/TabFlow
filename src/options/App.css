@@ -162,52 +162,48 @@ body {
   white-space: nowrap;
 }
 
-/* Toggle Switch */
-.toggle {
+/* Switch Component (matches Pencil design) */
+.switch {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   width: 40px;
-  height: 24px;
-  flex-shrink: 0;
-}
-
-.toggle input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.toggle-slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  height: 20px;
+  padding: 4px;
+  border: none;
+  border-radius: 999px;
   background-color: var(--input);
-  transition: 0.3s;
-  border-radius: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.3s;
 }
 
-.toggle-slider::before {
-  position: absolute;
-  content: '';
+.switch:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(87, 73, 244, 0.2);
+}
+
+.switch:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.switch-dot {
+  width: 12px;
   height: 12px;
-  width: 20px;
-  left: 4px;
-  bottom: 6px;
+  border-radius: 999px;
   background-color: var(--primary-foreground);
-  transition: 0.3s;
-  border-radius: 6px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  transform: translateX(0);
 }
 
-.toggle input:checked + .toggle-slider {
+.switch[aria-checked="true"] {
   background-color: var(--primary);
 }
 
-.toggle input:checked + .toggle-slider::before {
-  transform: translateX(12px);
+.switch[aria-checked="true"] .switch-dot {
+  transform: translateX(20px);
 }
 
 /* Select */

@@ -6,6 +6,7 @@ import {
   ShortcutConfig,
   DEFAULT_SHORTCUTS,
 } from './components/ShortcutSettings'
+import { Switch } from './components/Switch'
 
 interface Settings {
   enableSearchPanel: boolean
@@ -146,14 +147,10 @@ export function App() {
             <div className="setting-label">{t.enableSearchPanel}</div>
             <div className="setting-desc">{t.enableSearchPanelDesc}</div>
           </div>
-          <label className="toggle">
-            <input
-              type="checkbox"
-              checked={settings.enableSearchPanel}
-              onChange={(e) => updateSetting('enableSearchPanel', e.target.checked)}
-            />
-            <span className="toggle-slider" />
-          </label>
+          <Switch
+            checked={settings.enableSearchPanel}
+            onChange={(checked) => updateSetting('enableSearchPanel', checked)}
+          />
         </div>
 
         <div className="setting-item">
@@ -161,14 +158,10 @@ export function App() {
             <div className="setting-label">{t.showTabCountBadge}</div>
             <div className="setting-desc">{t.showTabCountBadgeDesc}</div>
           </div>
-          <label className="toggle">
-            <input
-              type="checkbox"
-              checked={settings.showTabCount}
-              onChange={(e) => updateSetting('showTabCount', e.target.checked)}
-            />
-            <span className="toggle-slider" />
-          </label>
+          <Switch
+            checked={settings.showTabCount}
+            onChange={(checked) => updateSetting('showTabCount', checked)}
+          />
         </div>
 
         <div className="setting-item">
@@ -218,14 +211,10 @@ export function App() {
             <div className="setting-label">{t.searchCurrentWindowOnly}</div>
             <div className="setting-desc">{t.searchCurrentWindowOnlyDesc}</div>
           </div>
-          <label className="toggle">
-            <input
-              type="checkbox"
-              checked={settings.searchCurrentWindow}
-              onChange={(e) => updateSetting('searchCurrentWindow', e.target.checked)}
-            />
-            <span className="toggle-slider" />
-          </label>
+          <Switch
+            checked={settings.searchCurrentWindow}
+            onChange={(checked) => updateSetting('searchCurrentWindow', checked)}
+          />
         </div>
 
         <div className="setting-item">
@@ -233,14 +222,10 @@ export function App() {
             <div className="setting-label">{t.alwaysShowTabUrl}</div>
             <div className="setting-desc">{t.alwaysShowTabUrlDesc}</div>
           </div>
-          <label className="toggle">
-            <input
-              type="checkbox"
-              checked={settings.alwaysShowTabUrl}
-              onChange={(e) => updateSetting('alwaysShowTabUrl', e.target.checked)}
-            />
-            <span className="toggle-slider" />
-          </label>
+          <Switch
+            checked={settings.alwaysShowTabUrl}
+            onChange={(checked) => updateSetting('alwaysShowTabUrl', checked)}
+          />
         </div>
       </section>
 
