@@ -11,6 +11,7 @@
   --tt-accent-foreground: #2a2933;
   --tt-radius-xs: 6px;
   --tt-radius-m: 12px;
+  --tt-radius-pill: 999px;
   --tt-shadow-modal: 0 12px 28px -10px rgba(42, 41, 51, 0.15);
   --tt-shadow-input: 0 6px 16px -8px rgba(87, 73, 244, 0.13),
     0 0 0 1px rgba(87, 73, 244, 0.2);
@@ -113,12 +114,12 @@
 .tt-input-wrapper {
   display: flex;
   align-items: center;
-  padding: 12px 18px;
+  padding: 18px 24px;
   margin: 0 24px;
-  background: var(--tt-background);
-  border: 2px solid var(--tt-border);
-  border-radius: var(--tt-radius-xs);
-  gap: 12px;
+  background: var(--tt-accent);
+  border: 1px solid var(--tt-border);
+  border-radius: var(--tt-radius-pill);
+  gap: 8px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
