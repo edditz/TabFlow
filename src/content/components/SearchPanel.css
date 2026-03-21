@@ -1,5 +1,6 @@
 /* CSS Variables - Light Theme (default) */
-:root {
+/* Using :host for Shadow DOM compatibility */
+:host {
   --tt-background: #ffffff;
   --tt-foreground: #2a2933;
   --tt-muted-foreground: #616167;
@@ -22,7 +23,7 @@
 }
 
 /* Dark Theme */
-[data-theme='dark'] {
+:host([data-theme='dark']) {
   --tt-background: #131124;
   --tt-foreground: #e8e8ea;
   --tt-muted-foreground: #888799;

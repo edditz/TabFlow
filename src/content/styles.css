@@ -1,9 +1,4 @@
-#tab-tool-root {
-  position: fixed;
-  z-index: 2147483646;
-}
-
-/* Toast notification */
+/* Toast notification - styles injected into Shadow DOM */
 .tt-toast {
   position: fixed;
   bottom: 24px;

@@ -5,7 +5,10 @@ import { translations, type Language } from '../i18n'
 import type { ShortcutConfig } from '../options/components/ShortcutSettings'
 import type { ShortcutKey } from '../options/components/ShortcutRecorder'
 import type { UrlDisplayStyle } from '../options/App'
-import './styles.css'
+
+// Import CSS as raw string for Shadow DOM injection
+import cssText from './components/SearchPanel.css?inline'
+import toastCssText from './styles.css?inline'
 
 // Dev-only - uses custom VITE_DEV env var instead of built-in DEV
 // This ensures Agentation is bundled in dev mode but tree-shaken in production
@@ -19,7 +22,9 @@ const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
 
 // DOM containers and React roots
 let searchRoot: ReturnType<typeof createRoot> | null = null
-let searchContainer: HTMLDivElement | null = null
+let shadowHost: HTMLDivElement | null = null
+let shadowRoot: ShadowRoot | null = null
+let appContainer: HTMLDivElement | null = null
 let closePanelCallback: (() => void) | null = null
 
 // Agentation instance
@@ -57,10 +62,25 @@ function matchesShortcut(e: KeyboardEvent, shortcut: ShortcutKey | null): boolea
 }
 
 function init(): void {
-  searchContainer = document.createElement('div')
-  searchContainer.id = 'tab-tool-root'
-  document.body.appendChild(searchContainer)
-  searchRoot = createRoot(searchContainer)
+  // Create shadow DOM host
+  shadowHost = document.createElement('div')
+  shadowHost.id = 'tab-tool-root'
+  document.body.appendChild(shadowHost)
+
+  // Create Shadow DOM for style isolation
+  shadowRoot = shadowHost.attachShadow({ mode: 'open' })
+
+  // Inject styles into Shadow DOM
+  const styleElement = document.createElement('style')
+  styleElement.textContent = cssText + '\n' + toastCssText
+  shadowRoot.appendChild(styleElement)
+
+  // Create container for React app inside Shadow DOM
+  appContainer = document.createElement('div')
+  appContainer.id = 'tab-tool-app'
+  shadowRoot.appendChild(appContainer)
+
+  searchRoot = createRoot(appContainer)
 
   // Load theme, language and shortcuts settings
   chrome.storage.sync.get(
@@ -74,6 +94,7 @@ function init(): void {
       if (data.shortcuts && data.shortcuts.length > 0) {
         currentShortcut = data.shortcuts[0].shortcut
       }
+      updateHostTheme()
       render()
     }
   )
@@ -89,6 +110,7 @@ function init(): void {
     }
     if (changes.theme) {
       currentTheme = changes.theme.newValue
+      updateHostTheme()
       render()
     }
     if (changes.language) {
@@ -114,6 +136,7 @@ function init(): void {
   // Listen for system theme changes
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
     if (currentTheme === 'system') {
+      updateHostTheme()
       render()
     }
   })
@@ -128,6 +151,13 @@ function init(): void {
         console.log('Agentation annotation:', annotation)
       }
     })
+  }
+}
+
+// Update theme attribute on shadow host for CSS variable switching
+function updateHostTheme(): void {
+  if (shadowHost) {
+    shadowHost.setAttribute('data-theme', getActualTheme())
   }
 }
 
@@ -195,8 +225,10 @@ function hide(): void {
 // Show toast notification when search panel is disabled
 let toastTimeout: ReturnType<typeof setTimeout> | null = null
 function showDisabledToast(): void {
+  if (!shadowRoot) return
+
   // Remove existing toast if any
-  const existingToast = document.querySelector('.tt-toast')
+  const existingToast = shadowRoot.querySelector('.tt-toast')
   if (existingToast) {
     existingToast.remove()
   }
@@ -212,7 +244,7 @@ function showDisabledToast(): void {
     <div class="tt-toast-title">${t.searchPanelDisabled}</div>
     <div class="tt-toast-hint">${t.searchPanelDisabledHint}</div>
   `
-  document.body.appendChild(toast)
+  shadowRoot.appendChild(toast)
 
   toastTimeout = setTimeout(() => {
     toast.classList.add('hiding')
