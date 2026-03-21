@@ -24,7 +24,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       ? { currentWindow: true }
       : {}
     chrome.tabs.query(queryOptions, (tabs) => {
-      sendResponse({ tabs })
+      chrome.windows.getCurrent((currentWindow) => {
+        sendResponse({ tabs, currentWindowId: currentWindow?.id })
+      })
     })
     return true // Required for async response
   }

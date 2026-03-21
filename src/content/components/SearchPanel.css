@@ -20,6 +20,7 @@
   --tt-backdrop-blur: 4px;
   --tt-item-selected-bg: #eef0ff;
   --tt-item-hover-bg: #f8f8fa;
+  --tt-badge-bg: rgba(87, 73, 244, 0.1);
 }
 
 /* Dark Theme */
@@ -37,6 +38,7 @@
   --tt-backdrop-bg: rgba(0, 0, 0, 0.4);
   --tt-item-selected-bg: #1a182e;
   --tt-item-hover-bg: #1a182e;
+  --tt-badge-bg: rgba(87, 73, 244, 0.25);
 }
 
 /* Overlay / Backdrop */
@@ -317,6 +319,18 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin-top: 2px;
+}
+
+.tt-result-badge {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--tt-primary);
+  background: var(--tt-badge-bg);
+  padding: 3px 8px;
+  border-radius: var(--tt-radius-pill);
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
 }
 
 .tt-result-delete {

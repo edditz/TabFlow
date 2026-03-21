@@ -59,6 +59,7 @@ export interface TranslationKeys {
   tabs: string
   windows: string
   currentWindowTabs: string
+  otherWindow: string
 }
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -121,6 +122,7 @@ export const translations: Record<Language, TranslationKeys> = {
     tabs: 'tabs',
     windows: 'windows',
     currentWindowTabs: 'current window',
+    otherWindow: 'Other window',
   },
   zh: {
     // Header
@@ -181,5 +183,6 @@ export const translations: Record<Language, TranslationKeys> = {
     tabs: '个标签页',
     windows: '个窗口',
     currentWindowTabs: '当前窗口',
+    otherWindow: '其他窗口',
   },
 }

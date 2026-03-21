@@ -9,6 +9,7 @@ interface TabResult {
   title: string
   url: string
   favIconUrl?: string
+  windowId: number
 }
 
 interface SearchPanelProps {
@@ -45,6 +46,7 @@ export function SearchPanel({
   const [isKeyboardNav, setIsKeyboardNav] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
   const [stats, setStats] = useState<{ totalTabs: number; totalWindows: number; currentWindowTabs: number } | null>(null)
+  const [currentWindowId, setCurrentWindowId] = useState<number | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const selectedItemRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -77,11 +79,15 @@ export function SearchPanel({
           currentWindow: searchCurrentWindow,
         })
         if (response?.tabs) {
+          if (response.currentWindowId) {
+            setCurrentWindowId(response.currentWindowId)
+          }
           const tabResults: TabResult[] = response.tabs.map((tab: chrome.tabs.Tab) => ({
             id: tab.id!,
             title: tab.title || 'Untitled',
             url: tab.url || '',
             favIconUrl: tab.favIconUrl || '',
+            windowId: tab.windowId!,
           }))
           setResults(tabResults)
         }
@@ -313,6 +319,9 @@ export function SearchPanel({
                       </div>
                     )}
                   </div>
+                  {!searchCurrentWindow && currentWindowId !== null && tab.windowId !== currentWindowId && (
+                    <span className="tt-result-badge">{t.otherWindow}</span>
+                  )}
                   <button
                     className="tt-result-delete"
                     onClick={async (e) => {
