@@ -141,9 +141,16 @@ function init(): void {
     }
   })
 
-  // Close panel when switching to another tab
+  // Close panel when switching to another tab or window
   document.addEventListener('visibilitychange', () => {
     if (document.hidden && isVisible) {
+      hide()
+    }
+  })
+
+  // Close panel when window loses focus
+  window.addEventListener('blur', () => {
+    if (isVisible) {
       hide()
     }
   })
