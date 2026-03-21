@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import { SearchPanel } from './components/SearchPanel'
 import { createAgentationInstance, type Annotation } from '../shared'
-import type { Language } from '../i18n'
+import { translations, type Language } from '../i18n'
 import type { ShortcutConfig } from '../options/components/ShortcutSettings'
 import type { ShortcutKey } from '../options/components/ShortcutRecorder'
 import type { UrlDisplayStyle } from '../options/App'
@@ -27,6 +27,7 @@ let agentationInstance: ReturnType<typeof createAgentationInstance> | null = nul
 // State
 let isVisible = false
 let keyboardListener: ((e: KeyboardEvent) => void) | null = null
+let currentEnableSearchPanel: boolean = true
 let currentTheme: 'system' | 'light' | 'dark' = 'system'
 let currentLanguage: Language = 'en'
 let currentUrlDisplayStyle: UrlDisplayStyle = 'domain'
@@ -62,8 +63,9 @@ function init(): void {
 
   // Load theme, language and shortcuts settings
   chrome.storage.sync.get(
-    { theme: 'system', language: 'en', urlDisplayStyle: 'domain', searchCurrentWindow: false, shortcuts: DEFAULT_SHORTCUTS },
+    { theme: 'system', language: 'en', urlDisplayStyle: 'domain', searchCurrentWindow: false, enableSearchPanel: true, shortcuts: DEFAULT_SHORTCUTS },
     (data) => {
+      currentEnableSearchPanel = data.enableSearchPanel
       currentTheme = data.theme
       currentLanguage = data.language
       currentUrlDisplayStyle = data.urlDisplayStyle
@@ -77,6 +79,13 @@ function init(): void {
 
   // Listen for settings changes
   chrome.storage.onChanged.addListener((changes) => {
+    if (changes.enableSearchPanel) {
+      currentEnableSearchPanel = changes.enableSearchPanel.newValue
+      // Hide panel if disabled while visible
+      if (!currentEnableSearchPanel && isVisible) {
+        hide()
+      }
+    }
     if (changes.theme) {
       currentTheme = changes.theme.newValue
       render()
@@ -125,6 +134,10 @@ function setupKeyboardListener(): void {
   keyboardListener = (e: KeyboardEvent) => {
     if (matchesShortcut(e, currentShortcut)) {
       e.preventDefault()
+      if (!currentEnableSearchPanel) {
+        showDisabledToast()
+        return
+      }
       toggle()
     }
   }
@@ -167,6 +180,34 @@ function hide(): void {
   render()
 }
 
+// Show toast notification when search panel is disabled
+let toastTimeout: ReturnType<typeof setTimeout> | null = null
+function showDisabledToast(): void {
+  // Remove existing toast if any
+  const existingToast = document.querySelector('.tt-toast')
+  if (existingToast) {
+    existingToast.remove()
+  }
+  if (toastTimeout) {
+    clearTimeout(toastTimeout)
+  }
+
+  const t = translations[currentLanguage]
+  const toast = document.createElement('div')
+  toast.className = 'tt-toast'
+  toast.setAttribute('data-theme', getActualTheme())
+  toast.innerHTML = `
+    <div class="tt-toast-title">${t.searchPanelDisabled}</div>
+    <div class="tt-toast-hint">${t.searchPanelDisabledHint}</div>
+  `
+  document.body.appendChild(toast)
+
+  toastTimeout = setTimeout(() => {
+    toast.classList.add('hiding')
+    setTimeout(() => toast.remove(), 300)
+  }, 3000)
+}
+
 // Initialize
 init()
 setupKeyboardListener()
@@ -175,7 +216,11 @@ render()
 // Listen for messages from background script
 chrome.runtime.onMessage.addListener((message) => {
   if (message.type === 'TOGGLE_SEARCH_PANEL') {
-    toggle()
+    if (currentEnableSearchPanel) {
+      toggle()
+    } else {
+      showDisabledToast()
+    }
   }
 })
 
