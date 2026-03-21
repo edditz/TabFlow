@@ -56,6 +56,17 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto,
     sans-serif;
   color: var(--tt-foreground);
+  /* Entry animation */
+  animation: tt-overlay-enter 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes tt-overlay-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Modal Container */
@@ -70,6 +81,19 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  /* Entry animation */
+  animation: tt-container-enter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes tt-container-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Header Section */
@@ -80,6 +104,9 @@
   gap: 8px;
   text-align: left;
   flex-shrink: 0;
+  /* Entry animation - appears first */
+  animation: tt-item-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+  opacity: 0;
 }
 
 .tt-title {
@@ -121,6 +148,9 @@
   border-radius: var(--tt-radius-pill);
   gap: 8px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  /* Entry animation - appears second */
+  animation: tt-item-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+  opacity: 0;
 }
 
 .tt-input-wrapper:focus-within {
@@ -175,6 +205,9 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  /* Entry animation - appears third */
+  animation: tt-item-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  opacity: 0;
 }
 
 .tt-result-item {
@@ -289,6 +322,50 @@
   letter-spacing: 0.08em;
   color: var(--tt-muted-foreground);
   flex-shrink: 0;
+  /* Entry animation - appears last */
+  animation: tt-item-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+  opacity: 0;
+}
+
+/* Item entry animation keyframes */
+@keyframes tt-item-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Exit animations */
+.tt-overlay.tt-closing {
+  animation: tt-overlay-exit 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes tt-overlay-exit {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.tt-container.tt-closing {
+  animation: tt-container-exit 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+@keyframes tt-container-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.98);
+  }
 }
 
 .tt-footer-hint {

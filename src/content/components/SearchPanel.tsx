@@ -12,7 +12,8 @@ interface TabResult {
 }
 
 interface SearchPanelProps {
-  onClose: () => void
+  onCloseComplete: () => void
+  registerCloseCallback: (callback: () => void) => void
   theme: 'light' | 'dark'
   language: Language
   urlDisplayStyle: UrlDisplayStyle
@@ -30,7 +31,8 @@ function extractDomain(url: string): string {
 }
 
 export function SearchPanel({
-  onClose,
+  onCloseComplete,
+  registerCloseCallback,
   theme,
   language,
   urlDisplayStyle,
@@ -41,8 +43,20 @@ export function SearchPanel({
   const [results, setResults] = useState<TabResult[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [isKeyboardNav, setIsKeyboardNav] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const selectedItemRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Handle close with exit animation
+  const handleClose = useCallback(() => {
+    setIsClosing(true)
+  }, [])
+
+  // Register close callback for external triggers (e.g., keyboard shortcut)
+  useEffect(() => {
+    registerCloseCallback(handleClose)
+  }, [registerCloseCallback, handleClose])
 
   // Prevent body scroll when panel is open
   useEffect(() => {
@@ -83,6 +97,21 @@ export function SearchPanel({
     inputRef.current?.focus()
   }, [])
 
+  // Handle exit animation completion
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const handleAnimationEnd = (e: AnimationEvent) => {
+      if (isClosing && e.animationName === 'tt-container-exit') {
+        onCloseComplete()
+      }
+    }
+
+    container.addEventListener('animationend', handleAnimationEnd)
+    return () => container.removeEventListener('animationend', handleAnimationEnd)
+  }, [isClosing, onCloseComplete])
+
   // Filter results based on query
   const filteredResults = results.filter((tab) => {
     if (!query.trim()) return true
@@ -113,7 +142,7 @@ export function SearchPanel({
     (e: KeyboardEvent<HTMLInputElement>) => {
       switch (e.key) {
         case 'Escape':
-          onClose()
+          handleClose()
           break
         case 'ArrowDown':
           e.preventDefault()
@@ -136,22 +165,23 @@ export function SearchPanel({
           const selected = filteredResults[selectedIndex]
           if (selected) {
             chrome.runtime.sendMessage({ type: 'ACTIVATE_TAB', tabId: selected.id })
-            onClose()
+            handleClose()
           }
           break
       }
     },
-    [filteredResults, selectedIndex, onClose]
+    [filteredResults, selectedIndex, handleClose]
   )
 
   return (
     <div
-      className="tt-overlay"
-      onClick={onClose}
+      className={`tt-overlay ${isClosing ? 'tt-closing' : ''}`}
+      onClick={handleClose}
       data-theme={theme}
     >
       <div
-        className="tt-container"
+        ref={containerRef}
+        className={`tt-container ${isClosing ? 'tt-closing' : ''}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -210,7 +240,7 @@ export function SearchPanel({
                   }}
                   onClick={() => {
                     chrome.runtime.sendMessage({ type: 'ACTIVATE_TAB', tabId: tab.id })
-                    onClose()
+                    handleClose()
                   }}
                 >
                   <div className="tt-result-icon">

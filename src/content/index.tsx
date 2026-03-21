@@ -20,6 +20,7 @@ const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
 // DOM containers and React roots
 let searchRoot: ReturnType<typeof createRoot> | null = null
 let searchContainer: HTMLDivElement | null = null
+let closePanelCallback: (() => void) | null = null
 
 // Agentation instance
 let agentationInstance: ReturnType<typeof createAgentationInstance> | null = null
@@ -145,8 +146,15 @@ function setupKeyboardListener(): void {
 }
 
 function toggle(): void {
-  isVisible = !isVisible
-  render()
+  if (isVisible) {
+    // Trigger close animation instead of hiding immediately
+    if (closePanelCallback) {
+      closePanelCallback()
+    }
+  } else {
+    isVisible = true
+    render()
+  }
 }
 
 function render(): void {
@@ -155,7 +163,10 @@ function render(): void {
   if (isVisible) {
     searchRoot.render(
       <SearchPanel
-        onClose={hide}
+        onCloseComplete={hide}
+        registerCloseCallback={(callback) => {
+          closePanelCallback = callback
+        }}
         theme={getActualTheme()}
         language={currentLanguage}
         urlDisplayStyle={currentUrlDisplayStyle}
@@ -168,6 +179,7 @@ function render(): void {
     }
   } else {
     searchRoot.render(null)
+    closePanelCallback = null
     // Hide Agentation when SearchPanel closes
     if (isDev && agentationInstance) {
       agentationInstance.hide()
