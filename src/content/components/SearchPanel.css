@@ -194,6 +194,16 @@
   border-color: var(--tt-border);
 }
 
+/* Disable hover effect during keyboard navigation */
+.tt-results.keyboard-nav .tt-result-item:hover {
+  background: transparent;
+  border-color: transparent;
+}
+
+.tt-results.keyboard-nav .tt-result-item:hover .tt-result-delete {
+  opacity: 0;
+}
+
 .tt-result-item.selected {
   background: var(--tt-item-selected-bg);
   border-color: var(--tt-primary);

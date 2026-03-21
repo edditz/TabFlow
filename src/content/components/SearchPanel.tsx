@@ -35,7 +35,9 @@ export function SearchPanel({
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<TabResult[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [isKeyboardNav, setIsKeyboardNav] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const selectedItemRef = useRef<HTMLDivElement>(null)
 
   // Prevent body scroll when panel is open
   useEffect(() => {
@@ -89,6 +91,16 @@ export function SearchPanel({
     setSelectedIndex(0)
   }, [query])
 
+  // Auto-scroll to keep selected item visible (keyboard navigation only)
+  useEffect(() => {
+    if (selectedItemRef.current && isKeyboardNav) {
+      selectedItemRef.current.scrollIntoView({
+        block: 'center',
+        behavior: 'smooth',
+      })
+    }
+  }, [selectedIndex, isKeyboardNav])
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
       switch (e.key) {
@@ -97,10 +109,12 @@ export function SearchPanel({
           break
         case 'ArrowDown':
           e.preventDefault()
+          setIsKeyboardNav(true)
           setSelectedIndex((prev) => (prev + 1) % filteredResults.length)
           break
         case 'ArrowUp':
           e.preventDefault()
+          setIsKeyboardNav(true)
           setSelectedIndex((prev) =>
             prev - 1 >= 0 ? prev - 1 : filteredResults.length - 1
           )
@@ -169,7 +183,8 @@ export function SearchPanel({
 
           {/* Results List */}
           <div
-            className="tt-results"
+            className={`tt-results ${isKeyboardNav ? 'keyboard-nav' : ''}`}
+            onMouseMove={() => setIsKeyboardNav(false)}
             onMouseLeave={() => setSelectedIndex(-1)}
           >
             {filteredResults.length === 0 ? (
@@ -178,8 +193,13 @@ export function SearchPanel({
               filteredResults.map((tab, index) => (
                 <div
                   key={tab.id}
+                  ref={index === selectedIndex ? selectedItemRef : null}
                   className={`tt-result-item ${index === selectedIndex ? 'selected' : ''}`}
-                  onMouseEnter={() => setSelectedIndex(index)}
+                  onMouseEnter={() => {
+                    if (!isKeyboardNav) {
+                      setSelectedIndex(index)
+                    }
+                  }}
                   onClick={() => {
                     chrome.runtime.sendMessage({ type: 'ACTIVATE_TAB', tabId: tab.id })
                     onClose()
