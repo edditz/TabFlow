@@ -31,3 +31,6 @@ coverage/
 
 # Vite
 .vite/
+
+# Release packages
+*.zip

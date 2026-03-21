@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite build --watch --mode dev",
     "build": "tsc && vite build",
+    "build:zip": "npm run build && cd dist && zip -r ../tab-tool-v$npm_package_version.zip . && cd .. && echo \"Created: tab-tool-v$npm_package_version.zip\"",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },
