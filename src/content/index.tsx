@@ -141,6 +141,13 @@ function init(): void {
     }
   })
 
+  // Close panel when switching to another tab
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && isVisible) {
+      hide()
+    }
+  })
+
   // Initialize Agentation instance (dev only)
   if (isDev) {
     agentationInstance = createAgentationInstance({
