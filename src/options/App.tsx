@@ -8,13 +8,15 @@ import {
 } from './components/ShortcutSettings'
 import { Switch } from './components/Switch'
 
+export type UrlDisplayStyle = 'none' | 'domain' | 'full'
+
 interface Settings {
   enableSearchPanel: boolean
   showTabCount: boolean
   theme: 'system' | 'light' | 'dark'
   language: 'en' | 'zh'
   searchCurrentWindow: boolean
-  alwaysShowTabUrl: boolean
+  urlDisplayStyle: UrlDisplayStyle
   shortcuts: ShortcutConfig[]
 }
 
@@ -24,7 +26,7 @@ const DEFAULT_SETTINGS: Settings = {
   theme: 'system',
   language: 'en',
   searchCurrentWindow: false,
-  alwaysShowTabUrl: true,
+  urlDisplayStyle: 'domain',
   shortcuts: DEFAULT_SHORTCUTS,
 }
 
@@ -219,13 +221,18 @@ export function App() {
 
         <div className="setting-item">
           <div className="setting-info">
-            <div className="setting-label">{t.alwaysShowTabUrl}</div>
-            <div className="setting-desc">{t.alwaysShowTabUrlDesc}</div>
+            <div className="setting-label">{t.urlDisplayStyle}</div>
+            <div className="setting-desc">{t.urlDisplayStyleDesc}</div>
           </div>
-          <Switch
-            checked={settings.alwaysShowTabUrl}
-            onChange={(checked) => updateSetting('alwaysShowTabUrl', checked)}
-          />
+          <select
+            className="setting-select"
+            value={settings.urlDisplayStyle}
+            onChange={(e) => updateSetting('urlDisplayStyle', e.target.value as UrlDisplayStyle)}
+          >
+            <option value="none">{t.urlDisplayStyleNone}</option>
+            <option value="domain">{t.urlDisplayStyleDomain}</option>
+            <option value="full">{t.urlDisplayStyleFull}</option>
+          </select>
         </div>
       </section>
 

@@ -4,6 +4,7 @@ import { createAgentationInstance, type Annotation } from '../shared'
 import type { Language } from '../i18n'
 import type { ShortcutConfig } from '../options/components/ShortcutSettings'
 import type { ShortcutKey } from '../options/components/ShortcutRecorder'
+import type { UrlDisplayStyle } from '../options/App'
 import './styles.css'
 
 // Dev-only - uses custom VITE_DEV env var instead of built-in DEV
@@ -28,6 +29,7 @@ let isVisible = false
 let keyboardListener: ((e: KeyboardEvent) => void) | null = null
 let currentTheme: 'system' | 'light' | 'dark' = 'system'
 let currentLanguage: Language = 'en'
+let currentUrlDisplayStyle: UrlDisplayStyle = 'domain'
 let currentShortcut: ShortcutKey | null = DEFAULT_SHORTCUTS[0].shortcut
 
 // Get actual theme based on setting and system preference
@@ -59,10 +61,11 @@ function init(): void {
 
   // Load theme, language and shortcuts settings
   chrome.storage.sync.get(
-    { theme: 'system', language: 'en', shortcuts: DEFAULT_SHORTCUTS },
+    { theme: 'system', language: 'en', urlDisplayStyle: 'domain', shortcuts: DEFAULT_SHORTCUTS },
     (data) => {
       currentTheme = data.theme
       currentLanguage = data.language
+      currentUrlDisplayStyle = data.urlDisplayStyle
       if (data.shortcuts && data.shortcuts.length > 0) {
         currentShortcut = data.shortcuts[0].shortcut
       }
@@ -78,6 +81,10 @@ function init(): void {
     }
     if (changes.language) {
       currentLanguage = changes.language.newValue
+      render()
+    }
+    if (changes.urlDisplayStyle) {
+      currentUrlDisplayStyle = changes.urlDisplayStyle.newValue
       render()
     }
     if (changes.shortcuts) {
@@ -127,7 +134,14 @@ function render(): void {
   if (!searchRoot) return
 
   if (isVisible) {
-    searchRoot.render(<SearchPanel onClose={hide} theme={getActualTheme()} language={currentLanguage} />)
+    searchRoot.render(
+      <SearchPanel
+        onClose={hide}
+        theme={getActualTheme()}
+        language={currentLanguage}
+        urlDisplayStyle={currentUrlDisplayStyle}
+      />
+    )
     // Show Agentation when SearchPanel opens
     if (isDev && agentationInstance) {
       agentationInstance.show()

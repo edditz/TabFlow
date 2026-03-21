@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import type { KeyboardEvent } from 'react'
 import { translations, type Language } from '../../i18n'
+import type { UrlDisplayStyle } from '../../options/App'
 import './SearchPanel.css'
 
 interface TabResult {
@@ -14,6 +15,7 @@ interface SearchPanelProps {
   onClose: () => void
   theme: 'light' | 'dark'
   language: Language
+  urlDisplayStyle: UrlDisplayStyle
 }
 
 // Extract domain from URL for display
@@ -30,6 +32,7 @@ export function SearchPanel({
   onClose,
   theme,
   language,
+  urlDisplayStyle,
 }: SearchPanelProps) {
   const t = translations[language]
   const [query, setQuery] = useState('')
@@ -227,9 +230,13 @@ export function SearchPanel({
                   </div>
                   <div className="tt-result-info">
                     <div className="tt-result-title">{tab.title}</div>
-                    <div className="tt-result-url">
-                      {extractDomain(tab.url)}
-                    </div>
+                    {urlDisplayStyle !== 'none' && (
+                      <div className="tt-result-url">
+                        {urlDisplayStyle === 'domain'
+                          ? extractDomain(tab.url)
+                          : tab.url}
+                      </div>
+                    )}
                   </div>
                   <button
                     className="tt-result-delete"

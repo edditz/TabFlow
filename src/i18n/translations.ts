@@ -36,8 +36,11 @@ export interface TranslationKeys {
   searchSettings: string
   searchCurrentWindowOnly: string
   searchCurrentWindowOnlyDesc: string
-  alwaysShowTabUrl: string
-  alwaysShowTabUrlDesc: string
+  urlDisplayStyle: string
+  urlDisplayStyleDesc: string
+  urlDisplayStyleNone: string
+  urlDisplayStyleDomain: string
+  urlDisplayStyleFull: string
 
   // Footer
   settingsSaved: string
@@ -90,8 +93,11 @@ export const translations: Record<Language, TranslationKeys> = {
     searchSettings: 'Search Settings',
     searchCurrentWindowOnly: 'Search Current Window Only',
     searchCurrentWindowOnlyDesc: 'Limit results to tabs from the active window',
-    alwaysShowTabUrl: 'Always Show Tab URL',
-    alwaysShowTabUrlDesc: 'Keep URL visible in candidate rows',
+    urlDisplayStyle: 'URL Display Style',
+    urlDisplayStyleDesc: 'Choose how to display URL in search results',
+    urlDisplayStyleNone: 'Hide URL',
+    urlDisplayStyleDomain: 'Domain Only',
+    urlDisplayStyleFull: 'Full URL',
 
     // Footer
     settingsSaved: 'Settings saved',
@@ -142,8 +148,11 @@ export const translations: Record<Language, TranslationKeys> = {
     searchSettings: '搜索设置',
     searchCurrentWindowOnly: '仅搜索当前窗口',
     searchCurrentWindowOnlyDesc: '将结果限制为当前活动窗口的标签页',
-    alwaysShowTabUrl: '始终显示标签页 URL',
-    alwaysShowTabUrlDesc: '在候选行中保持 URL 可见',
+    urlDisplayStyle: 'URL 显示样式',
+    urlDisplayStyleDesc: '选择搜索结果中 URL 的显示方式',
+    urlDisplayStyleNone: '不显示',
+    urlDisplayStyleDomain: '仅显示域名',
+    urlDisplayStyleFull: '显示完整 URL',
 
     // Footer
     settingsSaved: '设置已保存',
