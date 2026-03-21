@@ -106,6 +106,10 @@ export function SearchPanel({
           )
           break
         case 'Enter':
+          // Ignore Enter during IME composition (Chinese/Japanese input)
+          if (e.nativeEvent.isComposing) {
+            break
+          }
           e.preventDefault()
           const selected = filteredResults[selectedIndex]
           if (selected) {
