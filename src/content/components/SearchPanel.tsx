@@ -16,6 +16,7 @@ interface SearchPanelProps {
   theme: 'light' | 'dark'
   language: Language
   urlDisplayStyle: UrlDisplayStyle
+  searchCurrentWindow: boolean
 }
 
 // Extract domain from URL for display
@@ -33,6 +34,7 @@ export function SearchPanel({
   theme,
   language,
   urlDisplayStyle,
+  searchCurrentWindow,
 }: SearchPanelProps) {
   const t = translations[language]
   const [query, setQuery] = useState('')
@@ -55,7 +57,10 @@ export function SearchPanel({
   useEffect(() => {
     const fetchTabs = async () => {
       try {
-        const response = await chrome.runtime.sendMessage({ type: 'GET_ALL_TABS' })
+        const response = await chrome.runtime.sendMessage({
+          type: 'GET_ALL_TABS',
+          currentWindow: searchCurrentWindow,
+        })
         if (response?.tabs) {
           const tabResults: TabResult[] = response.tabs.map((tab: chrome.tabs.Tab) => ({
             id: tab.id!,
@@ -71,7 +76,7 @@ export function SearchPanel({
     }
 
     fetchTabs()
-  }, [])
+  }, [searchCurrentWindow])
 
   // Focus input on mount
   useEffect(() => {

@@ -20,7 +20,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log('Message received:', message, 'from:', sender)
 
   if (message.type === 'GET_ALL_TABS') {
-    chrome.tabs.query({}, (tabs) => {
+    const queryOptions: chrome.tabs.QueryInfo = message.currentWindow
+      ? { currentWindow: true }
+      : {}
+    chrome.tabs.query(queryOptions, (tabs) => {
       sendResponse({ tabs })
     })
     return true // Required for async response

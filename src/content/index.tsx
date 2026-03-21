@@ -30,6 +30,7 @@ let keyboardListener: ((e: KeyboardEvent) => void) | null = null
 let currentTheme: 'system' | 'light' | 'dark' = 'system'
 let currentLanguage: Language = 'en'
 let currentUrlDisplayStyle: UrlDisplayStyle = 'domain'
+let currentSearchCurrentWindow: boolean = false
 let currentShortcut: ShortcutKey | null = DEFAULT_SHORTCUTS[0].shortcut
 
 // Get actual theme based on setting and system preference
@@ -61,11 +62,12 @@ function init(): void {
 
   // Load theme, language and shortcuts settings
   chrome.storage.sync.get(
-    { theme: 'system', language: 'en', urlDisplayStyle: 'domain', shortcuts: DEFAULT_SHORTCUTS },
+    { theme: 'system', language: 'en', urlDisplayStyle: 'domain', searchCurrentWindow: false, shortcuts: DEFAULT_SHORTCUTS },
     (data) => {
       currentTheme = data.theme
       currentLanguage = data.language
       currentUrlDisplayStyle = data.urlDisplayStyle
+      currentSearchCurrentWindow = data.searchCurrentWindow
       if (data.shortcuts && data.shortcuts.length > 0) {
         currentShortcut = data.shortcuts[0].shortcut
       }
@@ -85,6 +87,10 @@ function init(): void {
     }
     if (changes.urlDisplayStyle) {
       currentUrlDisplayStyle = changes.urlDisplayStyle.newValue
+      render()
+    }
+    if (changes.searchCurrentWindow) {
+      currentSearchCurrentWindow = changes.searchCurrentWindow.newValue
       render()
     }
     if (changes.shortcuts) {
@@ -140,6 +146,7 @@ function render(): void {
         theme={getActualTheme()}
         language={currentLanguage}
         urlDisplayStyle={currentUrlDisplayStyle}
+        searchCurrentWindow={currentSearchCurrentWindow}
       />
     )
     // Show Agentation when SearchPanel opens
