@@ -145,10 +145,15 @@ export function SearchPanel({
     )
   })
 
-  // Reset selected index when query changes
+  // Reset selected index when query changes - select first result if available
   useEffect(() => {
-    setSelectedIndex(-1)
-  }, [query])
+    setIsKeyboardNav(false)
+    // Defer to ensure filteredResults is updated
+    const timer = setTimeout(() => {
+      setSelectedIndex(filteredResults.length > 0 && query.trim() ? 0 : -1)
+    }, 0)
+    return () => clearTimeout(timer)
+  }, [query, filteredResults.length])
 
   // Auto-scroll to keep selected item visible (keyboard navigation only)
   useEffect(() => {
