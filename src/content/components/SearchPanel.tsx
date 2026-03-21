@@ -41,7 +41,7 @@ export function SearchPanel({
   const t = translations[language]
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<TabResult[]>([])
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState(-1)
   const [isKeyboardNav, setIsKeyboardNav] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -123,9 +123,9 @@ export function SearchPanel({
     )
   })
 
-  // Reset selected index when filtered results change
+  // Reset selected index when query changes
   useEffect(() => {
-    setSelectedIndex(0)
+    setSelectedIndex(-1)
   }, [query])
 
   // Auto-scroll to keep selected item visible (keyboard navigation only)
