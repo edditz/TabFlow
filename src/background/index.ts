@@ -30,7 +30,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.type === 'ACTIVATE_TAB') {
-    chrome.tabs.update(message.tabId, { active: true })
+    // Get tab info to find its window, then focus both window and tab
+    chrome.tabs.get(message.tabId, (tab) => {
+      if (tab && tab.windowId) {
+        // Focus the window first, then activate the tab
+        chrome.windows.update(tab.windowId, { focused: true }, () => {
+          chrome.tabs.update(message.tabId, { active: true })
+        })
+      }
+    })
     return false
   }
 
