@@ -34,3 +34,6 @@ coverage/
 
 # Release packages
 *.zip
+
+test-results/
+playwright-report

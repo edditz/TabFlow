@@ -19,12 +19,15 @@
   "license": "MIT",
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.25",
+    "@playwright/test": "^1.58.2",
     "@types/chrome": "^0.0.268",
     "@types/node": "^20.12.7",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.7.0",
     "agentation": "^2.3.3",
+    "playwright": "^1.58.2",
+    "serve": "^14.2.6",
     "typescript": "^5.4.5",
     "vite": "^5.2.10"
   },
