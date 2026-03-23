@@ -42,6 +42,25 @@ function extractDomain(url: string): string {
   }
 }
 
+// Format relative time (e.g., "5 minutes ago", "2 hours ago")
+function formatRelativeTime(timestamp: number, language: Language): string {
+  const now = Date.now()
+  const diff = now - timestamp
+  const minutes = Math.floor(diff / 60000)
+  const hours = Math.floor(diff / 3600000)
+
+  if (minutes < 1) {
+    return language === 'zh' ? '刚刚' : 'Just now'
+  } else if (minutes < 60) {
+    return language === 'zh' ? `${minutes}分钟前` : `${minutes}m ago`
+  } else if (hours < 24) {
+    return language === 'zh' ? `${hours}小时前` : `${hours}h ago`
+  } else {
+    const days = Math.floor(hours / 24)
+    return language === 'zh' ? `${days}天前` : `${days}d ago`
+  }
+}
+
 export function SearchPanel({
   onCloseComplete,
   registerCloseCallback,
@@ -493,6 +512,9 @@ export function SearchPanel({
                               </div>
                             )}
                           </div>
+                          <span className="tt-result-time">
+                            {formatRelativeTime(tab.closedAt, language)}
+                          </span>
                         </div>
                       )
                     })}
