@@ -18,6 +18,9 @@ interface Settings {
   searchCurrentWindow: boolean
   urlDisplayStyle: UrlDisplayStyle
   shortcuts: ShortcutConfig[]
+  enableRecentClosed: boolean
+  recentClosedTimeWindow: number
+  recentClosedMaxResults: number
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -28,6 +31,9 @@ const DEFAULT_SETTINGS: Settings = {
   searchCurrentWindow: false,
   urlDisplayStyle: 'domain',
   shortcuts: DEFAULT_SHORTCUTS,
+  enableRecentClosed: true,
+  recentClosedTimeWindow: 24,
+  recentClosedMaxResults: 10,
 }
 
 // Get actual theme based on setting and system preference
@@ -234,6 +240,68 @@ export function App() {
             <option value="full">{t.urlDisplayStyleFull}</option>
           </select>
         </div>
+      </section>
+
+      {/* Recently Closed Settings */}
+      <section className="options-section">
+        <div className="section-header">
+          <svg className="section-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <h2 className="section-title">{t.recentClosedSettings}</h2>
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <div className="setting-label">{t.enableRecentClosed}</div>
+            <div className="setting-desc">{t.enableRecentClosedDesc}</div>
+          </div>
+          <Switch
+            checked={settings.enableRecentClosed}
+            onChange={(checked) => updateSetting('enableRecentClosed', checked)}
+          />
+        </div>
+
+        {settings.enableRecentClosed && (
+          <>
+            <div className="setting-item">
+              <div className="setting-info">
+                <div className="setting-label">{t.recentClosedTimeWindow}</div>
+                <div className="setting-desc">{t.recentClosedTimeWindowDesc}</div>
+              </div>
+              <select
+                className="setting-select"
+                value={settings.recentClosedTimeWindow}
+                onChange={(e) => updateSetting('recentClosedTimeWindow', Number(e.target.value))}
+              >
+                <option value="1">1 {t.hours}</option>
+                <option value="2">2 {t.hours}</option>
+                <option value="3">3 {t.hours}</option>
+                <option value="6">6 {t.hours}</option>
+                <option value="12">12 {t.hours}</option>
+                <option value="24">24 {t.hours}</option>
+              </select>
+            </div>
+
+            <div className="setting-item">
+              <div className="setting-info">
+                <div className="setting-label">{t.recentClosedMaxResults}</div>
+                <div className="setting-desc">{t.recentClosedMaxResultsDesc}</div>
+              </div>
+              <select
+                className="setting-select"
+                value={settings.recentClosedMaxResults}
+                onChange={(e) => updateSetting('recentClosedMaxResults', Number(e.target.value))}
+              >
+                <option value="3">3</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </div>
+          </>
+        )}
       </section>
 
       <footer className="options-footer">

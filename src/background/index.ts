@@ -66,6 +66,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true
   }
 
+  if (message.type === 'GET_RECENTLY_CLOSED') {
+    chrome.sessions.getRecentlyClosed({ maxResults: message.maxResults || 25 }, (sessions) => {
+      sendResponse({ sessions })
+    })
+    return true
+  }
+
+  if (message.type === 'RESTORE_TAB') {
+    chrome.sessions.restore(message.sessionId, (session) => {
+      sendResponse({ success: !!session })
+    })
+    return true
+  }
+
   return false
 })
 

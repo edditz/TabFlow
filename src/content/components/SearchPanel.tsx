@@ -12,6 +12,14 @@ interface TabResult {
   windowId: number
 }
 
+interface ClosedTab {
+  sessionId: string
+  title: string
+  url: string
+  favIconUrl?: string
+  closedAt: number
+}
+
 interface SearchPanelProps {
   onCloseComplete: () => void
   registerCloseCallback: (callback: () => void) => void
@@ -19,6 +27,9 @@ interface SearchPanelProps {
   language: Language
   urlDisplayStyle: UrlDisplayStyle
   searchCurrentWindow: boolean
+  enableRecentClosed: boolean
+  recentClosedTimeWindow: number
+  recentClosedMaxResults: number
 }
 
 // Extract domain from URL for display
@@ -38,10 +49,14 @@ export function SearchPanel({
   language,
   urlDisplayStyle,
   searchCurrentWindow,
+  enableRecentClosed,
+  recentClosedTimeWindow,
+  recentClosedMaxResults,
 }: SearchPanelProps) {
   const t = translations[language]
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<TabResult[]>([])
+  const [closedTabs, setClosedTabs] = useState<ClosedTab[]>([])
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [isKeyboardNav, setIsKeyboardNav] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
@@ -114,6 +129,49 @@ export function SearchPanel({
     fetchStats()
   }, [])
 
+  // Fetch recently closed tabs
+  useEffect(() => {
+    if (!enableRecentClosed) {
+      setClosedTabs([])
+      return
+    }
+
+    const fetchClosedTabs = async () => {
+      try {
+        const response = await chrome.runtime.sendMessage({
+          type: 'GET_RECENTLY_CLOSED',
+          maxResults: 25
+        })
+
+        const sessions = response?.sessions || []
+        console.log('[Tab Tool] Raw sessions:', sessions)
+        console.log('[Tab Tool] Config:', { enableRecentClosed, recentClosedTimeWindow, recentClosedMaxResults })
+
+        const now = Date.now()
+        const timeLimit = recentClosedTimeWindow * 60 * 60 * 1000
+
+        const tabs: ClosedTab[] = sessions
+          .filter((s: chrome.sessions.Session) => s.tab && (now - (s.lastModified * 1000) < timeLimit))
+          .slice(0, recentClosedMaxResults)
+          .map((s: chrome.sessions.Session) => ({
+            sessionId: s.tab!.sessionId!,
+            title: s.tab!.title || 'Untitled',
+            url: s.tab!.url || '',
+            favIconUrl: s.tab!.favIconUrl,
+            closedAt: s.lastModified * 1000
+          }))
+
+        console.log('[Tab Tool] Filtered closed tabs:', tabs)
+        setClosedTabs(tabs)
+      } catch (error) {
+        console.error('[Tab Tool] Error fetching closed tabs:', error)
+        setClosedTabs([])
+      }
+    }
+
+    fetchClosedTabs()
+  }, [enableRecentClosed, recentClosedTimeWindow, recentClosedMaxResults])
+
   // Focus input on mount
   useEffect(() => {
     inputRef.current?.focus()
@@ -145,15 +203,39 @@ export function SearchPanel({
     )
   })
 
+  // Filter closed tabs based on query
+  const filteredClosedTabs = enableRecentClosed ? closedTabs.filter(tab => {
+    if (!query.trim()) return true
+    const lowerQuery = query.toLowerCase()
+    return (
+      tab.title.toLowerCase().includes(lowerQuery) ||
+      tab.url.toLowerCase().includes(lowerQuery) ||
+      extractDomain(tab.url).toLowerCase().includes(lowerQuery)
+    )
+  }) : []
+
+  // Total items for keyboard navigation (open tabs + closed tabs)
+  const totalItems = filteredResults.length + filteredClosedTabs.length
+
+  // Restore a closed tab
+  const restoreTab = useCallback(async (tab: ClosedTab) => {
+    try {
+      await chrome.runtime.sendMessage({ type: 'RESTORE_TAB', sessionId: tab.sessionId })
+      handleClose()
+    } catch (error) {
+      // Session might have expired
+    }
+  }, [handleClose])
+
   // Reset selected index when query changes - select first result if available
   useEffect(() => {
     setIsKeyboardNav(false)
     // Defer to ensure filteredResults is updated
     const timer = setTimeout(() => {
-      setSelectedIndex(filteredResults.length > 0 && query.trim() ? 0 : -1)
+      setSelectedIndex(totalItems > 0 && query.trim() ? 0 : -1)
     }, 0)
     return () => clearTimeout(timer)
-  }, [query, filteredResults.length])
+  }, [query, totalItems])
 
   // Auto-scroll to keep selected item visible (keyboard navigation only)
   useEffect(() => {
@@ -174,13 +256,13 @@ export function SearchPanel({
         case 'ArrowDown':
           e.preventDefault()
           setIsKeyboardNav(true)
-          setSelectedIndex((prev) => (prev + 1) % filteredResults.length)
+          setSelectedIndex((prev) => (prev + 1) % totalItems)
           break
         case 'ArrowUp':
           e.preventDefault()
           setIsKeyboardNav(true)
           setSelectedIndex((prev) =>
-            prev - 1 >= 0 ? prev - 1 : filteredResults.length - 1
+            prev - 1 >= 0 ? prev - 1 : totalItems - 1
           )
           break
         case 'Enter':
@@ -189,15 +271,25 @@ export function SearchPanel({
             break
           }
           e.preventDefault()
-          const selected = filteredResults[selectedIndex]
-          if (selected) {
-            chrome.runtime.sendMessage({ type: 'ACTIVATE_TAB', tabId: selected.id })
-            handleClose()
+          if (selectedIndex >= 0) {
+            if (selectedIndex < filteredResults.length) {
+              // Open tab
+              const selected = filteredResults[selectedIndex]
+              chrome.runtime.sendMessage({ type: 'ACTIVATE_TAB', tabId: selected.id })
+              handleClose()
+            } else {
+              // Closed tab
+              const closedIndex = selectedIndex - filteredResults.length
+              const closedTab = filteredClosedTabs[closedIndex]
+              if (closedTab) {
+                restoreTab(closedTab)
+              }
+            }
           }
           break
       }
     },
-    [filteredResults, selectedIndex, handleClose]
+    [filteredResults, filteredClosedTabs, totalItems, selectedIndex, handleClose, restoreTab]
   )
 
   return (
@@ -276,80 +368,137 @@ export function SearchPanel({
             onMouseMove={() => setIsKeyboardNav(false)}
             onMouseLeave={() => setSelectedIndex(-1)}
           >
-            {filteredResults.length === 0 ? (
+            {filteredResults.length === 0 && (!enableRecentClosed || filteredClosedTabs.length === 0) ? (
               <div className="tt-empty">{t.noTabsFound}</div>
             ) : (
-              filteredResults.map((tab, index) => (
-                <div
-                  key={tab.id}
-                  ref={index === selectedIndex ? selectedItemRef : null}
-                  className={`tt-result-item ${index === selectedIndex ? 'selected' : ''}`}
-                  onMouseEnter={() => {
-                    if (!isKeyboardNav) {
-                      setSelectedIndex(index)
-                    }
-                  }}
-                  onClick={() => {
-                    chrome.runtime.sendMessage({ type: 'ACTIVATE_TAB', tabId: tab.id })
-                    handleClose()
-                  }}
-                >
-                  <div className="tt-result-icon">
-                    {tab.favIconUrl ? (
-                      <img src={tab.favIconUrl} alt="" />
-                    ) : (
+              <>
+                {/* Open Tabs */}
+                {filteredResults.map((tab, index) => (
+                  <div
+                    key={tab.id}
+                    ref={index === selectedIndex ? selectedItemRef : null}
+                    className={`tt-result-item ${index === selectedIndex ? 'selected' : ''}`}
+                    onMouseEnter={() => {
+                      if (!isKeyboardNav) {
+                        setSelectedIndex(index)
+                      }
+                    }}
+                    onClick={() => {
+                      chrome.runtime.sendMessage({ type: 'ACTIVATE_TAB', tabId: tab.id })
+                      handleClose()
+                    }}
+                  >
+                    <div className="tt-result-icon">
+                      {tab.favIconUrl ? (
+                        <img src={tab.favIconUrl} alt="" />
+                      ) : (
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          width="16"
+                          height="16"
+                        >
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                          <polyline points="14 2 14 8 20 8" />
+                          <line x1="16" y1="13" x2="8" y2="13" />
+                          <line x1="16" y1="17" x2="8" y2="17" />
+                          <polyline points="10 9 9 9 8 9" />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="tt-result-info">
+                      <div className="tt-result-title">{tab.title}</div>
+                      {urlDisplayStyle !== 'none' && (
+                        <div className="tt-result-url">
+                          {urlDisplayStyle === 'domain'
+                            ? extractDomain(tab.url)
+                            : tab.url}
+                        </div>
+                      )}
+                    </div>
+                    {!searchCurrentWindow && currentWindowId !== null && tab.windowId !== currentWindowId && (
+                      <span className="tt-result-badge">{t.otherWindow}</span>
+                    )}
+                    <button
+                      className="tt-result-delete"
+                      onClick={async (e) => {
+                        e.stopPropagation()
+                        await chrome.runtime.sendMessage({ type: 'CLOSE_TAB', tabId: tab.id })
+                        setResults((prev) => prev.filter((t) => t.id !== tab.id))
+                      }}
+                      title={t.closeTab}
+                    >
                       <svg
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        strokeWidth="1.5"
+                        strokeWidth="2"
                         width="16"
                         height="16"
                       >
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <polyline points="14 2 14 8 20 8" />
-                        <line x1="16" y1="13" x2="8" y2="13" />
-                        <line x1="16" y1="17" x2="8" y2="17" />
-                        <polyline points="10 9 9 9 8 9" />
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
                       </svg>
-                    )}
+                    </button>
                   </div>
-                  <div className="tt-result-info">
-                    <div className="tt-result-title">{tab.title}</div>
-                    {urlDisplayStyle !== 'none' && (
-                      <div className="tt-result-url">
-                        {urlDisplayStyle === 'domain'
-                          ? extractDomain(tab.url)
-                          : tab.url}
-                      </div>
-                    )}
+                ))}
+
+                {/* Recently Closed Section */}
+                {enableRecentClosed && filteredClosedTabs.length > 0 && (
+                  <div className="tt-section">
+                    <div className="tt-section-header">
+                      <h3>{t.recentClosedSection}</h3>
+                    </div>
+                    {filteredClosedTabs.map((tab, index) => {
+                      const globalIndex = filteredResults.length + index
+                      const isSelected = globalIndex === selectedIndex
+                      return (
+                        <div
+                          key={tab.sessionId}
+                          ref={isSelected ? selectedItemRef : null}
+                          className={`tt-result-item closed-tab ${isSelected ? 'selected' : ''}`}
+                          onMouseEnter={() => {
+                            if (!isKeyboardNav) {
+                              setSelectedIndex(globalIndex)
+                            }
+                          }}
+                          onClick={() => restoreTab(tab)}
+                        >
+                          <div className="tt-result-icon">
+                            {tab.favIconUrl ? (
+                              <img src={tab.favIconUrl} alt="" />
+                            ) : (
+                              <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                width="16"
+                                height="16"
+                              >
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                              </svg>
+                            )}
+                          </div>
+                          <div className="tt-result-info">
+                            <div className="tt-result-title">{tab.title}</div>
+                            {urlDisplayStyle !== 'none' && (
+                              <div className="tt-result-url">
+                                {urlDisplayStyle === 'domain'
+                                  ? extractDomain(tab.url)
+                                  : tab.url}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
-                  {!searchCurrentWindow && currentWindowId !== null && tab.windowId !== currentWindowId && (
-                    <span className="tt-result-badge">{t.otherWindow}</span>
-                  )}
-                  <button
-                    className="tt-result-delete"
-                    onClick={async (e) => {
-                      e.stopPropagation()
-                      await chrome.runtime.sendMessage({ type: 'CLOSE_TAB', tabId: tab.id })
-                      setResults((prev) => prev.filter((t) => t.id !== tab.id))
-                    }}
-                    title={t.closeTab}
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      width="16"
-                      height="16"
-                    >
-                      <line x1="18" y1="6" x2="6" y2="18" />
-                      <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                  </button>
-                </div>
-              ))
+                )}
+              </>
             )}
           </div>
         </div>

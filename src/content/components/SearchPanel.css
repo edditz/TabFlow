@@ -460,3 +460,51 @@
   scrollbar-width: thin;
   scrollbar-color: var(--tt-border) transparent;
 }
+
+/* Section (Recently Closed) */
+.tt-section {
+  margin-top: 12px;
+}
+
+.tt-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tt-muted-foreground);
+}
+
+.tt-section-header h3 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.tt-section-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--tt-border);
+}
+
+/* Closed Tab Styles */
+.closed-tab {
+  opacity: 0.85;
+}
+
+.closed-tab:hover {
+  opacity: 1;
+}
+
+.tt-result-action {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--tt-primary);
+  padding: 4px 8px;
+  border-radius: var(--tt-radius-xs);
+  flex-shrink: 0;
+}

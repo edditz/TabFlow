@@ -39,6 +39,9 @@ let currentLanguage: Language = 'en'
 let currentUrlDisplayStyle: UrlDisplayStyle = 'domain'
 let currentSearchCurrentWindow: boolean = false
 let currentShortcut: ShortcutKey | null = DEFAULT_SHORTCUTS[0].shortcut
+let currentEnableRecentClosed: boolean = true
+let currentRecentClosedTimeWindow: number = 24
+let currentRecentClosedMaxResults: number = 10
 
 // Get actual theme based on setting and system preference
 function getActualTheme(): 'light' | 'dark' {
@@ -84,13 +87,26 @@ function init(): void {
 
   // Load theme, language and shortcuts settings
   chrome.storage.sync.get(
-    { theme: 'system', language: 'en', urlDisplayStyle: 'domain', searchCurrentWindow: false, enableSearchPanel: true, shortcuts: DEFAULT_SHORTCUTS },
+    {
+      theme: 'system',
+      language: 'en',
+      urlDisplayStyle: 'domain',
+      searchCurrentWindow: false,
+      enableSearchPanel: true,
+      shortcuts: DEFAULT_SHORTCUTS,
+      enableRecentClosed: true,
+      recentClosedTimeWindow: 24,
+      recentClosedMaxResults: 10,
+    },
     (data) => {
       currentEnableSearchPanel = data.enableSearchPanel
       currentTheme = data.theme
       currentLanguage = data.language
       currentUrlDisplayStyle = data.urlDisplayStyle
       currentSearchCurrentWindow = data.searchCurrentWindow
+      currentEnableRecentClosed = data.enableRecentClosed
+      currentRecentClosedTimeWindow = data.recentClosedTimeWindow
+      currentRecentClosedMaxResults = data.recentClosedMaxResults
       if (data.shortcuts && data.shortcuts.length > 0) {
         currentShortcut = data.shortcuts[0].shortcut
       }
@@ -130,6 +146,18 @@ function init(): void {
       if (shortcuts && shortcuts.length > 0) {
         currentShortcut = shortcuts[0].shortcut
       }
+    }
+    if (changes.enableRecentClosed) {
+      currentEnableRecentClosed = changes.enableRecentClosed.newValue
+      render()
+    }
+    if (changes.recentClosedTimeWindow) {
+      currentRecentClosedTimeWindow = changes.recentClosedTimeWindow.newValue
+      render()
+    }
+    if (changes.recentClosedMaxResults) {
+      currentRecentClosedMaxResults = changes.recentClosedMaxResults.newValue
+      render()
     }
   })
 
@@ -215,6 +243,9 @@ function render(): void {
         language={currentLanguage}
         urlDisplayStyle={currentUrlDisplayStyle}
         searchCurrentWindow={currentSearchCurrentWindow}
+        enableRecentClosed={currentEnableRecentClosed}
+        recentClosedTimeWindow={currentRecentClosedTimeWindow}
+        recentClosedMaxResults={currentRecentClosedMaxResults}
       />
     )
     // Show Agentation when SearchPanel opens

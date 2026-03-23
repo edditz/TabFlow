@@ -35,7 +35,8 @@
     "tabs",
     "storage",
     "activeTab",
-    "commands"
+    "commands",
+    "sessions"
   ],
   "commands": {
     "_execute_action": {

@@ -45,6 +45,16 @@ export interface TranslationKeys {
   // Footer
   settingsSaved: string
 
+  // Recently Closed Settings Section
+  recentClosedSettings: string
+  enableRecentClosed: string
+  enableRecentClosedDesc: string
+  recentClosedTimeWindow: string
+  recentClosedTimeWindowDesc: string
+  recentClosedMaxResults: string
+  recentClosedMaxResultsDesc: string
+  hours: string
+
   // Search Panel
   searchTabs: string
   searchTabsDesc: string
@@ -60,6 +70,9 @@ export interface TranslationKeys {
   windows: string
   currentWindowTabs: string
   otherWindow: string
+  recentClosedSection: string
+  recentClosedEmpty: string
+  restoreTab: string
 }
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -108,6 +121,16 @@ export const translations: Record<Language, TranslationKeys> = {
     // Footer
     settingsSaved: 'Settings saved',
 
+    // Recently Closed Settings Section
+    recentClosedSettings: 'Recently Closed Settings',
+    enableRecentClosed: 'Enable Recently Closed Search',
+    enableRecentClosedDesc: 'Show recently closed tabs in search panel',
+    recentClosedTimeWindow: 'Time Window',
+    recentClosedTimeWindowDesc: 'Show tabs closed within this time',
+    recentClosedMaxResults: 'Maximum Results',
+    recentClosedMaxResultsDesc: 'Maximum number of recently closed tabs to show',
+    hours: 'hours',
+
     // Search Panel
     searchTabs: 'Search Tabs',
     searchTabsDesc: 'Find and jump to any open browser tab.',
@@ -123,6 +146,9 @@ export const translations: Record<Language, TranslationKeys> = {
     windows: 'windows',
     currentWindowTabs: 'current window',
     otherWindow: 'Other window',
+    recentClosedSection: 'Recently Closed',
+    recentClosedEmpty: 'No recently closed tabs',
+    restoreTab: 'Restore',
   },
   zh: {
     // Header
@@ -169,6 +195,16 @@ export const translations: Record<Language, TranslationKeys> = {
     // Footer
     settingsSaved: '设置已保存',
 
+    // Recently Closed Settings Section
+    recentClosedSettings: '最近关闭设置',
+    enableRecentClosed: '启用最近关闭搜索',
+    enableRecentClosedDesc: '在搜索面板中显示最近关闭的标签页',
+    recentClosedTimeWindow: '时间窗口',
+    recentClosedTimeWindowDesc: '显示过去多久时间内关闭的标签页',
+    recentClosedMaxResults: '最大数量',
+    recentClosedMaxResultsDesc: '最多显示多少个最近关闭的标签页',
+    hours: '小时',
+
     // Search Panel
     searchTabs: '搜索标签页',
     searchTabsDesc: '查找并跳转到任意打开的浏览器标签页。',
@@ -184,5 +220,8 @@ export const translations: Record<Language, TranslationKeys> = {
     windows: '个窗口',
     currentWindowTabs: '当前窗口',
     otherWindow: '其他窗口',
+    recentClosedSection: '最近关闭',
+    recentClosedEmpty: '没有最近关闭的标签页',
+    restoreTab: '恢复',
   },
 }
