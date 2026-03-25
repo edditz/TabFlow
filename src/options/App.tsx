@@ -1,11 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { useTranslation } from '../i18n'
-import {
-  ShortcutSettings,
-  ShortcutConfig,
-  DEFAULT_SHORTCUTS,
-} from './components/ShortcutSettings'
+import { ShortcutSettings, ShortcutConfig, DEFAULT_SHORTCUTS } from './components/ShortcutSettings'
 import { Switch } from './components/Switch'
 
 export type UrlDisplayStyle = 'none' | 'domain' | 'full'
@@ -33,7 +29,7 @@ const DEFAULT_SETTINGS: Settings = {
   shortcuts: DEFAULT_SHORTCUTS,
   enableRecentClosed: true,
   recentClosedTimeWindow: 24,
-  recentClosedMaxResults: 10,
+  recentClosedMaxResults: 10
 }
 
 // Get actual theme based on setting and system preference
@@ -58,14 +54,14 @@ export function App() {
   // Load settings and setup listeners
   useEffect(() => {
     // Load initial settings
-    chrome.storage.sync.get(DEFAULT_SETTINGS, (data) => {
+    chrome.storage.sync.get(DEFAULT_SETTINGS, data => {
       const loadedSettings = data as Settings
       setSettings(loadedSettings)
       setActualTheme(getActualTheme(loadedSettings.theme))
     })
 
     // Listen for settings changes
-    chrome.storage.onChanged.addListener((changes) => {
+    chrome.storage.onChanged.addListener(changes => {
       if (changes.theme) {
         setActualTheme(getActualTheme(changes.theme.newValue))
       }
@@ -74,7 +70,7 @@ export function App() {
     // Listen for system theme changes
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
     const handleSystemThemeChange = () => {
-      chrome.storage.sync.get({ theme: 'system' }, (data) => {
+      chrome.storage.sync.get({ theme: 'system' }, data => {
         if (data.theme === 'system') {
           setActualTheme(getActualTheme('system'))
         }
@@ -117,7 +113,17 @@ export function App() {
       {/* Keyboard Shortcuts */}
       <section className="options-section">
         <div className="section-header">
-          <svg className="section-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className="section-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <rect width="20" height="16" x="2" y="4" rx="2" />
             <path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10" />
           </svg>
@@ -126,7 +132,7 @@ export function App() {
 
         <ShortcutSettings
           shortcuts={settings.shortcuts.length === 2 ? settings.shortcuts : DEFAULT_SHORTCUTS}
-          onChange={(shortcuts) => updateSetting('shortcuts', shortcuts)}
+          onChange={shortcuts => updateSetting('shortcuts', shortcuts)}
           labels={{
             toggleSearchPanel: t.toggleSearchPanel,
             toggleSearchPanelDesc: t.toggleSearchPanelDesc,
@@ -135,7 +141,7 @@ export function App() {
             clickToRecord: t.clickToRecord,
             recording: t.recording,
             resetToDefault: t.resetToDefault,
-            shortcutConflict: t.shortcutConflict,
+            shortcutConflict: t.shortcutConflict
           }}
         />
       </section>
@@ -143,7 +149,17 @@ export function App() {
       {/* General Settings */}
       <section className="options-section">
         <div className="section-header">
-          <svg className="section-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className="section-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
             <circle cx="12" cy="12" r="3" />
           </svg>
@@ -157,7 +173,7 @@ export function App() {
           </div>
           <Switch
             checked={settings.enableSearchPanel}
-            onChange={(checked) => updateSetting('enableSearchPanel', checked)}
+            onChange={checked => updateSetting('enableSearchPanel', checked)}
           />
         </div>
 
@@ -168,7 +184,7 @@ export function App() {
           </div>
           <Switch
             checked={settings.showTabCount}
-            onChange={(checked) => updateSetting('showTabCount', checked)}
+            onChange={checked => updateSetting('showTabCount', checked)}
           />
         </div>
 
@@ -180,7 +196,7 @@ export function App() {
           <select
             className="setting-select"
             value={settings.theme}
-            onChange={(e) => updateSetting('theme', e.target.value as Settings['theme'])}
+            onChange={e => updateSetting('theme', e.target.value as Settings['theme'])}
           >
             <option value="system">{t.themeSystem}</option>
             <option value="light">{t.themeLight}</option>
@@ -196,7 +212,7 @@ export function App() {
           <select
             className="setting-select"
             value={settings.language}
-            onChange={(e) => updateSetting('language', e.target.value as Settings['language'])}
+            onChange={e => updateSetting('language', e.target.value as Settings['language'])}
           >
             <option value="en">{t.languageEn}</option>
             <option value="zh">{t.languageZh}</option>
@@ -207,7 +223,17 @@ export function App() {
       {/* Search Settings */}
       <section className="options-section">
         <div className="section-header">
-          <svg className="section-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className="section-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.3-4.3" />
           </svg>
@@ -221,7 +247,7 @@ export function App() {
           </div>
           <Switch
             checked={settings.searchCurrentWindow}
-            onChange={(checked) => updateSetting('searchCurrentWindow', checked)}
+            onChange={checked => updateSetting('searchCurrentWindow', checked)}
           />
         </div>
 
@@ -233,7 +259,7 @@ export function App() {
           <select
             className="setting-select"
             value={settings.urlDisplayStyle}
-            onChange={(e) => updateSetting('urlDisplayStyle', e.target.value as UrlDisplayStyle)}
+            onChange={e => updateSetting('urlDisplayStyle', e.target.value as UrlDisplayStyle)}
           >
             <option value="none">{t.urlDisplayStyleNone}</option>
             <option value="domain">{t.urlDisplayStyleDomain}</option>
@@ -245,9 +271,19 @@ export function App() {
       {/* Recently Closed Settings */}
       <section className="options-section">
         <div className="section-header">
-          <svg className="section-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12 6 12 12 16 14"/>
+          <svg
+            className="section-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
           </svg>
           <h2 className="section-title">{t.recentClosedSettings}</h2>
         </div>
@@ -259,7 +295,7 @@ export function App() {
           </div>
           <Switch
             checked={settings.enableRecentClosed}
-            onChange={(checked) => updateSetting('enableRecentClosed', checked)}
+            onChange={checked => updateSetting('enableRecentClosed', checked)}
           />
         </div>
 
@@ -273,7 +309,7 @@ export function App() {
               <select
                 className="setting-select"
                 value={settings.recentClosedTimeWindow}
-                onChange={(e) => updateSetting('recentClosedTimeWindow', Number(e.target.value))}
+                onChange={e => updateSetting('recentClosedTimeWindow', Number(e.target.value))}
               >
                 <option value="1">1 {t.hours}</option>
                 <option value="2">2 {t.hours}</option>
@@ -292,7 +328,7 @@ export function App() {
               <select
                 className="setting-select"
                 value={settings.recentClosedMaxResults}
-                onChange={(e) => updateSetting('recentClosedMaxResults', Number(e.target.value))}
+                onChange={e => updateSetting('recentClosedMaxResults', Number(e.target.value))}
               >
                 <option value="3">3</option>
                 <option value="5">5</option>

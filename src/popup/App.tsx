@@ -4,14 +4,14 @@ import type { ShortcutConfig } from '../options/components/ShortcutSettings'
 import './App.css'
 
 const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
-  { id: 'toggle-search-panel', shortcut: { key: 'z', ctrl: true, shift: true } },
+  { id: 'toggle-search-panel', shortcut: { key: 'z', ctrl: true, shift: true } }
 ]
 
 export function App() {
   const [shortcut, setShortcut] = useState<string>('')
 
   useEffect(() => {
-    chrome.storage.sync.get({ shortcuts: DEFAULT_SHORTCUTS }, (data) => {
+    chrome.storage.sync.get({ shortcuts: DEFAULT_SHORTCUTS }, data => {
       const shortcuts = data.shortcuts as ShortcutConfig[]
       if (shortcuts && shortcuts.length > 0) {
         setShortcut(formatShortcut(shortcuts[0].shortcut))

@@ -135,7 +135,17 @@ function AgentationPortal(props: Omit<AgentationWrapperProps, 'mode'>) {
     return () => {
       root.unmount()
     }
-  }, [container, Component, props.visible, props.onAnnotationAdd, props.onAnnotationDelete, props.onAnnotationUpdate, props.onAnnotationsClear, props.onCopy, props.copyToClipboard])
+  }, [
+    container,
+    Component,
+    props.visible,
+    props.onAnnotationAdd,
+    props.onAnnotationDelete,
+    props.onAnnotationUpdate,
+    props.onAnnotationsClear,
+    props.onCopy,
+    props.copyToClipboard
+  ])
 
   return null
 }
@@ -200,17 +210,19 @@ export function AgentationWrapper({
  * // 销毁
  * agentation.destroy()
  */
-export function createAgentationInstance(options: {
-  containerId?: string
-  zIndex?: number
-  visible?: boolean
-  onAnnotationAdd?: (annotation: Annotation) => void
-  onAnnotationDelete?: (annotation: Annotation) => void
-  onAnnotationUpdate?: (annotation: Annotation) => void
-  onAnnotationsClear?: (annotations: Annotation[]) => void
-  onCopy?: (markdown: string) => void
-  copyToClipboard?: boolean
-} = {}) {
+export function createAgentationInstance(
+  options: {
+    containerId?: string
+    zIndex?: number
+    visible?: boolean
+    onAnnotationAdd?: (annotation: Annotation) => void
+    onAnnotationDelete?: (annotation: Annotation) => void
+    onAnnotationUpdate?: (annotation: Annotation) => void
+    onAnnotationsClear?: (annotations: Annotation[]) => void
+    onCopy?: (markdown: string) => void
+    copyToClipboard?: boolean
+  } = {}
+) {
   const {
     containerId = 'agentation-root',
     zIndex = 2147483647,

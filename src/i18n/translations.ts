@@ -148,7 +148,7 @@ export const translations: Record<Language, TranslationKeys> = {
     otherWindow: 'Other window',
     recentClosedSection: 'Recently Closed',
     recentClosedEmpty: 'No recently closed tabs',
-    restoreTab: 'Restore',
+    restoreTab: 'Restore'
   },
   zh: {
     // Header
@@ -222,6 +222,6 @@ export const translations: Record<Language, TranslationKeys> = {
     otherWindow: '其他窗口',
     recentClosedSection: '最近关闭',
     recentClosedEmpty: '没有最近关闭的标签页',
-    restoreTab: '恢复',
-  },
+    restoreTab: '恢复'
+  }
 }

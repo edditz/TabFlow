@@ -1,12 +1,12 @@
 // Background service worker for Tab Tool extension
 
 // Listen for keyboard shortcut commands
-chrome.commands.onCommand.addListener((command) => {
+chrome.commands.onCommand.addListener(command => {
   console.log('Command received:', command)
 
   if (command === 'toggle-search-panel') {
     // Send message to active tab to toggle search panel
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
       const activeTab = tabs[0]
       if (activeTab?.id) {
         chrome.tabs.sendMessage(activeTab.id, { type: 'TOGGLE_SEARCH_PANEL' })
@@ -20,11 +20,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log('Message received:', message, 'from:', sender)
 
   if (message.type === 'GET_ALL_TABS') {
-    const queryOptions: chrome.tabs.QueryInfo = message.currentWindow
-      ? { currentWindow: true }
-      : {}
-    chrome.tabs.query(queryOptions, (tabs) => {
-      chrome.windows.getCurrent((currentWindow) => {
+    const queryOptions: chrome.tabs.QueryInfo = message.currentWindow ? { currentWindow: true } : {}
+    chrome.tabs.query(queryOptions, tabs => {
+      chrome.windows.getCurrent(currentWindow => {
         sendResponse({ tabs, currentWindowId: currentWindow?.id })
       })
     })
@@ -32,13 +30,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.type === 'GET_TAB_STATS') {
-    chrome.tabs.query({}, (allTabs) => {
-      chrome.windows.getAll((windows) => {
-        chrome.tabs.query({ currentWindow: true }, (currentWindowTabs) => {
+    chrome.tabs.query({}, allTabs => {
+      chrome.windows.getAll(windows => {
+        chrome.tabs.query({ currentWindow: true }, currentWindowTabs => {
           sendResponse({
             totalTabs: allTabs.length,
             totalWindows: windows.length,
-            currentWindowTabs: currentWindowTabs.length,
+            currentWindowTabs: currentWindowTabs.length
           })
         })
       })
@@ -48,7 +46,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.type === 'ACTIVATE_TAB') {
     // Get tab info to find its window, then focus both window and tab
-    chrome.tabs.get(message.tabId, (tab) => {
+    chrome.tabs.get(message.tabId, tab => {
       if (tab && tab.windowId) {
         // Focus the window first, then activate the tab
         chrome.windows.update(tab.windowId, { focused: true }, () => {
@@ -67,14 +65,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.type === 'GET_RECENTLY_CLOSED') {
-    chrome.sessions.getRecentlyClosed({ maxResults: message.maxResults || 25 }, (sessions) => {
+    chrome.sessions.getRecentlyClosed({ maxResults: message.maxResults || 25 }, sessions => {
       sendResponse({ sessions })
     })
     return true
   }
 
   if (message.type === 'RESTORE_TAB') {
-    chrome.sessions.restore(message.sessionId, (session) => {
+    chrome.sessions.restore(message.sessionId, session => {
       sendResponse({ success: !!session })
     })
     return true
@@ -84,7 +82,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 })
 
 // Extension installed/updated handler
-chrome.runtime.onInstalled.addListener((details) => {
+chrome.runtime.onInstalled.addListener(details => {
   console.log('Tab Tool installed:', details.reason)
 
   if (details.reason === 'install') {

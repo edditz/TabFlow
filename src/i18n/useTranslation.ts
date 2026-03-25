@@ -9,7 +9,7 @@ export function useTranslation() {
 
   // Load language setting
   useEffect(() => {
-    chrome.storage.sync.get({ language: DEFAULT_LANGUAGE }, (data) => {
+    chrome.storage.sync.get({ language: DEFAULT_LANGUAGE }, data => {
       const lang = data.language as Language
       setLanguage(lang)
       setT(translations[lang])

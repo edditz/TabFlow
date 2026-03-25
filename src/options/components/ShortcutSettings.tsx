@@ -1,10 +1,5 @@
 import { useState, useEffect } from 'react'
-import {
-  ShortcutRecorder,
-  ShortcutKey,
-  toChromeFormat,
-  isValidShortcut,
-} from './ShortcutRecorder'
+import { ShortcutRecorder, ShortcutKey, toChromeFormat, isValidShortcut } from './ShortcutRecorder'
 
 export interface ShortcutConfig {
   id: string
@@ -30,19 +25,15 @@ interface ShortcutSettingsProps {
 export const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
   {
     id: 'toggle-search-panel',
-    shortcut: { key: 'a', ctrl: true, meta: true },
+    shortcut: { key: 'a', ctrl: true, meta: true }
   },
   {
     id: '_execute_action',
-    shortcut: { key: 'h', meta: true },
-  },
+    shortcut: { key: 'h', meta: true }
+  }
 ]
 
-export function ShortcutSettings({
-  shortcuts,
-  onChange,
-  labels,
-}: ShortcutSettingsProps) {
+export function ShortcutSettings({ shortcuts, onChange, labels }: ShortcutSettingsProps) {
   const [conflictIndex, setConflictIndex] = useState<number | null>(null)
 
   // Check for conflicts
@@ -63,9 +54,7 @@ export function ShortcutSettings({
   }, [shortcuts])
 
   const handleShortcutChange = (index: number, newShortcut: ShortcutKey | null) => {
-    const updated = shortcuts.map((s, i) =>
-      i === index ? { ...s, shortcut: newShortcut } : s
-    )
+    const updated = shortcuts.map((s, i) => (i === index ? { ...s, shortcut: newShortcut } : s))
     onChange(updated)
   }
 
@@ -95,7 +84,7 @@ export function ShortcutSettings({
             </div>
             <ShortcutRecorder
               value={shortcut.shortcut}
-              onChange={(newShortcut) => handleShortcutChange(index, newShortcut)}
+              onChange={newShortcut => handleShortcutChange(index, newShortcut)}
               placeholder={labels.clickToRecord}
             />
           </div>

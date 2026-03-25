@@ -17,7 +17,7 @@ const isDev = import.meta.env.VITE_DEV === 'true'
 // Default shortcuts
 const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
   { id: 'toggle-search-panel', shortcut: { key: 'a', ctrl: true, meta: true } },
-  { id: '_execute_action', shortcut: { key: 'h', meta: true } },
+  { id: '_execute_action', shortcut: { key: 'h', meta: true } }
 ]
 
 // DOM containers and React roots
@@ -96,9 +96,9 @@ function init(): void {
       shortcuts: DEFAULT_SHORTCUTS,
       enableRecentClosed: true,
       recentClosedTimeWindow: 24,
-      recentClosedMaxResults: 10,
+      recentClosedMaxResults: 10
     },
-    (data) => {
+    data => {
       currentEnableSearchPanel = data.enableSearchPanel
       currentTheme = data.theme
       currentLanguage = data.language
@@ -116,7 +116,7 @@ function init(): void {
   )
 
   // Listen for settings changes
-  chrome.storage.onChanged.addListener((changes) => {
+  chrome.storage.onChanged.addListener(changes => {
     if (changes.enableSearchPanel) {
       currentEnableSearchPanel = changes.enableSearchPanel.newValue
       // Hide panel if disabled while visible
@@ -236,7 +236,7 @@ function render(): void {
     searchRoot.render(
       <SearchPanel
         onCloseComplete={hide}
-        registerCloseCallback={(callback) => {
+        registerCloseCallback={callback => {
           closePanelCallback = callback
         }}
         theme={getActualTheme()}
@@ -303,7 +303,7 @@ setupKeyboardListener()
 render()
 
 // Listen for messages from background script
-chrome.runtime.onMessage.addListener((message) => {
+chrome.runtime.onMessage.addListener(message => {
   if (message.type === 'TOGGLE_SEARCH_PANEL') {
     if (currentEnableSearchPanel) {
       toggle()

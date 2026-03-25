@@ -28,6 +28,19 @@ npm run dev
 npm run build
 ```
 
+### Code Quality
+
+```bash
+# Run ESLint
+npm run lint
+
+# Run ESLint with auto-fix
+npm run lint:fix
+
+# Format code with Prettier
+npm run format
+```
+
 ### Loading the Extension
 
 #### Chrome

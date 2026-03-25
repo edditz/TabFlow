@@ -90,7 +90,7 @@ export function ShortcutRecorder({
   value,
   onChange,
   placeholder = 'Press shortcut keys...',
-  disabled = false,
+  disabled = false
 }: ShortcutRecorderProps) {
   const [isRecording, setIsRecording] = useState(false)
   const [hasError, setHasError] = useState(false)
@@ -126,7 +126,7 @@ export function ShortcutRecorder({
         ctrl: e.ctrlKey,
         shift: e.shiftKey,
         alt: e.altKey,
-        meta: e.metaKey,
+        meta: e.metaKey
       }
 
       onChange(shortcut)

@@ -70,7 +70,7 @@ export function SearchPanel({
   searchCurrentWindow,
   enableRecentClosed,
   recentClosedTimeWindow,
-  recentClosedMaxResults,
+  recentClosedMaxResults
 }: SearchPanelProps) {
   const t = translations[language]
   const [query, setQuery] = useState('')
@@ -79,7 +79,11 @@ export function SearchPanel({
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [isKeyboardNav, setIsKeyboardNav] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
-  const [stats, setStats] = useState<{ totalTabs: number; totalWindows: number; currentWindowTabs: number } | null>(null)
+  const [stats, setStats] = useState<{
+    totalTabs: number
+    totalWindows: number
+    currentWindowTabs: number
+  } | null>(null)
   const [currentWindowId, setCurrentWindowId] = useState<number | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const selectedItemRef = useRef<HTMLDivElement>(null)
@@ -110,7 +114,7 @@ export function SearchPanel({
       try {
         const response = await chrome.runtime.sendMessage({
           type: 'GET_ALL_TABS',
-          currentWindow: searchCurrentWindow,
+          currentWindow: searchCurrentWindow
         })
         if (response?.tabs) {
           if (response.currentWindowId) {
@@ -121,11 +125,11 @@ export function SearchPanel({
             title: tab.title || 'Untitled',
             url: tab.url || '',
             favIconUrl: tab.favIconUrl || '',
-            windowId: tab.windowId!,
+            windowId: tab.windowId!
           }))
           setResults(tabResults)
         }
-      } catch (error) {
+      } catch (_error) {
         setResults([])
       }
     }
@@ -141,7 +145,7 @@ export function SearchPanel({
         if (response) {
           setStats(response)
         }
-      } catch (error) {
+      } catch (_error) {
         // Ignore errors
       }
     }
@@ -164,13 +168,17 @@ export function SearchPanel({
 
         const sessions = response?.sessions || []
         console.log('[Tab Tool] Raw sessions:', sessions)
-        console.log('[Tab Tool] Config:', { enableRecentClosed, recentClosedTimeWindow, recentClosedMaxResults })
+        console.log('[Tab Tool] Config:', {
+          enableRecentClosed,
+          recentClosedTimeWindow,
+          recentClosedMaxResults
+        })
 
         const now = Date.now()
         const timeLimit = recentClosedTimeWindow * 60 * 60 * 1000
 
         const tabs: ClosedTab[] = sessions
-          .filter((s: chrome.sessions.Session) => s.tab && (now - (s.lastModified * 1000) < timeLimit))
+          .filter((s: chrome.sessions.Session) => s.tab && now - s.lastModified * 1000 < timeLimit)
           .slice(0, recentClosedMaxResults)
           .map((s: chrome.sessions.Session) => ({
             sessionId: s.tab!.sessionId!,
@@ -212,7 +220,7 @@ export function SearchPanel({
   }, [isClosing, onCloseComplete])
 
   // Filter results based on query
-  const filteredResults = results.filter((tab) => {
+  const filteredResults = results.filter(tab => {
     if (!query.trim()) return true
     const lowerQuery = query.toLowerCase()
     return (
@@ -223,28 +231,33 @@ export function SearchPanel({
   })
 
   // Filter closed tabs based on query
-  const filteredClosedTabs = enableRecentClosed ? closedTabs.filter(tab => {
-    if (!query.trim()) return true
-    const lowerQuery = query.toLowerCase()
-    return (
-      tab.title.toLowerCase().includes(lowerQuery) ||
-      tab.url.toLowerCase().includes(lowerQuery) ||
-      extractDomain(tab.url).toLowerCase().includes(lowerQuery)
-    )
-  }) : []
+  const filteredClosedTabs = enableRecentClosed
+    ? closedTabs.filter(tab => {
+        if (!query.trim()) return true
+        const lowerQuery = query.toLowerCase()
+        return (
+          tab.title.toLowerCase().includes(lowerQuery) ||
+          tab.url.toLowerCase().includes(lowerQuery) ||
+          extractDomain(tab.url).toLowerCase().includes(lowerQuery)
+        )
+      })
+    : []
 
   // Total items for keyboard navigation (open tabs + closed tabs)
   const totalItems = filteredResults.length + filteredClosedTabs.length
 
   // Restore a closed tab
-  const restoreTab = useCallback(async (tab: ClosedTab) => {
-    try {
-      await chrome.runtime.sendMessage({ type: 'RESTORE_TAB', sessionId: tab.sessionId })
-      handleClose()
-    } catch (error) {
-      // Session might have expired
-    }
-  }, [handleClose])
+  const restoreTab = useCallback(
+    async (tab: ClosedTab) => {
+      try {
+        await chrome.runtime.sendMessage({ type: 'RESTORE_TAB', sessionId: tab.sessionId })
+        handleClose()
+      } catch (_error) {
+        // Session might have expired
+      }
+    },
+    [handleClose]
+  )
 
   // Reset selected index when query changes - select first result if available
   useEffect(() => {
@@ -261,7 +274,7 @@ export function SearchPanel({
     if (selectedItemRef.current && isKeyboardNav) {
       selectedItemRef.current.scrollIntoView({
         block: 'center',
-        behavior: 'smooth',
+        behavior: 'smooth'
       })
     }
   }, [selectedIndex, isKeyboardNav])
@@ -275,14 +288,12 @@ export function SearchPanel({
         case 'ArrowDown':
           e.preventDefault()
           setIsKeyboardNav(true)
-          setSelectedIndex((prev) => (prev + 1) % totalItems)
+          setSelectedIndex(prev => (prev + 1) % totalItems)
           break
         case 'ArrowUp':
           e.preventDefault()
           setIsKeyboardNav(true)
-          setSelectedIndex((prev) =>
-            prev - 1 >= 0 ? prev - 1 : totalItems - 1
-          )
+          setSelectedIndex(prev => (prev - 1 >= 0 ? prev - 1 : totalItems - 1))
           break
         case 'Enter':
           // Ignore Enter during IME composition (Chinese/Japanese input)
@@ -320,16 +331,14 @@ export function SearchPanel({
       <div
         ref={containerRef}
         className={`tt-container ${isClosing ? 'tt-closing' : ''}`}
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div className="tt-header">
           <div className="tt-header-content">
             <div className="tt-header-text">
               <h2 className="tt-title">{t.searchTabs}</h2>
-              <p className="tt-description">
-                {t.searchTabsDesc}
-              </p>
+              <p className="tt-description">{t.searchTabsDesc}</p>
             </div>
             {stats && (
               <div className="tt-header-stats">
@@ -376,7 +385,7 @@ export function SearchPanel({
               className="tt-input"
               placeholder={t.searchPlaceholder}
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={e => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
             />
           </div>
@@ -387,7 +396,8 @@ export function SearchPanel({
             onMouseMove={() => setIsKeyboardNav(false)}
             onMouseLeave={() => setSelectedIndex(-1)}
           >
-            {filteredResults.length === 0 && (!enableRecentClosed || filteredClosedTabs.length === 0) ? (
+            {filteredResults.length === 0 &&
+            (!enableRecentClosed || filteredClosedTabs.length === 0) ? (
               <div className="tt-empty">{t.noTabsFound}</div>
             ) : (
               <>
@@ -431,21 +441,21 @@ export function SearchPanel({
                       <div className="tt-result-title">{tab.title}</div>
                       {urlDisplayStyle !== 'none' && (
                         <div className="tt-result-url">
-                          {urlDisplayStyle === 'domain'
-                            ? extractDomain(tab.url)
-                            : tab.url}
+                          {urlDisplayStyle === 'domain' ? extractDomain(tab.url) : tab.url}
                         </div>
                       )}
                     </div>
-                    {!searchCurrentWindow && currentWindowId !== null && tab.windowId !== currentWindowId && (
-                      <span className="tt-result-badge">{t.otherWindow}</span>
-                    )}
+                    {!searchCurrentWindow &&
+                      currentWindowId !== null &&
+                      tab.windowId !== currentWindowId && (
+                        <span className="tt-result-badge">{t.otherWindow}</span>
+                      )}
                     <button
                       className="tt-result-delete"
-                      onClick={async (e) => {
+                      onClick={async e => {
                         e.stopPropagation()
                         await chrome.runtime.sendMessage({ type: 'CLOSE_TAB', tabId: tab.id })
-                        setResults((prev) => prev.filter((t) => t.id !== tab.id))
+                        setResults(prev => prev.filter(t => t.id !== tab.id))
                       }}
                       title={t.closeTab}
                     >
@@ -506,9 +516,7 @@ export function SearchPanel({
                             <div className="tt-result-title">{tab.title}</div>
                             {urlDisplayStyle !== 'none' && (
                               <div className="tt-result-url">
-                                {urlDisplayStyle === 'domain'
-                                  ? extractDomain(tab.url)
-                                  : tab.url}
+                                {urlDisplayStyle === 'domain' ? extractDomain(tab.url) : tab.url}
                               </div>
                             )}
                           </div>

@@ -14,8 +14,7 @@
   --tt-radius-m: 12px;
   --tt-radius-pill: 999px;
   --tt-shadow-modal: 0 12px 28px -10px rgba(42, 41, 51, 0.15);
-  --tt-shadow-input: 0 6px 16px -8px rgba(87, 73, 244, 0.13),
-    0 0 0 1px rgba(87, 73, 244, 0.2);
+  --tt-shadow-input: 0 6px 16px -8px rgba(87, 73, 244, 0.13), 0 0 0 1px rgba(87, 73, 244, 0.2);
   --tt-backdrop-bg: rgba(255, 255, 255, 0.72);
   --tt-backdrop-blur: 4px;
   --tt-item-selected-bg: #eef0ff;
@@ -33,8 +32,7 @@
   --tt-accent: #131124;
   --tt-accent-foreground: #e8e8ea;
   --tt-shadow-modal: 0 12px 30px -12px rgba(0, 0, 0, 0.4);
-  --tt-shadow-input: 0 8px 18px -8px rgba(87, 73, 244, 0.2),
-    0 0 0 1px rgba(87, 73, 244, 0.33);
+  --tt-shadow-input: 0 8px 18px -8px rgba(87, 73, 244, 0.2), 0 0 0 1px rgba(87, 73, 244, 0.33);
   --tt-backdrop-bg: rgba(0, 0, 0, 0.4);
   --tt-item-selected-bg: #1a182e;
   --tt-item-hover-bg: #1a182e;
@@ -56,8 +54,7 @@
   justify-content: center;
   align-items: flex-start;
   padding-top: 15vh;
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto,
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
   color: var(--tt-foreground);
   /* Entry animation */
   animation: tt-overlay-enter 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -182,7 +179,9 @@
   border: 1px solid var(--tt-border);
   border-radius: var(--tt-radius-pill);
   gap: 8px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   /* Entry animation - appears second */
   animation: tt-item-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
   opacity: 0;
@@ -253,7 +252,9 @@
   border-radius: var(--tt-radius-xs);
   cursor: pointer;
   gap: 10px;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
   border: 1px solid transparent;
 }
 
@@ -344,7 +345,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .tt-result-delete:hover {

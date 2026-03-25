@@ -119,7 +119,7 @@ function createPNG(width, height, r, g, b) {
 const iconsDir = join(__dirname, '..', 'icons')
 try {
   mkdirSync(iconsDir, { recursive: true })
-} catch (e) {
+} catch (_e) {
   // ignore
 }
 
