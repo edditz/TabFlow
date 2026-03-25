@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git commit*)",
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "You are verifying code quality before a git commit. Get the list of staged files with 'git diff --cached --name-only'. Filter for .ts/.tsx/.js/.jsx files. For each code file: 1) Read the file content. 2) Review for bugs, security issues, code quality problems, and best practices. 3) If you find CRITICAL or HIGH severity issues, report them clearly and set exit code 2 to block the commit. For MEDIUM issues, report them but don't block. After review is complete, run 'npm run lint'. If lint fails, report the errors and set exit code 2 to block the commit. If all checks pass (no CRITICAL/HIGH issues, lint passes), set exit code 0 to allow the commit.",
+            "timeout": 120,
+            "statusMessage": "Running code review and lint checks...",
+            "model": "sonnet"
+          }
+        ]
+      }
+    ]
+  }
+}
