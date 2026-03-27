@@ -3,6 +3,9 @@ import './App.css'
 import { useTranslation } from '../i18n'
 import { ShortcutSettings, ShortcutConfig, DEFAULT_SHORTCUTS } from './components/ShortcutSettings'
 import { Switch } from './components/Switch'
+import { AISettings as AISettingsComponent } from './components/AISettings'
+import type { AISettings } from '../classification'
+import { DEFAULT_AI_SETTINGS } from '../classification'
 
 export type UrlDisplayStyle = 'none' | 'domain' | 'full'
 
@@ -17,6 +20,7 @@ interface Settings {
   enableRecentClosed: boolean
   recentClosedTimeWindow: number
   recentClosedMaxResults: number
+  aiSettings: AISettings
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -29,7 +33,8 @@ const DEFAULT_SETTINGS: Settings = {
   shortcuts: DEFAULT_SHORTCUTS,
   enableRecentClosed: true,
   recentClosedTimeWindow: 24,
-  recentClosedMaxResults: 10
+  recentClosedMaxResults: 10,
+  aiSettings: DEFAULT_AI_SETTINGS
 }
 
 // Get actual theme based on setting and system preference
@@ -339,6 +344,26 @@ export function App() {
           </>
         )}
       </section>
+
+      {/* AI Classification Settings */}
+      <AISettingsComponent
+        settings={settings.aiSettings}
+        onChange={aiSettings => updateSetting('aiSettings', aiSettings)}
+        labels={{
+          aiSettings: t.aiSettings,
+          enableAiClassification: t.enableAiClassification,
+          enableAiClassificationDesc: t.enableAiClassificationDesc,
+          apiEndpoint: t.apiEndpoint,
+          apiEndpointHint: t.apiEndpointHint,
+          apiKey: t.apiKey,
+          apiKeyPlaceholder: t.apiKeyPlaceholder,
+          modelName: t.modelName,
+          modelNameHint: t.modelNameHint,
+          testConnection: t.testConnection,
+          connectionSuccess: t.connectionSuccess,
+          connectionFailed: t.connectionFailed
+        }}
+      />
 
       <footer className="options-footer">
         <span>Tab Tool v{chrome.runtime.getManifest().version}</span>
