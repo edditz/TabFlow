@@ -1,5 +1,20 @@
 // Background service worker for Tab Tool extension
 
+// Category color mapping for tab groups
+function getCategoryColor(category: string): chrome.tabGroups.ColorEnum {
+  const colorMap: Record<string, chrome.tabGroups.ColorEnum> = {
+    Work: 'blue',
+    Development: 'purple',
+    Social: 'pink',
+    Shopping: 'green',
+    Entertainment: 'red',
+    News: 'yellow',
+    Docs: 'cyan',
+    Other: 'grey'
+  }
+  return colorMap[category] || 'grey'
+}
+
 // Listen for keyboard shortcut commands
 chrome.commands.onCommand.addListener(command => {
   console.log('Command received:', command)
@@ -76,6 +91,33 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ success: !!session })
     })
     return true
+  }
+
+  if (message.type === 'CLASSIFY_TABS') {
+    // Create tab groups from classification results
+    ;(async () => {
+      try {
+        const createdGroups: { name: string; groupId: number }[] = []
+
+        for (const group of message.groups) {
+          if (group.tabs && group.tabs.length > 0) {
+            const tabIds = group.tabs.map((tab: { id: number }) => tab.id)
+            const groupId = await chrome.tabs.group({ tabIds })
+            await chrome.tabGroups.update(groupId, {
+              title: group.name,
+              color: getCategoryColor(group.name)
+            })
+            createdGroups.push({ name: group.name, groupId })
+          }
+        }
+
+        sendResponse({ success: true, groups: createdGroups })
+      } catch (error) {
+        console.error('[Tab Tool] Error creating tab groups:', error)
+        sendResponse({ success: false, error: String(error) })
+      }
+    })()
+    return true // Required for async response
   }
 
   return false
