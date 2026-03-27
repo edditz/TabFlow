@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import type { KeyboardEvent } from 'react'
 import { translations, type Language } from '../../i18n'
 import type { UrlDisplayStyle } from '../../options/App'
+import { ClassificationPanel } from './ClassificationPanel'
+import type { CategoryGroup } from '../../classification'
 import './SearchPanel.css'
 
 interface TabResult {
@@ -79,6 +81,7 @@ export function SearchPanel({
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [isKeyboardNav, setIsKeyboardNav] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
+  const [showClassification, setShowClassification] = useState(false)
   const [stats, setStats] = useState<{
     totalTabs: number
     totalWindows: number
@@ -358,6 +361,26 @@ export function SearchPanel({
                     </span>
                   </>
                 )}
+                <button
+                  className="tt-classify-btn"
+                  onClick={() => setShowClassification(true)}
+                  title={t.smartClassify}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    width="16"
+                    height="16"
+                  >
+                    <rect x="3" y="3" width="7" height="7" rx="1" />
+                    <rect x="14" y="3" width="7" height="7" rx="1" />
+                    <rect x="3" y="14" width="7" height="7" rx="1" />
+                    <rect x="14" y="14" width="7" height="7" rx="1" />
+                  </svg>
+                  <span>{t.smartClassify}</span>
+                </button>
               </div>
             )}
           </div>
@@ -545,6 +568,57 @@ export function SearchPanel({
             <span>{t.close}</span>
           </div>
         </div>
+
+        {showClassification && (
+          <ClassificationPanel
+            tabs={results.map(tab => ({
+              id: tab.id,
+              title: tab.title,
+              url: tab.url,
+              favIconUrl: tab.favIconUrl
+            }))}
+            theme={theme}
+            language={language}
+            onClose={() => setShowClassification(false)}
+            onConfirm={(groups: CategoryGroup[]) => {
+              chrome.runtime.sendMessage(
+                {
+                  type: 'CLASSIFY_TABS',
+                  groups: groups.map(g => ({
+                    name: g.name,
+                    tabs: g.tabs,
+                    color: g.color
+                  }))
+                },
+                response => {
+                  if (response?.success) {
+                    setShowClassification(false)
+                    handleClose()
+                  }
+                }
+              )
+            }}
+            labels={{
+              smartClassify: t.smartClassify,
+              analyzing: t.analyzing,
+              aiNotConfigured: t.aiNotConfigured,
+              aiNotConfiguredDesc: t.aiNotConfiguredDesc,
+              classifyAnyway: t.classifyAnyway,
+              goToSettings: t.goToSettings,
+              createTabGroups: t.createTabGroups,
+              cancel: t.cancel,
+              noTabsToClassify: t.noTabsToClassify,
+              categoryWork: t.categoryWork,
+              categoryDevelopment: t.categoryDevelopment,
+              categorySocial: t.categorySocial,
+              categoryShopping: t.categoryShopping,
+              categoryEntertainment: t.categoryEntertainment,
+              categoryNews: t.categoryNews,
+              categoryDocs: t.categoryDocs,
+              categoryOther: t.categoryOther
+            }}
+          />
+        )}
       </div>
     </div>
   )

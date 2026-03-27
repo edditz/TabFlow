@@ -158,6 +158,32 @@
   opacity: 0.5;
 }
 
+/* Smart Classify Button */
+.tt-classify-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--tt-border);
+  border-radius: 6px;
+  color: var(--tt-muted-foreground);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.tt-classify-btn:hover {
+  background: var(--tt-accent);
+  color: var(--tt-foreground);
+  border-color: var(--tt-muted-foreground);
+}
+
+.tt-classify-btn svg {
+  flex-shrink: 0;
+}
+
 /* Search Content */
 .tt-search-content {
   padding: 0;
