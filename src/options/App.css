@@ -430,3 +430,65 @@ body {
   color: var(--foreground);
   border-color: var(--primary);
 }
+
+/* AI Settings */
+.setting-input {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--card);
+  color: var(--foreground);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.setting-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(87, 73, 244, 0.1);
+}
+
+.setting-input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.setting-action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.setting-button {
+  padding: 8px 16px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.setting-button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.setting-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.test-result {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.test-result.success {
+  color: #10b981;
+}
+
+.test-result.error {
+  color: #ef4444;
+}
