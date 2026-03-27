@@ -73,6 +73,43 @@ export interface TranslationKeys {
   recentClosedSection: string
   recentClosedEmpty: string
   restoreTab: string
+
+  // AI Classification Settings
+  aiSettings: string
+  enableAiClassification: string
+  enableAiClassificationDesc: string
+  apiEndpoint: string
+  apiEndpointHint: string
+  apiKey: string
+  apiKeyPlaceholder: string
+  modelName: string
+  modelNameHint: string
+  testConnection: string
+  connectionSuccess: string
+  connectionFailed: string
+
+  // Smart Classification
+  smartClassify: string
+  analyzing: string
+  aiNotConfigured: string
+  aiNotConfiguredDesc: string
+  classifyAnyway: string
+  goToSettings: string
+  createTabGroups: string
+  cancel: string
+  noTabsToClassify: string
+  allTabsClassified: string
+  classificationComplete: string
+
+  // Category names
+  categoryWork: string
+  categoryDevelopment: string
+  categorySocial: string
+  categoryShopping: string
+  categoryEntertainment: string
+  categoryNews: string
+  categoryDocs: string
+  categoryOther: string
 }
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -148,7 +185,44 @@ export const translations: Record<Language, TranslationKeys> = {
     otherWindow: 'Other window',
     recentClosedSection: 'Recently Closed',
     recentClosedEmpty: 'No recently closed tabs',
-    restoreTab: 'Restore'
+    restoreTab: 'Restore',
+
+    // AI Classification Settings
+    aiSettings: 'AI Classification Settings',
+    enableAiClassification: 'Enable AI Smart Classification',
+    enableAiClassificationDesc: 'Use AI to classify tabs that don\'t match built-in rules',
+    apiEndpoint: 'API Endpoint',
+    apiEndpointHint: 'Supports any OpenAI-compatible endpoint',
+    apiKey: 'API Key',
+    apiKeyPlaceholder: 'Enter your API key',
+    modelName: 'Model Name',
+    modelNameHint: 'Common: gpt-3.5-turbo, gpt-4, claude-3-haiku-20240307',
+    testConnection: 'Test Connection',
+    connectionSuccess: 'Connection successful',
+    connectionFailed: 'Connection failed',
+
+    // Smart Classification
+    smartClassify: 'Smart Classify',
+    analyzing: 'Analyzing tabs...',
+    aiNotConfigured: 'AI Not Configured',
+    aiNotConfiguredDesc: 'Will use built-in rules only. Some tabs may not be accurately categorized.',
+    classifyAnyway: 'Classify Anyway',
+    goToSettings: 'Go to Settings',
+    createTabGroups: 'Create Tab Groups',
+    cancel: 'Cancel',
+    noTabsToClassify: 'No tabs to classify',
+    allTabsClassified: 'All tabs are already classified',
+    classificationComplete: 'Classification complete!',
+
+    // Category names
+    categoryWork: 'Work',
+    categoryDevelopment: 'Development',
+    categorySocial: 'Social',
+    categoryShopping: 'Shopping',
+    categoryEntertainment: 'Entertainment',
+    categoryNews: 'News',
+    categoryDocs: 'Docs',
+    categoryOther: 'Other'
   },
   zh: {
     // Header
@@ -222,6 +296,43 @@ export const translations: Record<Language, TranslationKeys> = {
     otherWindow: '其他窗口',
     recentClosedSection: '最近关闭',
     recentClosedEmpty: '没有最近关闭的标签页',
-    restoreTab: '恢复'
+    restoreTab: '恢复',
+
+    // AI Classification Settings
+    aiSettings: 'AI 分类设置',
+    enableAiClassification: '启用 AI 智能分类',
+    enableAiClassificationDesc: '使用 AI 对不匹配内置规则的标签进行分类',
+    apiEndpoint: 'API 端点',
+    apiEndpointHint: '支持任意 OpenAI 兼容端点',
+    apiKey: 'API Key',
+    apiKeyPlaceholder: '输入您的 API 密钥',
+    modelName: '模型名称',
+    modelNameHint: '常用: gpt-3.5-turbo, gpt-4, claude-3-haiku-20240307',
+    testConnection: '测试连接',
+    connectionSuccess: '连接成功',
+    connectionFailed: '连接失败',
+
+    // Smart Classification
+    smartClassify: '智能分类',
+    analyzing: '正在分析标签...',
+    aiNotConfigured: 'AI 未配置',
+    aiNotConfiguredDesc: '将仅使用内置规则进行分类，部分标签可能无法准确归类。',
+    classifyAnyway: '仍要分类',
+    goToSettings: '去设置',
+    createTabGroups: '创建标签组',
+    cancel: '取消',
+    noTabsToClassify: '没有需要分类的标签',
+    allTabsClassified: '所有标签已分类',
+    classificationComplete: '分类完成！',
+
+    // Category names
+    categoryWork: '工作',
+    categoryDevelopment: '开发',
+    categorySocial: '社交',
+    categoryShopping: '购物',
+    categoryEntertainment: '娱乐',
+    categoryNews: '新闻',
+    categoryDocs: '文档',
+    categoryOther: '其他'
   }
 }
