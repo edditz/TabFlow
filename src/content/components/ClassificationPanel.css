@@ -300,3 +300,63 @@
   justify-content: flex-end;
   width: 100%;
 }
+
+/* ========================================
+   Drag and Drop Styles
+   ======================================== */
+
+/* Draggable tab wrapper */
+.cp-draggable-tab {
+  cursor: grab;
+}
+
+.cp-draggable-tab:active {
+  cursor: grabbing;
+}
+
+.cp-draggable-tab.dragging {
+  opacity: 0.4;
+}
+
+/* Drop target highlight */
+.cp-group.drop-target {
+  border: 2px dashed var(--tt-primary);
+  background: color-mix(in srgb, var(--tt-primary) 5%, var(--tt-card));
+}
+
+/* Drop hint tooltip */
+.cp-drop-hint {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--tt-primary);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 10;
+  animation: cp-hint-fade-in 0.15s ease;
+  pointer-events: none;
+}
+
+@keyframes cp-hint-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* DragOverlay - dragged item style */
+.cp-drag-overlay {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  background: var(--tt-card);
+  pointer-events: none;
+  touch-action: none;
+}

@@ -1,8 +1,21 @@
 // src/content/components/ClassificationPanel.tsx
 import { useState, useEffect } from 'react'
+import {
+  DndContext,
+  DragOverlay,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragStartEvent,
+  type DragEndEvent
+} from '@dnd-kit/core'
 import type { TabInfo, CategoryGroup, AISettings } from '../../classification'
 import { classifyTabs, DEFAULT_AI_SETTINGS } from '../../classification'
 import { TabItem } from './TabItem'
+import { DraggableTabItem } from './DraggableTabItem'
+import { DroppableCategoryGroup } from './DroppableCategoryGroup'
 import './ClassificationPanel.css'
 
 interface ClassificationPanelProps {
@@ -29,6 +42,7 @@ interface ClassificationPanelProps {
     categoryNews: string
     categoryDocs: string
     categoryOther: string
+    moveToCategory: string
   }
 }
 
@@ -44,6 +58,18 @@ export function ClassificationPanel({
   const [state, setState] = useState<PanelState>('loading')
   const [groups, setGroups] = useState<CategoryGroup[]>([])
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
+  const [activeTab, setActiveTab] = useState<TabInfo | null>(null)
+  const [overGroupId, setOverGroupId] = useState<string | null>(null)
+
+  // DnD sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5
+      }
+    }),
+    useSensor(KeyboardSensor)
+  )
 
   // Run classification on mount
   useEffect(() => {
@@ -110,6 +136,84 @@ export function ClassificationPanel({
     })
   }
 
+  // Helper: Find which group contains a tab
+  const findGroupContainingTab = (tabId: number): string | null => {
+    for (const group of groups) {
+      if (group.tabs.some(t => t.id === tabId)) {
+        return group.name
+      }
+    }
+    return null
+  }
+
+  // Helper: Move tab between groups (immutable)
+  const moveTabBetweenGroups = (
+    prevGroups: CategoryGroup[],
+    tabId: number,
+    sourceGroupName: string,
+    targetGroupName: string
+  ): CategoryGroup[] => {
+    let movedTab: TabInfo | null = null
+
+    // Remove from source and find the tab
+    const newGroups = prevGroups.map(group => {
+      if (group.name === sourceGroupName) {
+        const tabIndex = group.tabs.findIndex(t => t.id === tabId)
+        if (tabIndex !== -1) {
+          movedTab = group.tabs[tabIndex]
+          return {
+            ...group,
+            tabs: [...group.tabs.slice(0, tabIndex), ...group.tabs.slice(tabIndex + 1)]
+          }
+        }
+      }
+      return group
+    })
+
+    // Add to target
+    if (movedTab) {
+      return newGroups.map(group => {
+        if (group.name === targetGroupName) {
+          return {
+            ...group,
+            tabs: [...group.tabs, movedTab!]
+          }
+        }
+        return group
+      })
+    }
+
+    return newGroups
+  }
+
+  // DnD handlers
+  const handleDragStart = (event: DragStartEvent) => {
+    const tab = event.active.data.current?.tab as TabInfo | undefined
+    if (tab) {
+      setActiveTab(tab)
+    }
+  }
+
+  const handleDragOver = (event: { over: { id: string | number } | null }) => {
+    setOverGroupId(event.over?.id ? String(event.over.id) : null)
+  }
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    setActiveTab(null)
+    setOverGroupId(null)
+
+    if (!over) return
+
+    const tabId = parseInt(String(active.id).replace('tab-', ''), 10)
+    const targetGroupName = String(over.id).replace('group-', '')
+    const sourceGroupName = findGroupContainingTab(tabId)
+
+    if (!sourceGroupName || sourceGroupName === targetGroupName) return
+
+    setGroups(prev => moveTabBetweenGroups(prev, tabId, sourceGroupName, targetGroupName))
+  }
+
   return (
     <>
       {/* Header */}
@@ -157,56 +261,63 @@ export function ClassificationPanel({
         )}
 
         {state === 'preview' && (
-          <div className="cp-groups">
-            {groups.map(group => {
-              const isCollapsed = collapsedGroups.has(group.name)
-              return (
-                <div key={group.name} className="cp-group">
-                  <div
-                    className="cp-group-header"
-                    onClick={() => toggleGroupCollapse(group.name)}
-                    role="button"
-                    aria-expanded={!isCollapsed}
-                    tabIndex={0}
-                    onKeyDown={e => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault()
-                        toggleGroupCollapse(group.name)
-                      }
-                    }}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragEnd={handleDragEnd}
+          >
+            <div className="cp-groups">
+              {groups.map(group => {
+                const isCollapsed = collapsedGroups.has(group.name)
+                const isOver = overGroupId === `group-${group.name}`
+
+                return (
+                  <DroppableCategoryGroup
+                    key={group.name}
+                    group={group}
+                    isOver={isOver && activeTab !== null}
+                    getCategoryLabel={getCategoryLabel}
+                    moveToCategoryLabel={labels.moveToCategory}
+                    isCollapsed={isCollapsed}
+                    onToggleCollapse={() => toggleGroupCollapse(group.name)}
                   >
-                    <button
-                      className="cp-collapse-btn"
-                      aria-label={isCollapsed ? 'Expand' : 'Collapse'}
-                      tabIndex={-1}
-                    >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        width="16"
-                        height="16"
-                        className={isCollapsed ? 'cp-collapse-icon-collapsed' : ''}
-                      >
-                        <polyline points="6 9 12 15 18 9" />
-                      </svg>
-                    </button>
-                    <span className={`cp-group-color cp-color-${group.color}`} />
-                    <span className="cp-group-name">{getCategoryLabel(group.name)}</span>
-                    <span className="cp-group-count">{group.tabs.length}</span>
-                  </div>
-                  <div className={`cp-group-tabs-wrapper ${isCollapsed ? 'cp-collapsed' : ''}`}>
-                    <div className="cp-group-tabs">
-                      {group.tabs.map(tab => (
-                        <TabItem key={tab.id} tab={tab} showUrl={false} className="cp-tab-item" />
-                      ))}
-                    </div>
-                  </div>
+                    {group.tabs.map(tab => (
+                      <DraggableTabItem
+                        key={tab.id}
+                        tab={tab}
+                        isDragging={activeTab?.id === tab.id}
+                      />
+                    ))}
+                  </DroppableCategoryGroup>
+                )
+              })}
+            </div>
+
+            <DragOverlay
+              style={{
+                position: 'fixed',
+                pointerEvents: 'none',
+                zIndex: 9999
+              }}
+            >
+              {activeTab && (
+                <div
+                  style={{
+                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
+                    borderRadius: '6px',
+                    background: 'var(--tt-card, #fff)',
+                    padding: '8px 12px',
+                    opacity: 0.95,
+                    cursor: 'grabbing'
+                  }}
+                >
+                  <TabItem tab={activeTab} showUrl={false} className="cp-tab-item" />
                 </div>
-              )
-            })}
-          </div>
+              )}
+            </DragOverlay>
+          </DndContext>
         )}
       </div>
 

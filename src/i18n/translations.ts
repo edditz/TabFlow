@@ -111,6 +111,9 @@ export interface TranslationKeys {
   categoryNews: string
   categoryDocs: string
   categoryOther: string
+
+  // Drag and Drop
+  moveToCategory: string
 }
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -224,7 +227,10 @@ export const translations: Record<Language, TranslationKeys> = {
     categoryEntertainment: 'Entertainment',
     categoryNews: 'News',
     categoryDocs: 'Docs',
-    categoryOther: 'Other'
+    categoryOther: 'Other',
+
+    // Drag and Drop
+    moveToCategory: 'Move to {category}'
   },
   zh: {
     // Header
@@ -336,6 +342,9 @@ export const translations: Record<Language, TranslationKeys> = {
     categoryEntertainment: '娱乐',
     categoryNews: '新闻',
     categoryDocs: '文档',
-    categoryOther: '其他'
+    categoryOther: '其他',
+
+    // Drag and Drop
+    moveToCategory: '移动到 {category}'
   }
 }
