@@ -323,7 +323,8 @@ function render(): void {
                 categoryEntertainment: t.categoryEntertainment,
                 categoryNews: t.categoryNews,
                 categoryDocs: t.categoryDocs,
-                categoryOther: t.categoryOther
+                categoryOther: t.categoryOther,
+                moveToCategory: t.moveToCategory
               }}
             />
           )}
