@@ -1,7 +1,25 @@
 /* ClassificationPanel.css */
 /* Styles for content inside SearchPanel container */
 
-/* Header back button */
+/* Header layout - back button and title in one row */
+.cp-header {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+/* Header title - centered */
+.cp-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--tt-foreground);
+  text-align: center;
+  flex: 1;
+}
+
+/* Back button */
 .tt-back-btn {
   display: flex;
   align-items: center;
@@ -10,16 +28,18 @@
   border: none;
   padding: 6px 10px;
   cursor: pointer;
-  color: var(--muted);
+  color: var(--tt-muted-foreground);
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
   transition: all 0.15s;
+  position: absolute;
+  left: 0;
 }
 
 .tt-back-btn:hover {
-  background: var(--hover);
-  color: var(--foreground);
+  background: var(--tt-item-hover-bg);
+  color: var(--tt-foreground);
 }
 
 .tt-back-btn span {
@@ -30,31 +50,6 @@
   .tt-back-btn span {
     display: inline;
   }
-}
-
-/* Header title centering when back button present */
-.cp-header-title {
-  flex: 1;
-  text-align: center;
-}
-
-/* Close button in header */
-.tt-close-btn {
-  background: none;
-  border: none;
-  padding: 6px;
-  cursor: pointer;
-  color: var(--muted);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s;
-}
-
-.tt-close-btn:hover {
-  background: var(--hover);
-  color: var(--foreground);
 }
 
 /* Content wrapper */
@@ -71,14 +66,14 @@
   align-items: center;
   justify-content: center;
   padding: 40px;
-  color: var(--muted);
+  color: var(--tt-muted-foreground);
 }
 
 .cp-spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid var(--border-color);
-  border-top-color: var(--primary);
+  border: 3px solid var(--tt-border);
+  border-top-color: var(--tt-primary);
   border-radius: 50%;
   animation: cp-spin 0.8s linear infinite;
 }
@@ -98,7 +93,7 @@
 .cp-empty {
   text-align: center;
   padding: 40px;
-  color: var(--muted);
+  color: var(--tt-muted-foreground);
 }
 
 /* Warning state */
@@ -114,13 +109,13 @@
 
 .cp-warning h3 {
   margin: 0 0 8px;
-  color: var(--foreground);
+  color: var(--tt-foreground);
   font-size: 16px;
 }
 
 .cp-warning p {
   margin: 0 0 20px;
-  color: var(--muted);
+  color: var(--tt-muted-foreground);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -139,9 +134,10 @@
 }
 
 .cp-group {
-  background: var(--card);
+  background: var(--tt-card);
   border-radius: 8px;
   overflow: hidden;
+  border: 1px solid var(--tt-border);
 }
 
 .cp-group-header {
@@ -149,7 +145,48 @@
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  background: var(--hover);
+  background: var(--tt-item-hover-bg);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.cp-group-header:hover {
+  background: color-mix(in srgb, var(--tt-item-hover-bg) 50%, var(--tt-border));
+}
+
+.cp-group-header:focus {
+  outline: none;
+}
+
+/* Collapse button */
+.cp-collapse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--tt-muted-foreground);
+  border-radius: 4px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.cp-collapse-btn:hover {
+  background: var(--tt-item-hover-bg);
+  color: var(--tt-foreground);
+}
+
+.cp-collapse-btn svg {
+  transition: transform 0.2s ease;
+}
+
+.cp-collapse-icon-collapsed {
+  transform: rotate(-90deg);
 }
 
 .cp-group-color {
@@ -170,49 +207,61 @@
 
 .cp-group-name {
   font-weight: 500;
-  color: var(--foreground);
+  color: var(--tt-foreground);
   font-size: 14px;
 }
 
 .cp-group-count {
   margin-left: auto;
   font-size: 12px;
-  color: var(--muted);
-  background: var(--background);
+  color: var(--tt-muted-foreground);
+  background: var(--tt-accent);
   padding: 2px 8px;
   border-radius: 10px;
 }
 
+.cp-group-tabs-wrapper {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.25s ease-out;
+}
+
+.cp-group-tabs-wrapper.cp-collapsed {
+  grid-template-rows: 0fr;
+}
+
 .cp-group-tabs {
-  padding: 8px 12px;
-}
-
-.cp-tab {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 0;
-  font-size: 13px;
-}
-
-.cp-tab-icon {
-  width: 16px;
-  height: 16px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
-.cp-tab-title {
-  color: var(--foreground);
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  min-height: 0;
 }
 
-.cp-tab-more {
-  font-size: 12px;
-  color: var(--muted);
-  padding: 4px 0;
+.cp-group-tabs .cp-tab-item:first-child {
+  padding-top: 8px;
+}
+
+.cp-group-tabs .cp-tab-item:last-child {
+  padding-bottom: 8px;
+}
+
+/* TabItem adjustments for classification panel */
+.cp-tab-item {
+  padding: 8px 12px;
+  border-radius: 0;
+  border: none;
+  cursor: default;
+}
+
+.cp-tab-item:hover {
+  background: transparent;
+}
+
+.cp-tab-item .tt-result-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.cp-tab-item .tt-result-title {
+  font-size: 13px;
 }
 
 /* Buttons */
@@ -227,21 +276,21 @@
 }
 
 .cp-btn-primary {
-  background: var(--primary);
+  background: var(--tt-primary);
   color: white;
 }
 
 .cp-btn-primary:hover {
-  background: var(--primary-dark);
+  background: color-mix(in srgb, var(--tt-primary) 85%, black);
 }
 
 .cp-btn-secondary {
-  background: var(--hover);
-  color: var(--foreground);
+  background: var(--tt-item-hover-bg);
+  color: var(--tt-foreground);
 }
 
 .cp-btn-secondary:hover {
-  background: var(--border-color);
+  background: var(--tt-border);
 }
 
 /* Footer actions */
@@ -250,13 +299,4 @@
   gap: 12px;
   justify-content: flex-end;
   width: 100%;
-}
-
-/* Dark theme adjustments */
-[data-theme='dark'] .cp-group {
-  background: var(--background);
-}
-
-[data-theme='dark'] .cp-group-header {
-  background: rgba(255, 255, 255, 0.05);
 }

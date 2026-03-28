@@ -1,0 +1,123 @@
+/* TabItem.css */
+/* Shared styles for tab items used in SearchPanel and ClassificationPanel */
+
+/* Tab Item */
+.tt-result-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  margin: 0;
+  border-radius: var(--tt-radius-xs);
+  cursor: pointer;
+  gap: 10px;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.tt-result-item:hover {
+  background: var(--tt-item-hover-bg);
+  border-color: var(--tt-border);
+}
+
+.tt-result-item.selected {
+  background: var(--tt-item-selected-bg);
+  border-color: var(--tt-primary);
+}
+
+/* Tab Icon */
+.tt-result-icon {
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: var(--tt-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  overflow: hidden;
+  color: var(--tt-muted-foreground);
+}
+
+.tt-result-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Tab Info */
+.tt-result-info {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-align: left;
+}
+
+.tt-result-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--tt-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tt-result-url {
+  font-size: 12px;
+  color: var(--tt-muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+/* Badge */
+.tt-result-badge {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--tt-primary);
+  background: var(--tt-badge-bg);
+  padding: 3px 8px;
+  border-radius: var(--tt-radius-pill);
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+/* Delete Button */
+.tt-result-delete {
+  opacity: 0;
+  background: transparent;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: var(--tt-muted-foreground);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.tt-result-delete:hover {
+  background: var(--tt-item-hover-bg);
+  color: var(--tt-foreground);
+}
+
+.tt-result-item:hover .tt-result-delete,
+.tt-result-item.selected .tt-result-delete {
+  opacity: 1;
+}
+
+/* Time suffix for closed tabs */
+.tt-result-time {
+  font-size: 12px;
+  color: var(--tt-muted-foreground);
+  flex-shrink: 0;
+  margin-left: 8px;
+}

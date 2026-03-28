@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import type { TabInfo, CategoryGroup, AISettings } from '../../classification'
 import { classifyTabs, DEFAULT_AI_SETTINGS } from '../../classification'
+import { TabItem } from './TabItem'
 import './ClassificationPanel.css'
 
 interface ClassificationPanelProps {
@@ -42,6 +43,7 @@ export function ClassificationPanel({
 }: ClassificationPanelProps) {
   const [state, setState] = useState<PanelState>('loading')
   const [groups, setGroups] = useState<CategoryGroup[]>([])
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
 
   // Run classification on mount
   useEffect(() => {
@@ -96,28 +98,30 @@ export function ClassificationPanel({
     return labelMap[name] || name
   }
 
+  const toggleGroupCollapse = (groupName: string) => {
+    setCollapsedGroups(prev => {
+      const next = new Set(prev)
+      if (next.has(groupName)) {
+        next.delete(groupName)
+      } else {
+        next.add(groupName)
+      }
+      return next
+    })
+  }
+
   return (
     <>
-      {/* Header - matches SearchPanel structure */}
+      {/* Header */}
       <div className="tt-header">
-        <div className="tt-header-content">
-          <div className="tt-header-left">
-            <button className="tt-back-btn" onClick={onBack} aria-label={labels.backToSearch}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-              <span>{labels.backToSearch}</span>
-            </button>
-          </div>
-          <div className="tt-header-text cp-header-title">
-            <h2 className="tt-title">{labels.smartClassify}</h2>
-          </div>
-          <button className="tt-close-btn" onClick={onClose} aria-label="Close">
+        <div className="tt-header-content cp-header">
+          <button className="tt-back-btn" onClick={onBack} aria-label={labels.backToSearch}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
+              <polyline points="15 18 9 12 15 6" />
             </svg>
+            <span>{labels.backToSearch}</span>
           </button>
+          <h2 className="cp-title">{labels.smartClassify}</h2>
         </div>
       </div>
 
@@ -154,28 +158,54 @@ export function ClassificationPanel({
 
         {state === 'preview' && (
           <div className="cp-groups">
-            {groups.map(group => (
-              <div key={group.name} className="cp-group">
-                <div className="cp-group-header">
-                  <span className={`cp-group-color cp-color-${group.color}`} />
-                  <span className="cp-group-name">{getCategoryLabel(group.name)}</span>
-                  <span className="cp-group-count">{group.tabs.length}</span>
-                </div>
-                <div className="cp-group-tabs">
-                  {group.tabs.slice(0, 3).map(tab => (
-                    <div key={tab.id} className="cp-tab">
-                      {tab.favIconUrl && (
-                        <img src={tab.favIconUrl} alt="" className="cp-tab-icon" />
-                      )}
-                      <span className="cp-tab-title">{tab.title}</span>
+            {groups.map(group => {
+              const isCollapsed = collapsedGroups.has(group.name)
+              return (
+                <div key={group.name} className="cp-group">
+                  <div
+                    className="cp-group-header"
+                    onClick={() => toggleGroupCollapse(group.name)}
+                    role="button"
+                    aria-expanded={!isCollapsed}
+                    tabIndex={0}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        toggleGroupCollapse(group.name)
+                      }
+                    }}
+                  >
+                    <button
+                      className="cp-collapse-btn"
+                      aria-label={isCollapsed ? 'Expand' : 'Collapse'}
+                      tabIndex={-1}
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        width="16"
+                        height="16"
+                        className={isCollapsed ? 'cp-collapse-icon-collapsed' : ''}
+                      >
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </button>
+                    <span className={`cp-group-color cp-color-${group.color}`} />
+                    <span className="cp-group-name">{getCategoryLabel(group.name)}</span>
+                    <span className="cp-group-count">{group.tabs.length}</span>
+                  </div>
+                  <div className={`cp-group-tabs-wrapper ${isCollapsed ? 'cp-collapsed' : ''}`}>
+                    <div className="cp-group-tabs">
+                      {group.tabs.map(tab => (
+                        <TabItem key={tab.id} tab={tab} showUrl={false} className="cp-tab-item" />
+                      ))}
                     </div>
-                  ))}
-                  {group.tabs.length > 3 && (
-                    <div className="cp-tab-more">+{group.tabs.length - 3} more</div>
-                  )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>
