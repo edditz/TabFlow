@@ -1,13 +1,16 @@
 import { createRoot } from 'react-dom/client'
 import { SearchPanel } from './components/SearchPanel'
+import { ClassificationPanel } from './components/ClassificationPanel'
 import { createAgentationInstance, type Annotation } from '../shared'
 import { translations, type Language } from '../i18n'
 import type { ShortcutConfig } from '../options/components/ShortcutSettings'
 import type { ShortcutKey } from '../options/components/ShortcutRecorder'
 import type { UrlDisplayStyle } from '../options/App'
+import type { TabInfo, CategoryGroup } from '../classification'
 
 // Import CSS as raw string for Shadow DOM injection
 import cssText from './components/SearchPanel.css?inline'
+import classificationCssText from './components/ClassificationPanel.css?inline'
 import toastCssText from './styles.css?inline'
 
 // Dev-only - uses custom VITE_DEV env var instead of built-in DEV
@@ -32,6 +35,9 @@ let agentationInstance: ReturnType<typeof createAgentationInstance> | null = nul
 
 // State
 let isVisible = false
+let isClosing = false
+let currentView: 'search' | 'classification' = 'search'
+let classificationTabs: TabInfo[] = []
 let keyboardListener: ((e: KeyboardEvent) => void) | null = null
 let currentEnableSearchPanel: boolean = true
 let currentTheme: 'system' | 'light' | 'dark' = 'system'
@@ -75,7 +81,7 @@ function init(): void {
 
   // Inject styles into Shadow DOM
   const styleElement = document.createElement('style')
-  styleElement.textContent = cssText + '\n' + toastCssText
+  styleElement.textContent = cssText + '\n' + classificationCssText + '\n' + toastCssText
   shadowRoot.appendChild(styleElement)
 
   // Create container for React app inside Shadow DOM
@@ -219,12 +225,16 @@ function setupKeyboardListener(): void {
 
 function toggle(): void {
   if (isVisible) {
-    // Trigger close animation instead of hiding immediately
-    if (closePanelCallback) {
-      closePanelCallback()
-    }
+    // Trigger close animation
+    isClosing = true
+    render()
+    // Actually hide after animation
+    setTimeout(() => {
+      hide()
+    }, 150)
   } else {
     isVisible = true
+    isClosing = false
     render()
   }
 }
@@ -233,29 +243,103 @@ function render(): void {
   if (!searchRoot) return
 
   if (isVisible) {
+    const t = translations[currentLanguage]
+
+    // Unified container - only created once, content switches inside
     searchRoot.render(
-      <SearchPanel
-        onCloseComplete={hide}
-        registerCloseCallback={callback => {
-          closePanelCallback = callback
+      <div
+        className={`tt-overlay ${isClosing ? 'tt-closing' : ''}`}
+        onClick={() => {
+          if (closePanelCallback) {
+            closePanelCallback()
+          } else {
+            hide()
+          }
         }}
-        theme={getActualTheme()}
-        language={currentLanguage}
-        urlDisplayStyle={currentUrlDisplayStyle}
-        searchCurrentWindow={currentSearchCurrentWindow}
-        enableRecentClosed={currentEnableRecentClosed}
-        recentClosedTimeWindow={currentRecentClosedTimeWindow}
-        recentClosedMaxResults={currentRecentClosedMaxResults}
-      />
+        data-theme={getActualTheme()}
+      >
+        <div
+          className={`tt-container ${isClosing ? 'tt-closing' : ''}`}
+          onClick={e => e.stopPropagation()}
+        >
+          {currentView === 'search' ? (
+            <SearchPanel
+              onCloseComplete={hide}
+              registerCloseCallback={callback => {
+                closePanelCallback = callback
+              }}
+              language={currentLanguage}
+              urlDisplayStyle={currentUrlDisplayStyle}
+              searchCurrentWindow={currentSearchCurrentWindow}
+              enableRecentClosed={currentEnableRecentClosed}
+              recentClosedTimeWindow={currentRecentClosedTimeWindow}
+              recentClosedMaxResults={currentRecentClosedMaxResults}
+              onShowClassification={(tabs: TabInfo[]) => {
+                classificationTabs = tabs
+                currentView = 'classification'
+                render()
+              }}
+            />
+          ) : (
+            <ClassificationPanel
+              tabs={classificationTabs}
+              onClose={hide}
+              onBack={() => {
+                currentView = 'search'
+                render()
+              }}
+              onConfirm={(groups: CategoryGroup[]) => {
+                chrome.runtime.sendMessage(
+                  {
+                    type: 'CLASSIFY_TABS',
+                    groups: groups.map(g => ({
+                      name: g.name,
+                      tabs: g.tabs,
+                      color: g.color
+                    }))
+                  },
+                  response => {
+                    if (response?.success) {
+                      hide()
+                    }
+                  }
+                )
+              }}
+              labels={{
+                smartClassify: t.smartClassify,
+                backToSearch: t.backToSearch,
+                analyzing: t.analyzing,
+                aiNotConfigured: t.aiNotConfigured,
+                aiNotConfiguredDesc: t.aiNotConfiguredDesc,
+                classifyAnyway: t.classifyAnyway,
+                goToSettings: t.goToSettings,
+                createTabGroups: t.createTabGroups,
+                cancel: t.cancel,
+                noTabsToClassify: t.noTabsToClassify,
+                categoryWork: t.categoryWork,
+                categoryDevelopment: t.categoryDevelopment,
+                categorySocial: t.categorySocial,
+                categoryShopping: t.categoryShopping,
+                categoryEntertainment: t.categoryEntertainment,
+                categoryNews: t.categoryNews,
+                categoryDocs: t.categoryDocs,
+                categoryOther: t.categoryOther
+              }}
+            />
+          )}
+        </div>
+      </div>
     )
-    // Show Agentation when SearchPanel opens
+
+    // Show Agentation when panel opens
     if (isDev && agentationInstance) {
       agentationInstance.show()
     }
   } else {
     searchRoot.render(null)
     closePanelCallback = null
-    // Hide Agentation when SearchPanel closes
+    isClosing = false
+    // Hide Agentation when panel closes
     if (isDev && agentationInstance) {
       agentationInstance.hide()
     }
@@ -264,6 +348,10 @@ function render(): void {
 
 function hide(): void {
   isVisible = false
+  isClosing = false
+  currentView = 'search'
+  classificationTabs = []
+  closePanelCallback = null
   render()
 }
 

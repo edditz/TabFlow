@@ -6,12 +6,12 @@ import './ClassificationPanel.css'
 
 interface ClassificationPanelProps {
   tabs: TabInfo[]
-  theme: 'light' | 'dark'
-  language: 'en' | 'zh'
   onClose: () => void
+  onBack: () => void
   onConfirm: (groups: CategoryGroup[]) => void
   labels: {
     smartClassify: string
+    backToSearch: string
     analyzing: string
     aiNotConfigured: string
     aiNotConfiguredDesc: string
@@ -35,8 +35,8 @@ type PanelState = 'loading' | 'ai-warning' | 'preview' | 'empty'
 
 export function ClassificationPanel({
   tabs,
-  theme,
   onClose,
+  onBack,
   onConfirm,
   labels
 }: ClassificationPanelProps) {
@@ -97,90 +97,105 @@ export function ClassificationPanel({
   }
 
   return (
-    <div className="cp-overlay" onClick={onClose} data-theme={theme}>
-      <div className="cp-container" onClick={e => e.stopPropagation()}>
-        <div className="cp-header">
-          <h2>{labels.smartClassify}</h2>
-          <button className="cp-close" onClick={onClose} aria-label="Close">
+    <>
+      {/* Header - matches SearchPanel structure */}
+      <div className="tt-header">
+        <div className="tt-header-content">
+          <div className="tt-header-left">
+            <button className="tt-back-btn" onClick={onBack} aria-label={labels.backToSearch}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+              <span>{labels.backToSearch}</span>
+            </button>
+          </div>
+          <div className="tt-header-text cp-header-title">
+            <h2 className="tt-title">{labels.smartClassify}</h2>
+          </div>
+          <button className="tt-close-btn" onClick={onClose} aria-label="Close">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20">
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
+      </div>
 
-        <div className="cp-content">
-          {state === 'loading' && (
-            <div className="cp-loading">
-              <div className="cp-spinner" />
-              <p>{labels.analyzing}</p>
+      {/* Content */}
+      <div className="tt-search-content cp-content-wrapper">
+        {state === 'loading' && (
+          <div className="cp-loading">
+            <div className="cp-spinner" />
+            <p>{labels.analyzing}</p>
+          </div>
+        )}
+
+        {state === 'empty' && (
+          <div className="cp-empty">
+            <p>{labels.noTabsToClassify}</p>
+          </div>
+        )}
+
+        {state === 'ai-warning' && (
+          <div className="cp-warning">
+            <div className="cp-warning-icon">⚠️</div>
+            <h3>{labels.aiNotConfigured}</h3>
+            <p>{labels.aiNotConfiguredDesc}</p>
+            <div className="cp-warning-actions">
+              <button className="cp-btn cp-btn-secondary" onClick={() => setState('preview')}>
+                {labels.classifyAnyway}
+              </button>
+              <button className="cp-btn cp-btn-primary" onClick={handleGoToSettings}>
+                {labels.goToSettings}
+              </button>
             </div>
-          )}
+          </div>
+        )}
 
-          {state === 'empty' && (
-            <div className="cp-empty">
-              <p>{labels.noTabsToClassify}</p>
-            </div>
-          )}
-
-          {state === 'ai-warning' && (
-            <div className="cp-warning">
-              <div className="cp-warning-icon">⚠️</div>
-              <h3>{labels.aiNotConfigured}</h3>
-              <p>{labels.aiNotConfiguredDesc}</p>
-              <div className="cp-warning-actions">
-                <button className="cp-btn cp-btn-secondary" onClick={() => setState('preview')}>
-                  {labels.classifyAnyway}
-                </button>
-                <button className="cp-btn cp-btn-primary" onClick={handleGoToSettings}>
-                  {labels.goToSettings}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {state === 'preview' && (
-            <>
-              <div className="cp-groups">
-                {groups.map(group => (
-                  <div key={group.name} className="cp-group">
-                    <div className="cp-group-header">
-                      <span className={`cp-group-color cp-color-${group.color}`} />
-                      <span className="cp-group-name">{getCategoryLabel(group.name)}</span>
-                      <span className="cp-group-count">{group.tabs.length}</span>
-                    </div>
-                    <div className="cp-group-tabs">
-                      {group.tabs.slice(0, 3).map(tab => (
-                        <div key={tab.id} className="cp-tab">
-                          {tab.favIconUrl && (
-                            <img src={tab.favIconUrl} alt="" className="cp-tab-icon" />
-                          )}
-                          <span className="cp-tab-title">{tab.title}</span>
-                        </div>
-                      ))}
-                      {group.tabs.length > 3 && (
-                        <div className="cp-tab-more">+{group.tabs.length - 3} more</div>
+        {state === 'preview' && (
+          <div className="cp-groups">
+            {groups.map(group => (
+              <div key={group.name} className="cp-group">
+                <div className="cp-group-header">
+                  <span className={`cp-group-color cp-color-${group.color}`} />
+                  <span className="cp-group-name">{getCategoryLabel(group.name)}</span>
+                  <span className="cp-group-count">{group.tabs.length}</span>
+                </div>
+                <div className="cp-group-tabs">
+                  {group.tabs.slice(0, 3).map(tab => (
+                    <div key={tab.id} className="cp-tab">
+                      {tab.favIconUrl && (
+                        <img src={tab.favIconUrl} alt="" className="cp-tab-icon" />
                       )}
+                      <span className="cp-tab-title">{tab.title}</span>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                  {group.tabs.length > 3 && (
+                    <div className="cp-tab-more">+{group.tabs.length - 3} more</div>
+                  )}
+                </div>
               </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-              <div className="cp-footer">
-                <button className="cp-btn cp-btn-secondary" onClick={onClose}>
-                  {labels.cancel}
-                </button>
-                <button
-                  className="cp-btn cp-btn-primary"
-                  onClick={() => onConfirm(groups)}
-                >
-                  {labels.createTabGroups}
-                </button>
-              </div>
-            </>
+      {/* Footer */}
+      <div className="tt-footer">
+        <div className="tt-footer-actions">
+          <button className="cp-btn cp-btn-secondary" onClick={onClose}>
+            {labels.cancel}
+          </button>
+          {state === 'preview' && (
+            <button
+              className="cp-btn cp-btn-primary"
+              onClick={() => onConfirm(groups)}
+            >
+              {labels.createTabGroups}
+            </button>
           )}
         </div>
       </div>
-    </div>
+    </>
   )
 }

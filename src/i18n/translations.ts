@@ -90,6 +90,7 @@ export interface TranslationKeys {
 
   // Smart Classification
   smartClassify: string
+  backToSearch: string
   analyzing: string
   aiNotConfigured: string
   aiNotConfiguredDesc: string
@@ -203,6 +204,7 @@ export const translations: Record<Language, TranslationKeys> = {
 
     // Smart Classification
     smartClassify: 'Smart Classify',
+    backToSearch: 'Back to Search',
     analyzing: 'Analyzing tabs...',
     aiNotConfigured: 'AI Not Configured',
     aiNotConfiguredDesc: 'Will use built-in rules only. Some tabs may not be accurately categorized.',
@@ -314,6 +316,7 @@ export const translations: Record<Language, TranslationKeys> = {
 
     // Smart Classification
     smartClassify: '智能分类',
+    backToSearch: '返回搜索',
     analyzing: '正在分析标签...',
     aiNotConfigured: 'AI 未配置',
     aiNotConfiguredDesc: '将仅使用内置规则进行分类，部分标签可能无法准确归类。',
