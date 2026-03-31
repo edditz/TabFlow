@@ -60,7 +60,36 @@ export function App() {
   useEffect(() => {
     // Load initial settings
     chrome.storage.sync.get(DEFAULT_SETTINGS, data => {
-      const loadedSettings = data as Settings
+      let loadedSettings = data as Settings
+
+      // In development mode, auto-fill AI settings from environment variables
+      if (import.meta.env.VITE_DEV) {
+        const envAISettings: Partial<AISettings> = {}
+
+        if (import.meta.env.VITE_AI_ENABLED !== undefined) {
+          envAISettings.enabled = import.meta.env.VITE_AI_ENABLED === 'true'
+        }
+        if (import.meta.env.VITE_AI_ENDPOINT) {
+          envAISettings.endpoint = import.meta.env.VITE_AI_ENDPOINT
+        }
+        if (import.meta.env.VITE_AI_API_KEY) {
+          envAISettings.apiKey = import.meta.env.VITE_AI_API_KEY
+        }
+        if (import.meta.env.VITE_AI_MODEL) {
+          envAISettings.model = import.meta.env.VITE_AI_MODEL
+        }
+
+        // If any env vars are set, merge and save to storage
+        if (Object.keys(envAISettings).length > 0) {
+          loadedSettings = {
+            ...loadedSettings,
+            aiSettings: { ...loadedSettings.aiSettings, ...envAISettings }
+          }
+          // Save to storage so UI shows the values
+          chrome.storage.sync.set({ aiSettings: loadedSettings.aiSettings })
+        }
+      }
+
       setSettings(loadedSettings)
       setActualTheme(getActualTheme(loadedSettings.theme))
     })

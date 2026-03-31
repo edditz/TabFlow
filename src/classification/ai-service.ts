@@ -2,8 +2,54 @@
 import type { AISettings, TabInfo } from './types'
 import { DEFAULT_AI_SETTINGS } from './types'
 
+/**
+ * Get AI settings from environment variables (development mode only)
+ * Returns null if not in development mode or env vars are not set
+ */
+function getEnvAISettings(): Partial<AISettings> | null {
+  // Only apply env vars in development mode
+  if (!import.meta.env.VITE_DEV) {
+    return null
+  }
+
+  const envSettings: Partial<AISettings> = {}
+
+  if (import.meta.env.VITE_AI_ENABLED !== undefined) {
+    envSettings.enabled = import.meta.env.VITE_AI_ENABLED === 'true'
+  }
+
+  if (import.meta.env.VITE_AI_ENDPOINT) {
+    envSettings.endpoint = import.meta.env.VITE_AI_ENDPOINT
+  }
+
+  if (import.meta.env.VITE_AI_API_KEY) {
+    envSettings.apiKey = import.meta.env.VITE_AI_API_KEY
+  }
+
+  if (import.meta.env.VITE_AI_MODEL) {
+    envSettings.model = import.meta.env.VITE_AI_MODEL
+  }
+
+  // Return null if no env vars are set
+  if (Object.keys(envSettings).length === 0) {
+    return null
+  }
+
+  return envSettings
+}
+
 export function getAISettings(): Promise<AISettings> {
   return new Promise(resolve => {
+    // In development mode, environment variables override storage settings
+    const envSettings = getEnvAISettings()
+
+    if (envSettings) {
+      // Merge env vars with defaults (storage settings are ignored in dev mode)
+      resolve({ ...DEFAULT_AI_SETTINGS, ...envSettings })
+      return
+    }
+
+    // Production mode: use storage settings
     chrome.storage.sync.get({ aiSettings: DEFAULT_AI_SETTINGS }, data => {
       resolve(data.aiSettings as AISettings)
     })
