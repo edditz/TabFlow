@@ -2,7 +2,7 @@
 
 ## 概述
 
-为 Tab Tool 添加智能标签分类功能，一键将所有打开的标签按类型整理到 Chrome Tab Groups 中。
+为 TabFlow 添加智能标签分类功能，一键将所有打开的标签按类型整理到 Chrome Tab Groups 中。
 
 ## 功能特性
 

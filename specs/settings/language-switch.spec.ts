@@ -19,7 +19,7 @@ test.describe('语言切换功能', () => {
     await expect(languageSelect).toHaveValue('zh')
 
     const title = page.locator('h1')
-    await expect(title).toContainText('Tab Tool 设置')
+    await expect(title).toContainText('TabFlow 设置')
   })
 
   test('切换语言为英文', async ({ page }) => {
@@ -36,6 +36,6 @@ test.describe('语言切换功能', () => {
     await expect(languageSelect).toHaveValue('en')
 
     const title = page.locator('h1')
-    await expect(title).toContainText('Tab Tool Settings')
+    await expect(title).toContainText('TabFlow Settings')
   })
 })

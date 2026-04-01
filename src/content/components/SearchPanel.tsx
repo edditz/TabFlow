@@ -166,8 +166,8 @@ export function SearchPanel({
         })
 
         const sessions = response?.sessions || []
-        console.log('[Tab Tool] Raw sessions:', sessions)
-        console.log('[Tab Tool] Config:', {
+        console.log('[TabFlow] Raw sessions:', sessions)
+        console.log('[TabFlow] Config:', {
           enableRecentClosed,
           recentClosedTimeWindow,
           recentClosedMaxResults
@@ -187,10 +187,10 @@ export function SearchPanel({
             closedAt: s.lastModified * 1000
           }))
 
-        console.log('[Tab Tool] Filtered closed tabs:', tabs)
+        console.log('[TabFlow] Filtered closed tabs:', tabs)
         setClosedTabs(tabs)
       } catch (error) {
-        console.error('[Tab Tool] Error fetching closed tabs:', error)
+        console.error('[TabFlow] Error fetching closed tabs:', error)
         setClosedTabs([])
       }
     }

@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Tab Tool",
+  "name": "TabFlow",
   "version": "1.0.0",
   "description": "Enhanced tab management for Chrome and Edge",
   "icons": {
@@ -45,7 +45,7 @@
         "default": "Ctrl+Shift+Y",
         "mac": "Command+Shift+Y"
       },
-      "description": "Open Tab Tool search panel"
+      "description": "Open TabFlow search panel"
     },
     "toggle-search-panel": {
       "suggested_key": {

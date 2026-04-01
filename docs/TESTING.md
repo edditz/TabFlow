@@ -2,7 +2,7 @@
 
 ## 概述
 
-本文档介绍如何使用 Playwright 为 Tab Tool 浏览器扩展编写和运行测试。
+本文档介绍如何使用 Playwright 为 TabFlow 浏览器扩展编写和运行测试。
 
 ## 测试架构
 

@@ -73,7 +73,7 @@ function matchesShortcut(e: KeyboardEvent, shortcut: ShortcutKey | null): boolea
 function init(): void {
   // Create shadow DOM host
   shadowHost = document.createElement('div')
-  shadowHost.id = 'tab-tool-root'
+  shadowHost.id = 'tabflow-root'
   document.body.appendChild(shadowHost)
 
   // Create Shadow DOM for style isolation
@@ -86,7 +86,7 @@ function init(): void {
 
   // Create container for React app inside Shadow DOM
   appContainer = document.createElement('div')
-  appContainer.id = 'tab-tool-app'
+  appContainer.id = 'tabflow-app'
   shadowRoot.appendChild(appContainer)
 
   searchRoot = createRoot(appContainer)
@@ -192,7 +192,7 @@ function init(): void {
   // Initialize Agentation instance (dev only)
   if (isDev) {
     agentationInstance = createAgentationInstance({
-      containerId: 'tab-tool-agentation',
+      containerId: 'tabflow-agentation',
       zIndex: 2147483647,
       visible: false,
       onAnnotationAdd: (annotation: Annotation) => {
@@ -402,4 +402,4 @@ chrome.runtime.onMessage.addListener(message => {
   }
 })
 
-console.log('Tab Tool content script loaded')
+console.log('TabFlow content script loaded')

@@ -14,12 +14,12 @@ test.describe('页面加载和初始状态', () => {
     // 检查页面标题
     const title = page.locator('h1')
     await expect(title).toBeVisible()
-    await expect(title).toContainText('Tab Tool')
+    await expect(title).toContainText('TabFlow')
 
     // 检查版本号
     const footer = page.locator('.options-footer')
     await expect(footer).toBeVisible()
-    await expect(footer).toContainText('Tab Tool v')
+    await expect(footer).toContainText('TabFlow v')
 
     // 检查所有设置区域已加载
     const sections = page.locator('.options-section')

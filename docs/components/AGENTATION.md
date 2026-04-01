@@ -189,14 +189,14 @@ let isVisible = false
 function init() {
   // 创建 SearchPanel 容器
   searchContainer = document.createElement('div')
-  searchContainer.id = 'tab-tool-root'
+  searchContainer.id = 'tabflow-root'
   document.body.appendChild(searchContainer)
   searchRoot = createRoot(searchContainer)
 
   // 初始化 Agentation（仅开发环境）
   if (isDev) {
     agentationInstance = createAgentationInstance({
-      containerId: 'tab-tool-agentation',
+      containerId: 'tabflow-agentation',
       zIndex: 2147483647,
       visible: false,
       onAnnotationAdd: (annotation: Annotation) => {

@@ -136,7 +136,7 @@ export function App() {
     <div className="options-container">
       <header className="options-header">
         <div className="header-icon">
-          <img src="../../icons/icon128.png" alt="Tab Tool" />
+          <img src="../../icons/icon128.png" alt="TabFlow" />
         </div>
         <div className="header-text">
           <h1>{t.settingsTitle}</h1>
@@ -395,7 +395,7 @@ export function App() {
       />
 
       <footer className="options-footer">
-        <span>Tab Tool v{chrome.runtime.getManifest().version}</span>
+        <span>TabFlow v{chrome.runtime.getManifest().version}</span>
       </footer>
 
       <div className={`save-indicator ${saved ? 'show' : ''}`}>{t.settingsSaved}</div>

@@ -1,4 +1,4 @@
-# Tab Tool
+# TabFlow
 
 See @README.md for project overview and @package.json for available npm commands.
 

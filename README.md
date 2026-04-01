@@ -1,4 +1,4 @@
-# Tab Tool
+# TabFlow
 
 A browser extension for enhanced tab management, supporting both Chrome and Edge.
 
@@ -67,7 +67,7 @@ npm run format
 ## Project Structure
 
 ```
-tab-tool/
+tabflow/
 ├── src/
 │   ├── background/     # Service worker
 │   ├── content/        # Content script (injected into pages)

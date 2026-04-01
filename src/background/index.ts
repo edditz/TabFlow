@@ -1,4 +1,4 @@
-// Background service worker for Tab Tool extension
+// Background service worker for TabFlow extension
 
 // Category color mapping for tab groups
 function getCategoryColor(category: string): chrome.tabGroups.ColorEnum {
@@ -113,7 +113,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         sendResponse({ success: true, groups: createdGroups })
       } catch (error) {
-        console.error('[Tab Tool] Error creating tab groups:', error)
+        console.error('[TabFlow] Error creating tab groups:', error)
         sendResponse({ success: false, error: String(error) })
       }
     })()
@@ -125,7 +125,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // Extension installed/updated handler
 chrome.runtime.onInstalled.addListener(details => {
-  console.log('Tab Tool installed:', details.reason)
+  console.log('TabFlow installed:', details.reason)
 
   if (details.reason === 'install') {
     // Open options page on first install

@@ -1,12 +1,12 @@
 {
-  "name": "tab-tool",
+  "name": "tabflow",
   "version": "1.0.0",
   "description": "A browser extension for enhanced tab management",
   "type": "module",
   "scripts": {
     "dev": "vite build --watch --mode dev",
     "build": "tsc && vite build",
-    "build:zip": "npm run build && cd dist && zip -r ../tab-tool-v$npm_package_version.zip . && cd .. && echo \"Created: tab-tool-v$npm_package_version.zip\"",
+    "build:zip": "npm run build && cd dist && zip -r ../tabflow-v$npm_package_version.zip . && cd .. && echo \"Created: tabflow-v$npm_package_version.zip\"",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",

@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 为 Tab Tool 添加智能标签分类功能，一键将所有打开的标签按类型整理到 Chrome Tab Groups 中。
+**Goal:** 为 TabFlow 添加智能标签分类功能，一键将所有打开的标签按类型整理到 Chrome Tab Groups 中。
 
 **Architecture:** 混合分类模式（内置规则 + AI 补充），在 SearchPanel 添加入口，弹出 ClassificationPanel 预览分类结果，确认后通过 Background Service 创建 Tab Groups。
 
@@ -513,7 +513,7 @@ ${tabList}
     })
 
     if (!response.ok) {
-      console.error('[Tab Tool] AI classification failed:', response.status)
+      console.error('[TabFlow] AI classification failed:', response.status)
       return result
     }
 
@@ -542,7 +542,7 @@ ${tabList}
 
     return result
   } catch (error) {
-    console.error('[Tab Tool] AI classification error:', error)
+    console.error('[TabFlow] AI classification error:', error)
     return result
   }
 }
@@ -721,7 +721,7 @@ git commit -m "feat: add classification engine combining rules and AI"
 
         sendResponse({ success: true, groups: createdGroups })
       } catch (error) {
-        console.error('[Tab Tool] Error creating tab groups:', error)
+        console.error('[TabFlow] Error creating tab groups:', error)
         sendResponse({ success: false, error: String(error) })
       }
     })

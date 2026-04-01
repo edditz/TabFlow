@@ -139,7 +139,7 @@ ${tabList}
     })
 
     if (!response.ok) {
-      console.error('[Tab Tool] AI classification failed:', response.status)
+      console.error('[TabFlow] AI classification failed:', response.status)
       return result
     }
 
@@ -168,7 +168,7 @@ ${tabList}
 
     return result
   } catch (error) {
-    console.error('[Tab Tool] AI classification error:', error)
+    console.error('[TabFlow] AI classification error:', error)
     return result
   }
 }

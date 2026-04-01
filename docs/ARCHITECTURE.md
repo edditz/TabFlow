@@ -1,8 +1,8 @@
-# Tab Tool 项目架构文档
+# TabFlow 项目架构文档
 
 ## 项目概述
 
-Tab Tool 是一个浏览器扩展，用于增强 Chrome 和 Edge 的标签页管理功能。
+TabFlow 是一个浏览器扩展，用于增强 Chrome 和 Edge 的标签页管理功能。
 
 ## 技术栈
 
@@ -17,7 +17,7 @@ Tab Tool 是一个浏览器扩展，用于增强 Chrome 和 Edge 的标签页管
 ## 目录结构
 
 ```
-tab-tool/
+tabflow/
 ├── src/
 │   ├── background/          # Service Worker（后台脚本）
 │   │   └── index.ts         # 处理快捷键命令、消息转发

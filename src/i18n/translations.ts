@@ -119,7 +119,7 @@ export interface TranslationKeys {
 export const translations: Record<Language, TranslationKeys> = {
   en: {
     // Header
-    settingsTitle: 'Tab Tool Settings',
+    settingsTitle: 'TabFlow Settings',
     settingsSubtitle: 'Configure your tab management preferences',
 
     // Keyboard Shortcuts Section
@@ -234,7 +234,7 @@ export const translations: Record<Language, TranslationKeys> = {
   },
   zh: {
     // Header
-    settingsTitle: 'Tab Tool 设置',
+    settingsTitle: 'TabFlow 设置',
     settingsSubtitle: '配置您的标签页管理偏好',
 
     // Keyboard Shortcuts Section
