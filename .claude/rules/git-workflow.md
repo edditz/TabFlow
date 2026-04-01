@@ -4,6 +4,7 @@
 
 - **No auto-commit**: Always ask user before committing code
 - **User confirmation required**: Never commit without explicit approval
+- **README 同步**: 修改 `README.md` 时必须同步更新 `README.zh-CN.md`，反之亦然，保持中英文内容一致
 
 ## Commit Message Format (Conventional Commits 1.0.0)
 
