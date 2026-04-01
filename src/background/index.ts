@@ -93,6 +93,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true
   }
 
+  if (message.type === 'OPEN_OPTIONS_PAGE') {
+    chrome.runtime.openOptionsPage()
+    return false
+  }
+
   if (message.type === 'CLASSIFY_TABS') {
     // Create tab groups from classification results
     ;(async () => {

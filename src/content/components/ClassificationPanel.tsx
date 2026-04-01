@@ -106,7 +106,7 @@ export function ClassificationPanel({
   }, [tabs])
 
   const handleGoToSettings = () => {
-    chrome.runtime.openOptionsPage()
+    chrome.runtime.sendMessage({ type: 'OPEN_OPTIONS_PAGE' })
     onClose()
   }
 
