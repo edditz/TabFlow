@@ -39,6 +39,9 @@ let isClosing = false
 let currentView: 'search' | 'classification' = 'search'
 let classificationTabs: TabInfo[] = []
 let keyboardListener: ((e: KeyboardEvent) => void) | null = null
+let wheelListener: ((e: WheelEvent) => void) | null = null
+let savedHtmlOverflow = ''
+let savedBodyOverflow = ''
 let currentEnableSearchPanel: boolean = true
 let currentTheme: 'system' | 'light' | 'dark' = 'system'
 let currentLanguage: Language = 'en'
@@ -209,6 +212,66 @@ function updateHostTheme(): void {
   }
 }
 
+// Prevent wheel events from scrolling the background page when panel is open
+function handleWheel(e: WheelEvent): void {
+  if (!shadowHost || !shadowRoot) return
+
+  const path = e.composedPath()
+
+  // Event from outside our extension — always block
+  if (!path.includes(shadowHost)) {
+    e.preventDefault()
+    return
+  }
+
+  // Event from overlay backdrop (not inside the panel container) — always block
+  const container = shadowRoot.querySelector('.tt-container')
+  if (container && !path.includes(container)) {
+    e.preventDefault()
+    return
+  }
+
+  // Event inside the panel — check scrollable container boundaries
+  const scrollable =
+    shadowRoot.querySelector('.cp-content-wrapper') ||
+    shadowRoot.querySelector('.tt-results') ||
+    shadowRoot.querySelector('.tt-search-content')
+
+  if (!scrollable) {
+    e.preventDefault()
+    return
+  }
+
+  const { scrollTop, scrollHeight, clientHeight } = scrollable as HTMLElement
+  const atTop = scrollTop <= 0
+  const atBottom = Math.ceil(scrollTop) + clientHeight >= scrollHeight
+
+  if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+    e.preventDefault()
+  }
+}
+
+function enableWheelPrevention(): void {
+  if (wheelListener) return
+  wheelListener = handleWheel
+  document.addEventListener('wheel', wheelListener, { passive: false })
+  // Lock page overflow to hide scrollbar
+  savedHtmlOverflow = document.documentElement.style.overflow
+  savedBodyOverflow = document.body.style.overflow
+  document.documentElement.style.overflow = 'hidden'
+  document.body.style.overflow = 'hidden'
+}
+
+function disableWheelPrevention(): void {
+  if (!wheelListener) return
+  document.removeEventListener('wheel', wheelListener)
+  wheelListener = null
+  document.documentElement.style.overflow = savedHtmlOverflow
+  document.body.style.overflow = savedBodyOverflow
+  savedHtmlOverflow = ''
+  savedBodyOverflow = ''
+}
+
 function setupKeyboardListener(): void {
   keyboardListener = (e: KeyboardEvent) => {
     if (matchesShortcut(e, currentShortcut)) {
@@ -235,6 +298,7 @@ function toggle(): void {
   } else {
     isVisible = true
     isClosing = false
+    enableWheelPrevention()
     render()
   }
 }
@@ -353,6 +417,7 @@ function hide(): void {
   currentView = 'search'
   classificationTabs = []
   closePanelCallback = null
+  disableWheelPrevention()
   render()
 }
 
