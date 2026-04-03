@@ -30,6 +30,7 @@ interface SearchPanelProps {
   enableRecentClosed: boolean
   recentClosedTimeWindow: number
   recentClosedMaxResults: number
+  showClassification: boolean
   onShowClassification: (tabs: TabInfo[]) => void
 }
 
@@ -71,6 +72,7 @@ export function SearchPanel({
   enableRecentClosed,
   recentClosedTimeWindow,
   recentClosedMaxResults,
+  showClassification,
   onShowClassification
 }: SearchPanelProps) {
   const t = translations[language]
@@ -315,55 +317,57 @@ export function SearchPanel({
             <h2 className="tt-title">{t.searchTabs}</h2>
             <p className="tt-description">{t.searchTabsDesc}</p>
           </div>
-          {stats && (
-            <div className="tt-header-stats">
-              {searchCurrentWindow ? (
-                <span className="tt-stats-item">
-                  {stats.currentWindowTabs} {t.tabs}
-                  <span className="tt-stats-divider">•</span>
-                  {t.currentWindowTabs}
-                </span>
-              ) : (
-                <>
+          <div className="tt-header-stats">
+              {stats && (
+                searchCurrentWindow ? (
                   <span className="tt-stats-item">
-                    {stats.totalTabs} {t.tabs}
+                    {stats.currentWindowTabs} {t.tabs}
+                    <span className="tt-stats-divider">•</span>
+                    {t.currentWindowTabs}
                   </span>
-                  <span className="tt-stats-item">
-                    {stats.totalWindows} {t.windows}
-                  </span>
-                </>
+                ) : (
+                  <>
+                    <span className="tt-stats-item">
+                      {stats.totalTabs} {t.tabs}
+                    </span>
+                    <span className="tt-stats-item">
+                      {stats.totalWindows} {t.windows}
+                    </span>
+                  </>
+                )
               )}
-              <button
-                className="tt-classify-btn"
-                onClick={() =>
-                  onShowClassification(
-                    results.map(tab => ({
-                      id: tab.id,
-                      title: tab.title,
-                      url: tab.url,
-                      favIconUrl: tab.favIconUrl
-                    }))
-                  )
-                }
-                title={t.smartClassify}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  width="16"
-                  height="16"
+              {showClassification && (
+                <button
+                  className="tt-classify-btn"
+                  onClick={() =>
+                    onShowClassification(
+                      results.map(tab => ({
+                        id: tab.id,
+                        title: tab.title,
+                        url: tab.url,
+                        favIconUrl: tab.favIconUrl
+                      }))
+                    )
+                  }
+                  title={t.smartClassify}
                 >
-                  <rect x="3" y="3" width="7" height="7" rx="1" />
-                  <rect x="14" y="3" width="7" height="7" rx="1" />
-                  <rect x="3" y="14" width="7" height="7" rx="1" />
-                  <rect x="14" y="14" width="7" height="7" rx="1" />
-                </svg>
-                <span>{t.smartClassify}</span>
-              </button>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    width="16"
+                    height="16"
+                  >
+                    <rect x="3" y="3" width="7" height="7" rx="1" />
+                    <rect x="14" y="3" width="7" height="7" rx="1" />
+                    <rect x="3" y="14" width="7" height="7" rx="1" />
+                    <rect x="14" y="14" width="7" height="7" rx="1" />
+                  </svg>
+                  <span>{t.smartClassify}</span>
+                </button>
+              )}
             </div>
-          )}
         </div>
       </div>
 

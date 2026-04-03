@@ -11,8 +11,8 @@ import {
   type DragStartEvent,
   type DragEndEvent
 } from '@dnd-kit/core'
-import type { TabInfo, CategoryGroup, AISettings } from '../../classification'
-import { classifyTabs, DEFAULT_AI_SETTINGS } from '../../classification'
+import type { TabInfo, CategoryGroup } from '../../classification'
+import { classifyTabs } from '../../classification'
 import { TabItem } from './TabItem'
 import { DraggableTabItem } from './DraggableTabItem'
 import { DroppableCategoryGroup } from './DroppableCategoryGroup'
@@ -27,9 +27,6 @@ interface ClassificationPanelProps {
     smartClassify: string
     backToSearch: string
     analyzing: string
-    aiNotConfigured: string
-    aiNotConfiguredDesc: string
-    classifyAnyway: string
     goToSettings: string
     createTabGroups: string
     cancel: string
@@ -46,7 +43,7 @@ interface ClassificationPanelProps {
   }
 }
 
-type PanelState = 'loading' | 'ai-warning' | 'preview' | 'empty'
+type PanelState = 'loading' | 'preview' | 'empty'
 
 export function ClassificationPanel({
   tabs,
@@ -79,36 +76,18 @@ export function ClassificationPanel({
     }
 
     const runClassification = async () => {
-      // Get AI settings to check if configured
-      const aiSettings = await new Promise<AISettings>(resolve => {
-        chrome.storage.sync.get({ aiSettings: DEFAULT_AI_SETTINGS }, data => {
-          resolve(data.aiSettings as AISettings)
-        })
-      })
-
-      // Run classification
-      const result = await classifyTabs(tabs)
-      setGroups(result.groups)
-
-      // Show warning if AI not configured and there might be unclassified tabs
-      if (!aiSettings.enabled || !aiSettings.apiKey) {
-        const hasOtherCategory = result.groups.some(g => g.name === 'Other')
-        if (hasOtherCategory) {
-          setState('ai-warning')
-          return
-        }
+      try {
+        const result = await classifyTabs(tabs)
+        setGroups(result.groups)
+        setState('preview')
+      } catch (error) {
+        console.error('[TabFlow] Classification failed:', error)
+        setState('empty')
       }
-
-      setState('preview')
     }
 
     runClassification()
   }, [tabs])
-
-  const handleGoToSettings = () => {
-    chrome.runtime.sendMessage({ type: 'OPEN_OPTIONS_PAGE' })
-    onClose()
-  }
 
   const getCategoryLabel = (name: string): string => {
     const labelMap: Record<string, string> = {
@@ -241,22 +220,6 @@ export function ClassificationPanel({
         {state === 'empty' && (
           <div className="cp-empty">
             <p>{labels.noTabsToClassify}</p>
-          </div>
-        )}
-
-        {state === 'ai-warning' && (
-          <div className="cp-warning">
-            <div className="cp-warning-icon">⚠️</div>
-            <h3>{labels.aiNotConfigured}</h3>
-            <p>{labels.aiNotConfiguredDesc}</p>
-            <div className="cp-warning-actions">
-              <button className="cp-btn cp-btn-secondary" onClick={() => setState('preview')}>
-                {labels.classifyAnyway}
-              </button>
-              <button className="cp-btn cp-btn-primary" onClick={handleGoToSettings}>
-                {labels.goToSettings}
-              </button>
-            </div>
           </div>
         )}
 

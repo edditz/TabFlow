@@ -92,9 +92,6 @@ export interface TranslationKeys {
   smartClassify: string
   backToSearch: string
   analyzing: string
-  aiNotConfigured: string
-  aiNotConfiguredDesc: string
-  classifyAnyway: string
   goToSettings: string
   createTabGroups: string
   cancel: string
@@ -209,9 +206,6 @@ export const translations: Record<Language, TranslationKeys> = {
     smartClassify: 'Smart Classify',
     backToSearch: 'Back to Search',
     analyzing: 'Analyzing tabs...',
-    aiNotConfigured: 'AI Not Configured',
-    aiNotConfiguredDesc: 'Will use built-in rules only. Some tabs may not be accurately categorized.',
-    classifyAnyway: 'Classify Anyway',
     goToSettings: 'Go to Settings',
     createTabGroups: 'Create Tab Groups',
     cancel: 'Cancel',
@@ -324,9 +318,6 @@ export const translations: Record<Language, TranslationKeys> = {
     smartClassify: '智能分类',
     backToSearch: '返回搜索',
     analyzing: '正在分析标签...',
-    aiNotConfigured: 'AI 未配置',
-    aiNotConfiguredDesc: '将仅使用内置规则进行分类，部分标签可能无法准确归类。',
-    classifyAnyway: '仍要分类',
     goToSettings: '去设置',
     createTabGroups: '创建标签组',
     cancel: '取消',

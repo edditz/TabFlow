@@ -6,7 +6,8 @@ import { translations, type Language } from '../i18n'
 import type { ShortcutConfig } from '../options/components/ShortcutSettings'
 import type { ShortcutKey } from '../options/components/ShortcutRecorder'
 import type { UrlDisplayStyle } from '../options/App'
-import type { TabInfo, CategoryGroup } from '../classification'
+import type { TabInfo, CategoryGroup, AISettings } from '../classification'
+import { DEFAULT_AI_SETTINGS } from '../classification'
 
 // Import CSS as raw string for Shadow DOM injection
 import cssText from './components/SearchPanel.css?inline'
@@ -51,6 +52,7 @@ let currentShortcut: ShortcutKey | null = DEFAULT_SHORTCUTS[0].shortcut
 let currentEnableRecentClosed: boolean = true
 let currentRecentClosedTimeWindow: number = 24
 let currentRecentClosedMaxResults: number = 10
+let currentAiEnabled: boolean = false
 
 // Get actual theme based on setting and system preference
 function getActualTheme(): 'light' | 'dark' {
@@ -105,7 +107,8 @@ function init(): void {
       shortcuts: DEFAULT_SHORTCUTS,
       enableRecentClosed: true,
       recentClosedTimeWindow: 24,
-      recentClosedMaxResults: 10
+      recentClosedMaxResults: 10,
+      aiSettings: DEFAULT_AI_SETTINGS
     },
     data => {
       currentEnableSearchPanel = data.enableSearchPanel
@@ -116,6 +119,8 @@ function init(): void {
       currentEnableRecentClosed = data.enableRecentClosed
       currentRecentClosedTimeWindow = data.recentClosedTimeWindow
       currentRecentClosedMaxResults = data.recentClosedMaxResults
+      const ai = data.aiSettings as AISettings
+      currentAiEnabled = ai.enabled && !!ai.apiKey
       if (data.shortcuts && data.shortcuts.length > 0) {
         currentShortcut = data.shortcuts[0].shortcut
       }
@@ -166,6 +171,11 @@ function init(): void {
     }
     if (changes.recentClosedMaxResults) {
       currentRecentClosedMaxResults = changes.recentClosedMaxResults.newValue
+      render()
+    }
+    if (changes.aiSettings) {
+      const ai = changes.aiSettings.newValue as AISettings
+      currentAiEnabled = ai.enabled && !!ai.apiKey
       render()
     }
   })
@@ -349,6 +359,7 @@ function render(): void {
               enableRecentClosed={currentEnableRecentClosed}
               recentClosedTimeWindow={currentRecentClosedTimeWindow}
               recentClosedMaxResults={currentRecentClosedMaxResults}
+              showClassification={currentAiEnabled}
               onShowClassification={(tabs: TabInfo[]) => {
                 classificationTabs = tabs
                 currentView = 'classification'
@@ -384,9 +395,6 @@ function render(): void {
                 smartClassify: t.smartClassify,
                 backToSearch: t.backToSearch,
                 analyzing: t.analyzing,
-                aiNotConfigured: t.aiNotConfigured,
-                aiNotConfiguredDesc: t.aiNotConfiguredDesc,
-                classifyAnyway: t.classifyAnyway,
                 goToSettings: t.goToSettings,
                 createTabGroups: t.createTabGroups,
                 cancel: t.cancel,
