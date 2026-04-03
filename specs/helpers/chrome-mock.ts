@@ -72,7 +72,6 @@ const mockStorage = {
 // Default settings
 mockStorage.data = {
   enableSearchPanel: true,
-  showTabCount: false,
   theme: 'system',
   language: 'en',
   searchCurrentWindow: false,

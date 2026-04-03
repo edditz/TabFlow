@@ -20,8 +20,6 @@ export interface TranslationKeys {
   generalSettings: string
   enableSearchPanel: string
   enableSearchPanelDesc: string
-  showTabCountBadge: string
-  showTabCountBadgeDesc: string
   theme: string
   themeDesc: string
   themeSystem: string
@@ -139,8 +137,6 @@ export const translations: Record<Language, TranslationKeys> = {
     generalSettings: 'General Settings',
     enableSearchPanel: 'Enable Search Panel',
     enableSearchPanelDesc: 'Show the global search panel on any page',
-    showTabCountBadge: 'Show Tab Count Badge',
-    showTabCountBadgeDesc: 'Display the number of open tabs on the extension icon',
     theme: 'Theme',
     themeDesc: 'Choose the appearance of the search panel',
     themeSystem: 'System Default',
@@ -256,8 +252,6 @@ export const translations: Record<Language, TranslationKeys> = {
     generalSettings: '常规设置',
     enableSearchPanel: '启用搜索面板',
     enableSearchPanelDesc: '在任意页面显示全局搜索面板',
-    showTabCountBadge: '显示标签页数量徽章',
-    showTabCountBadgeDesc: '在扩展图标上显示打开的标签页数量',
     theme: '主题',
     themeDesc: '选择搜索面板的外观',
     themeSystem: '跟随系统',

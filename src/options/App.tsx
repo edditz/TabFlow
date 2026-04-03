@@ -11,7 +11,6 @@ export type UrlDisplayStyle = 'none' | 'domain' | 'full'
 
 interface Settings {
   enableSearchPanel: boolean
-  showTabCount: boolean
   theme: 'system' | 'light' | 'dark'
   language: 'en' | 'zh'
   searchCurrentWindow: boolean
@@ -25,7 +24,6 @@ interface Settings {
 
 const DEFAULT_SETTINGS: Settings = {
   enableSearchPanel: true,
-  showTabCount: false,
   theme: 'system',
   language: 'en',
   searchCurrentWindow: false,
@@ -208,17 +206,6 @@ export function App() {
           <Switch
             checked={settings.enableSearchPanel}
             onChange={checked => updateSetting('enableSearchPanel', checked)}
-          />
-        </div>
-
-        <div className="setting-item">
-          <div className="setting-info">
-            <div className="setting-label">{t.showTabCountBadge}</div>
-            <div className="setting-desc">{t.showTabCountBadgeDesc}</div>
-          </div>
-          <Switch
-            checked={settings.showTabCount}
-            onChange={checked => updateSetting('showTabCount', checked)}
           />
         </div>
 
