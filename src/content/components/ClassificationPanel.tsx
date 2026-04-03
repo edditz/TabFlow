@@ -303,17 +303,10 @@ export function ClassificationPanel({
               }}
             >
               {activeTab && (
-                <div
-                  style={{
-                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
-                    borderRadius: '6px',
-                    background: 'var(--tt-card, #fff)',
-                    padding: '8px 12px',
-                    opacity: 0.95,
-                    cursor: 'grabbing'
-                  }}
-                >
-                  <TabItem tab={activeTab} showUrl={false} className="cp-tab-item" />
+                <div className="cp-drag-overlay">
+                  <div className="cp-draggable-tab">
+                    <TabItem tab={activeTab} showUrl={false} className="cp-tab-item" />
+                  </div>
                 </div>
               )}
             </DragOverlay>

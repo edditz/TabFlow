@@ -325,6 +325,17 @@ function render(): void {
         <div
           className={`tt-container ${isClosing ? 'tt-closing' : ''}`}
           onClick={e => e.stopPropagation()}
+          onAnimationEnd={(e: React.AnimationEvent<HTMLDivElement>) => {
+            // Remove transform after entry animation completes.
+            // The animation leaves transform: translateY(0) scale(1) on the element,
+            // which creates a containing block for position:fixed children,
+            // breaking dnd-kit's DragOverlay positioning.
+            if (e.animationName === 'tt-container-enter') {
+              const el = e.currentTarget
+              el.style.animation = 'none'
+              el.style.transform = 'none'
+            }
+          }}
         >
           {currentView === 'search' ? (
             <SearchPanel

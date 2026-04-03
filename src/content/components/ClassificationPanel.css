@@ -352,11 +352,12 @@
   }
 }
 
-/* DragOverlay - dragged item style */
+/* DragOverlay - dragged item wrapper */
 .cp-drag-overlay {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   border-radius: 6px;
   background: var(--tt-card);
   pointer-events: none;
   touch-action: none;
+  opacity: 0.95;
 }
