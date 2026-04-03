@@ -1,5 +1,6 @@
 // src/options/components/AISettings.tsx
 import { useState, useCallback, useEffect } from 'react'
+import { Zap } from 'lucide-react'
 import type { AISettings } from '../../classification'
 import { DEFAULT_AI_SETTINGS, testAIConnection } from '../../classification'
 import { Switch } from './Switch'
@@ -58,24 +59,7 @@ export function AISettings({ settings, onChange, labels }: AISettingsProps) {
   return (
     <section className="options-section">
       <div className="section-header">
-        <svg
-          className="section-icon"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M12 8V4H8" />
-          <rect width="16" height="12" x="4" y="8" rx="2" />
-          <path d="M2 14h2" />
-          <path d="M20 14h2" />
-          <path d="M15 13v2" />
-          <path d="M9 13v2" />
-        </svg>
+        <Zap className="section-icon" size={16} strokeWidth={2} />
         <h2 className="section-title">{labels.aiSettings}</h2>
       </div>
 

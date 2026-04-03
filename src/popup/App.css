@@ -11,7 +11,7 @@ body {
 }
 
 .popup-container {
-  padding: 16px;
+  padding: 12px;
 }
 
 .popup-header {
@@ -19,8 +19,6 @@ body {
   align-items: center;
   gap: 12px;
   margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #e5e7eb;
 }
 
 .popup-icon {
@@ -70,7 +68,9 @@ body {
 }
 
 .popup-btn-icon {
-  font-size: 18px;
+  display: flex;
+  align-items: center;
+  color: #374151;
 }
 
 .popup-btn-text {
@@ -85,13 +85,4 @@ body {
   background: #f3f4f6;
   padding: 2px 6px;
   border-radius: 4px;
-}
-
-.popup-footer {
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid #e5e7eb;
-  text-align: center;
-  font-size: 12px;
-  color: #9ca3af;
 }

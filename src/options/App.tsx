@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Keyboard, Settings, Search, Clock } from 'lucide-react'
 import './App.css'
 import { useTranslation } from '../i18n'
 import { ShortcutSettings, ShortcutConfig, DEFAULT_SHORTCUTS } from './components/ShortcutSettings'
@@ -145,20 +146,7 @@ export function App() {
       {/* Keyboard Shortcuts */}
       <section className="options-section">
         <div className="section-header">
-          <svg
-            className="section-icon"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect width="20" height="16" x="2" y="4" rx="2" />
-            <path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10" />
-          </svg>
+          <Keyboard className="section-icon" size={16} strokeWidth={2} />
           <h2 className="section-title">{t.keyboardShortcuts}</h2>
         </div>
 
@@ -181,20 +169,7 @@ export function App() {
       {/* General Settings */}
       <section className="options-section">
         <div className="section-header">
-          <svg
-            className="section-icon"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-            <circle cx="12" cy="12" r="3" />
-          </svg>
+          <Settings className="section-icon" size={16} strokeWidth={2} />
           <h2 className="section-title">{t.generalSettings}</h2>
         </div>
 
@@ -244,20 +219,7 @@ export function App() {
       {/* Search Settings */}
       <section className="options-section">
         <div className="section-header">
-          <svg
-            className="section-icon"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
+          <Search className="section-icon" size={16} strokeWidth={2} />
           <h2 className="section-title">{t.searchSettings}</h2>
         </div>
 
@@ -292,20 +254,7 @@ export function App() {
       {/* Recently Closed Settings */}
       <section className="options-section">
         <div className="section-header">
-          <svg
-            className="section-icon"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <polyline points="12 6 12 12 16 14" />
-          </svg>
+          <Clock className="section-icon" size={16} strokeWidth={2} />
           <h2 className="section-title">{t.recentClosedSettings}</h2>
         </div>
 

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import type { KeyboardEvent } from 'react'
+import { Search, X, File, AppWindow } from 'lucide-react'
 import { translations, type Language } from '../../i18n'
 import type { UrlDisplayStyle } from '../../options/App'
 import type { TabInfo } from '../../classification'
@@ -342,19 +343,7 @@ export function SearchPanel({
                   }
                   title={t.smartClassify}
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    width="16"
-                    height="16"
-                  >
-                    <rect x="3" y="3" width="7" height="7" rx="1" />
-                    <rect x="14" y="3" width="7" height="7" rx="1" />
-                    <rect x="3" y="14" width="7" height="7" rx="1" />
-                    <rect x="14" y="14" width="7" height="7" rx="1" />
-                  </svg>
+                  <AppWindow size={16} />
                   <span>{t.smartClassify}</span>
                 </button>
               )}
@@ -366,18 +355,7 @@ export function SearchPanel({
       <div className="tt-search-content">
         {/* Search Input */}
         <div className="tt-input-wrapper">
-          <svg
-            className="tt-search-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.35-4.35" />
-          </svg>
+          <Search className="tt-search-icon" size={18} />
           <input
             ref={inputRef}
             type="text"
@@ -420,20 +398,7 @@ export function SearchPanel({
                     {tab.favIconUrl ? (
                       <img src={tab.favIconUrl} alt="" />
                     ) : (
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        width="16"
-                        height="16"
-                      >
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <polyline points="14 2 14 8 20 8" />
-                        <line x1="16" y1="13" x2="8" y2="13" />
-                        <line x1="16" y1="17" x2="8" y2="17" />
-                        <polyline points="10 9 9 9 8 9" />
-                      </svg>
+                      <File size={16} strokeWidth={1.5} />
                     )}
                   </div>
                   <div className="tt-result-info">
@@ -458,17 +423,7 @@ export function SearchPanel({
                     }}
                     title={t.closeTab}
                   >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      width="16"
-                      height="16"
-                    >
-                      <line x1="18" y1="6" x2="6" y2="18" />
-                      <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
+                    <X size={16} />
                   </button>
                 </div>
               ))}
@@ -498,17 +453,7 @@ export function SearchPanel({
                           {tab.favIconUrl ? (
                             <img src={tab.favIconUrl} alt="" />
                           ) : (
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              width="16"
-                              height="16"
-                            >
-                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                              <polyline points="14 2 14 8 20 8" />
-                            </svg>
+                            <File size={16} strokeWidth={1.5} />
                           )}
                         </div>
                         <div className="tt-result-info">

@@ -1,5 +1,6 @@
 // src/content/components/ClassificationPanel.tsx
 import { useState, useEffect } from 'react'
+import { ChevronLeft, RefreshCw } from 'lucide-react'
 import {
   DndContext,
   DragOverlay,
@@ -217,9 +218,7 @@ export function ClassificationPanel({
       <div className="tt-header">
         <div className="tt-header-content cp-header">
           <button className="tt-back-btn" onClick={onBack} aria-label={labels.backToSearch}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
+            <ChevronLeft size={20} />
             <span>{labels.backToSearch}</span>
           </button>
           <h2 className="cp-title">{labels.smartClassify}</h2>
@@ -258,10 +257,7 @@ export function ClassificationPanel({
             </div>
             <div className="cp-error-actions">
               <button className="cp-btn cp-btn-primary cp-error-retry" onClick={handleRetry}>
-                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16">
-                  <path d="M4 10a6 6 0 0 1 11.3-2.8M16 10a6 6 0 0 1-11.3 2.8" strokeLinecap="round" />
-                  <path d="M15.3 4v3.2h-3.2M4.7 16v-3.2h3.2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                <RefreshCw size={16} />
                 {labels.retry}
               </button>
               <button className="cp-btn cp-btn-secondary" onClick={onBack}>

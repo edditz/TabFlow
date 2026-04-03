@@ -1,5 +1,6 @@
 // src/content/components/DroppableCategoryGroup.tsx
 import { useDroppable } from '@dnd-kit/core'
+import { ChevronDown } from 'lucide-react'
 import type { CategoryGroup } from '../../classification'
 
 interface DroppableCategoryGroupProps {
@@ -52,17 +53,7 @@ export function DroppableCategoryGroup({
           aria-label={isCollapsed ? 'Expand' : 'Collapse'}
           tabIndex={-1}
         >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            width="16"
-            height="16"
-            className={isCollapsed ? 'cp-collapse-icon-collapsed' : ''}
-          >
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
+          <ChevronDown size={16} strokeWidth={2} className={isCollapsed ? 'cp-collapse-icon-collapsed' : ''} />
         </button>
         <span className={`cp-group-color cp-color-${group.color}`} />
         <span className="cp-group-name">{getCategoryLabel(group.name)}</span>
