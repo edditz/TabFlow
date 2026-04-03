@@ -100,15 +100,6 @@ export function SearchPanel({
     registerCloseCallback(handleClose)
   }, [registerCloseCallback, handleClose])
 
-  // Prevent body scroll when panel is open
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = originalOverflow
-    }
-  }, [])
-
   // Fetch real tabs from all windows via background script
   useEffect(() => {
     const fetchTabs = async () => {

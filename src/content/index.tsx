@@ -135,7 +135,7 @@ function init(): void {
       currentEnableSearchPanel = changes.enableSearchPanel.newValue
       // Hide panel if disabled while visible
       if (!currentEnableSearchPanel && isVisible) {
-        hide()
+        closeWithAnimation()
       }
     }
     if (changes.theme) {
@@ -191,14 +191,14 @@ function init(): void {
   // Close panel when switching to another tab or window
   document.addEventListener('visibilitychange', () => {
     if (document.hidden && isVisible) {
-      hide()
+      closeWithAnimation()
     }
   })
 
   // Close panel when window loses focus
   window.addEventListener('blur', () => {
     if (isVisible) {
-      hide()
+      closeWithAnimation()
     }
   })
 
@@ -296,15 +296,18 @@ function setupKeyboardListener(): void {
   document.addEventListener('keydown', keyboardListener)
 }
 
+function closeWithAnimation(): void {
+  if (!isVisible || isClosing) return
+  isClosing = true
+  render()
+  setTimeout(() => {
+    hide()
+  }, 200)
+}
+
 function toggle(): void {
   if (isVisible) {
-    // Trigger close animation
-    isClosing = true
-    render()
-    // Actually hide after animation
-    setTimeout(() => {
-      hide()
-    }, 150)
+    closeWithAnimation()
   } else {
     isVisible = true
     isClosing = false
@@ -327,7 +330,7 @@ function render(): void {
           if (closePanelCallback) {
             closePanelCallback()
           } else {
-            hide()
+            closeWithAnimation()
           }
         }}
         data-theme={getActualTheme()}
@@ -335,6 +338,13 @@ function render(): void {
         <div
           className={`tt-container ${isClosing ? 'tt-closing' : ''}`}
           onClick={e => e.stopPropagation()}
+          ref={(el: HTMLDivElement | null) => {
+            // Clear inline styles set during entry animation so exit animation works
+            if (el && isClosing) {
+              el.style.animation = ''
+              el.style.transform = ''
+            }
+          }}
           onAnimationEnd={(e: React.AnimationEvent<HTMLDivElement>) => {
             // Remove transform after entry animation completes.
             // The animation leaves transform: translateY(0) scale(1) on the element,
@@ -349,7 +359,7 @@ function render(): void {
         >
           {currentView === 'search' ? (
             <SearchPanel
-              onCloseComplete={hide}
+              onCloseComplete={closeWithAnimation}
               registerCloseCallback={callback => {
                 closePanelCallback = callback
               }}
@@ -369,7 +379,7 @@ function render(): void {
           ) : (
             <ClassificationPanel
               tabs={classificationTabs}
-              onClose={hide}
+              onClose={closeWithAnimation}
               onBack={() => {
                 currentView = 'search'
                 render()
@@ -386,7 +396,7 @@ function render(): void {
                   },
                   response => {
                     if (response?.success) {
-                      hide()
+                      closeWithAnimation()
                     }
                   }
                 )
