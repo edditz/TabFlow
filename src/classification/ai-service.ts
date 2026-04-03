@@ -139,15 +139,20 @@ ${tabList}
     })
 
     if (!response.ok) {
-      console.error('[TabFlow] AI classification failed:', response.status)
-      return result
+      const errorText = await response.text().catch(() => '')
+      throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`)
     }
 
-    const data = await response.json()
-    const content = data.choices?.[0]?.message?.content
+    let data: { choices?: { message?: { content?: string } }[] }
+    try {
+      data = await response.json()
+    } catch {
+      throw new Error('Failed to parse AI response as JSON')
+    }
 
+    const content = data.choices?.[0]?.message?.content
     if (!content) {
-      return result
+      throw new Error('AI returned an empty response')
     }
 
     // Parse JSON from response (handle markdown code blocks)
@@ -157,7 +162,12 @@ ${tabList}
       jsonStr = jsonMatch[1].trim()
     }
 
-    const classifications: AIClassificationResponse = JSON.parse(jsonStr)
+    let classifications: AIClassificationResponse
+    try {
+      classifications = JSON.parse(jsonStr)
+    } catch {
+      throw new Error('Failed to parse AI classification result')
+    }
 
     for (const [index, category] of Object.entries(classifications)) {
       const tabIndex = parseInt(index, 10) - 1
@@ -168,7 +178,9 @@ ${tabList}
 
     return result
   } catch (error) {
-    console.error('[TabFlow] AI classification error:', error)
-    return result
+    if (error instanceof DOMException && error.name === 'TimeoutError') {
+      throw new Error('Request timed out after 10 seconds')
+    }
+    throw error instanceof Error ? error : new Error('Unknown error occurred')
   }
 }

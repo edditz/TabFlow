@@ -40,10 +40,13 @@ interface ClassificationPanelProps {
     categoryDocs: string
     categoryOther: string
     moveToCategory: string
+    classificationError: string
+    classificationErrorHint: string
+    retry: string
   }
 }
 
-type PanelState = 'loading' | 'preview' | 'empty'
+type PanelState = 'loading' | 'preview' | 'empty' | 'error'
 
 export function ClassificationPanel({
   tabs,
@@ -57,6 +60,7 @@ export function ClassificationPanel({
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set())
   const [activeTab, setActiveTab] = useState<TabInfo | null>(null)
   const [overGroupId, setOverGroupId] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState('')
 
   // DnD sensors
   const sensors = useSensors(
@@ -76,13 +80,15 @@ export function ClassificationPanel({
     }
 
     const runClassification = async () => {
+      setState('loading')
       try {
         const result = await classifyTabs(tabs)
         setGroups(result.groups)
         setState('preview')
       } catch (error) {
         console.error('[TabFlow] Classification failed:', error)
-        setState('empty')
+        setErrorMessage(error instanceof Error ? error.message : 'Unknown error')
+        setState('error')
       }
     }
 
@@ -101,6 +107,18 @@ export function ClassificationPanel({
       Other: labels.categoryOther
     }
     return labelMap[name] || name
+  }
+
+  const handleRetry = async () => {
+    setState('loading')
+    try {
+      const result = await classifyTabs(tabs)
+      setGroups(result.groups)
+      setState('preview')
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : 'Unknown error')
+      setState('error')
+    }
   }
 
   const toggleGroupCollapse = (groupName: string) => {
@@ -220,6 +238,36 @@ export function ClassificationPanel({
         {state === 'empty' && (
           <div className="cp-empty">
             <p>{labels.noTabsToClassify}</p>
+          </div>
+        )}
+
+        {state === 'error' && (
+          <div className="cp-error">
+            <div className="cp-error-icon">
+              <svg viewBox="0 0 48 48" fill="none" width="56" height="56">
+                <circle cx="24" cy="24" r="22" stroke="currentColor" strokeWidth="2" opacity="0.2" />
+                <circle cx="24" cy="24" r="22" stroke="currentColor" strokeWidth="2" strokeDasharray="138" strokeDashoffset="138" className="cp-error-circle" />
+                <path d="M24 14v14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="cp-error-line" />
+                <circle cx="24" cy="34" r="1.5" fill="currentColor" className="cp-error-dot" />
+              </svg>
+            </div>
+            <h3 className="cp-error-title">{labels.classificationError}</h3>
+            <p className="cp-error-hint">{labels.classificationErrorHint}</p>
+            <div className="cp-error-detail">
+              <code>{errorMessage}</code>
+            </div>
+            <div className="cp-error-actions">
+              <button className="cp-btn cp-btn-primary cp-error-retry" onClick={handleRetry}>
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16">
+                  <path d="M4 10a6 6 0 0 1 11.3-2.8M16 10a6 6 0 0 1-11.3 2.8" strokeLinecap="round" />
+                  <path d="M15.3 4v3.2h-3.2M4.7 16v-3.2h3.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                {labels.retry}
+              </button>
+              <button className="cp-btn cp-btn-secondary" onClick={onBack}>
+                {labels.backToSearch}
+              </button>
+            </div>
           </div>
         )}
 

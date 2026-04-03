@@ -27,7 +27,6 @@ export interface AISettings {
 
 export interface ClassificationResult {
   groups: CategoryGroup[]
-  unclassifiedTabs: TabInfo[]
 }
 
 export const DEFAULT_AI_SETTINGS: AISettings = {

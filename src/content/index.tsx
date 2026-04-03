@@ -417,7 +417,10 @@ function render(): void {
                 categoryNews: t.categoryNews,
                 categoryDocs: t.categoryDocs,
                 categoryOther: t.categoryOther,
-                moveToCategory: t.moveToCategory
+                moveToCategory: t.moveToCategory,
+                classificationError: t.classificationError,
+                classificationErrorHint: t.classificationErrorHint,
+                retry: t.retry
               }}
             />
           )}

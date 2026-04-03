@@ -30,7 +30,6 @@ export async function classifyTabs(tabs: TabInfo[]): Promise<ClassificationResul
 
   // Group tabs by category
   const categoryMap = new Map<string, TabInfo[]>()
-  const unclassifiedTabs: TabInfo[] = []
 
   for (const tab of tabs) {
     const category = aiClassified.get(tab.id)
@@ -39,13 +38,7 @@ export async function classifyTabs(tabs: TabInfo[]): Promise<ClassificationResul
         categoryMap.set(category, [])
       }
       categoryMap.get(category)!.push(tab)
-    } else {
-      unclassifiedTabs.push(tab)
     }
-  }
-
-  if (unclassifiedTabs.length > 0) {
-    categoryMap.set('Other', unclassifiedTabs)
   }
 
   const groups: CategoryGroup[] = []
@@ -62,8 +55,5 @@ export async function classifyTabs(tabs: TabInfo[]): Promise<ClassificationResul
 
   groups.sort((a, b) => b.tabs.length - a.tabs.length)
 
-  return {
-    groups,
-    unclassifiedTabs: []
-  }
+  return { groups }
 }

@@ -111,6 +111,11 @@ export interface TranslationKeys {
 
   // Drag and Drop
   moveToCategory: string
+
+  // Classification Error
+  classificationError: string
+  classificationErrorHint: string
+  retry: string
 }
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -224,7 +229,12 @@ export const translations: Record<Language, TranslationKeys> = {
     categoryOther: 'Other',
 
     // Drag and Drop
-    moveToCategory: 'Move to {category}'
+    moveToCategory: 'Move to {category}',
+
+    // Classification Error
+    classificationError: 'Classification Failed',
+    classificationErrorHint: 'Failed to communicate with AI service. Please check your settings.',
+    retry: 'Retry'
   },
   zh: {
     // Header
@@ -336,6 +346,11 @@ export const translations: Record<Language, TranslationKeys> = {
     categoryOther: '其他',
 
     // Drag and Drop
-    moveToCategory: '移动到 {category}'
+    moveToCategory: '移动到 {category}',
+
+    // Classification Error
+    classificationError: '分类失败',
+    classificationErrorHint: '无法与 AI 服务通信，请检查您的设置。',
+    retry: '重试'
   }
 }
