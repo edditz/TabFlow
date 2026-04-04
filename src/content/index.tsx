@@ -20,8 +20,7 @@ const isDev = import.meta.env.VITE_DEV === 'true'
 
 // Default shortcuts
 const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
-  { id: 'toggle-search-panel', shortcut: { key: 'a', ctrl: true, meta: true } },
-  { id: '_execute_action', shortcut: { key: 'h', meta: true } }
+  { id: 'toggle-search-panel', shortcut: { key: 'a', ctrl: true, meta: true } }
 ]
 
 // DOM containers and React roots

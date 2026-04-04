@@ -9,8 +9,6 @@ export interface TranslationKeys {
   keyboardShortcuts: string
   toggleSearchPanel: string
   toggleSearchPanelDesc: string
-  openExtensionPopup: string
-  openExtensionPopupDesc: string
   clickToRecord: string
   recording: string
   resetToDefault: string
@@ -130,8 +128,6 @@ export const translations: Record<Language, TranslationKeys> = {
     keyboardShortcuts: 'Keyboard Shortcuts',
     toggleSearchPanel: 'Toggle Search Panel',
     toggleSearchPanelDesc: 'Open/close the global tab search panel',
-    openExtensionPopup: 'Open Extension Popup',
-    openExtensionPopupDesc: 'Open the extension popup window',
     clickToRecord: 'Click to record...',
     recording: 'Recording...',
     resetToDefault: 'Reset to Default',
@@ -249,8 +245,6 @@ export const translations: Record<Language, TranslationKeys> = {
     keyboardShortcuts: '键盘快捷键',
     toggleSearchPanel: '切换搜索面板',
     toggleSearchPanelDesc: '打开/关闭全局标签页搜索面板',
-    openExtensionPopup: '打开扩展弹窗',
-    openExtensionPopupDesc: '打开扩展弹出窗口',
     clickToRecord: '点击录入...',
     recording: '录入中...',
     resetToDefault: '恢复默认',

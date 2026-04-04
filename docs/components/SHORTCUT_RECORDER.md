@@ -93,7 +93,7 @@ function fromChromeFormat(shortcut: string): ShortcutKey | null
 
 ## ShortcutSettings
 
-快捷键设置面板组件，管理多个快捷键配置，支持冲突检测和恢复默认。
+快捷键设置面板组件，管理快捷键配置，支持冲突检测和恢复默认。
 
 ### Props
 
@@ -104,8 +104,6 @@ interface ShortcutSettingsProps {
   labels: {                      // 国际化文本
     toggleSearchPanel: string
     toggleSearchPanelDesc: string
-    openExtensionPopup: string
-    openExtensionPopupDesc: string
     clickToRecord: string
     recording: string
     resetToDefault: string
@@ -126,10 +124,6 @@ const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
   {
     id: 'toggle-search-panel',
     shortcut: { key: 'a', ctrl: true, meta: true },  // ⌃+⌘+A
-  },
-  {
-    id: '_execute_action',
-    shortcut: { key: 'h', meta: true },  // ⌘+H
   },
 ]
 ```
@@ -157,8 +151,6 @@ function SettingsPage() {
       labels={{
         toggleSearchPanel: '切换搜索面板',
         toggleSearchPanelDesc: '打开/关闭全局标签页搜索面板',
-        openExtensionPopup: '打开扩展弹窗',
-        openExtensionPopupDesc: '打开扩展弹出窗口',
         clickToRecord: '点击录入...',
         recording: '录入中...',
         resetToDefault: '恢复默认',

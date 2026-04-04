@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react'
 import { Keyboard, Settings, Search, Clock } from 'lucide-react'
 import './App.css'
 import { useTranslation } from '../i18n'
-import { ShortcutSettings, ShortcutConfig, DEFAULT_SHORTCUTS } from './components/ShortcutSettings'
+import {
+  ShortcutSettings,
+  ShortcutConfig,
+  DEFAULT_SHORTCUTS
+} from './components/ShortcutSettings'
 import { Switch } from './components/Switch'
 import { AISettings as AISettingsComponent } from './components/AISettings'
 import type { AISettings } from '../classification'
@@ -34,6 +38,11 @@ const DEFAULT_SETTINGS: Settings = {
   recentClosedTimeWindow: 24,
   recentClosedMaxResults: 10,
   aiSettings: DEFAULT_AI_SETTINGS
+}
+
+// Sync shortcuts to chrome.commands via background service worker
+function syncShortcutsViaBackground(shortcuts: ShortcutConfig[]): void {
+  chrome.runtime.sendMessage({ type: 'UPDATE_SHORTCUTS', shortcuts })
 }
 
 // Get actual theme based on setting and system preference
@@ -91,6 +100,10 @@ export function App() {
 
       setSettings(loadedSettings)
       setActualTheme(getActualTheme(loadedSettings.theme))
+
+      // Sync shortcuts to chrome.commands via background
+      const shortcutsToSync = loadedSettings.shortcuts?.length === 1 ? loadedSettings.shortcuts : DEFAULT_SHORTCUTS
+      syncShortcutsViaBackground(shortcutsToSync)
     })
 
     // Listen for settings changes
@@ -125,6 +138,11 @@ export function App() {
       setActualTheme(getActualTheme(value as 'system' | 'light' | 'dark'))
     }
 
+    // Update chrome.commands via background when shortcuts change
+    if (key === 'shortcuts') {
+      syncShortcutsViaBackground(value as ShortcutConfig[])
+    }
+
     chrome.storage.sync.set(newSettings, () => {
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
@@ -151,13 +169,11 @@ export function App() {
         </div>
 
         <ShortcutSettings
-          shortcuts={settings.shortcuts.length === 2 ? settings.shortcuts : DEFAULT_SHORTCUTS}
+          shortcuts={settings.shortcuts.length === 1 ? settings.shortcuts : DEFAULT_SHORTCUTS}
           onChange={shortcuts => updateSetting('shortcuts', shortcuts)}
           labels={{
             toggleSearchPanel: t.toggleSearchPanel,
             toggleSearchPanelDesc: t.toggleSearchPanelDesc,
-            openExtensionPopup: t.openExtensionPopup,
-            openExtensionPopupDesc: t.openExtensionPopupDesc,
             clickToRecord: t.clickToRecord,
             recording: t.recording,
             resetToDefault: t.resetToDefault,

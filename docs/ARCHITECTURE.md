@@ -90,7 +90,6 @@ tabflow/
 | 功能 | Windows/Linux | macOS |
 |------|---------------|-------|
 | 切换搜索面板 | Ctrl+Shift+Z | Cmd+Shift+Z |
-| 打开扩展弹窗 | Ctrl+Shift+Y | Cmd+Shift+Y |
 
 ## 开发命令
 ```bash

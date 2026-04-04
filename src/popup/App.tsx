@@ -1,26 +1,9 @@
-import { useState, useEffect } from 'react'
-import { formatShortcut } from '../options/components/ShortcutRecorder'
-import type { ShortcutConfig } from '../options/components/ShortcutSettings'
 import { useTranslation } from '../i18n'
 import { Search, Settings, FolderX } from 'lucide-react'
 import './App.css'
 
-const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
-  { id: 'toggle-search-panel', shortcut: { key: 'z', ctrl: true, shift: true } }
-]
-
 export function App() {
   const { t } = useTranslation()
-  const [shortcut, setShortcut] = useState<string>('')
-
-  useEffect(() => {
-    chrome.storage.sync.get({ shortcuts: DEFAULT_SHORTCUTS }, data => {
-      const shortcuts = data.shortcuts as ShortcutConfig[]
-      if (shortcuts && shortcuts.length > 0) {
-        setShortcut(formatShortcut(shortcuts[0].shortcut))
-      }
-    })
-  }, [])
 
   const handleOpenSearch = async () => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
@@ -53,7 +36,6 @@ export function App() {
         <button className="popup-btn" onClick={handleOpenSearch}>
           <span className="popup-btn-icon"><Search size={18} strokeWidth={2} /></span>
           <span className="popup-btn-text">{t.popupSearchTabs}</span>
-          {shortcut && <span className="popup-shortcut">{shortcut}</span>}
         </button>
 
         <button className="popup-btn" onClick={handleOpenOptions}>

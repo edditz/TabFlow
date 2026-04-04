@@ -12,8 +12,6 @@ interface ShortcutSettingsProps {
   labels: {
     toggleSearchPanel: string
     toggleSearchPanelDesc: string
-    openExtensionPopup: string
-    openExtensionPopupDesc: string
     clickToRecord: string
     recording: string
     resetToDefault: string
@@ -26,10 +24,6 @@ export const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
   {
     id: 'toggle-search-panel',
     shortcut: { key: 'a', ctrl: true, meta: true }
-  },
-  {
-    id: '_execute_action',
-    shortcut: { key: 'h', meta: true }
   }
 ]
 
@@ -62,22 +56,14 @@ export function ShortcutSettings({ shortcuts, onChange, labels }: ShortcutSettin
     onChange(DEFAULT_SHORTCUTS)
   }
 
-  const getLabel = (index: number) => {
-    if (index === 0) {
-      return { label: labels.toggleSearchPanel, desc: labels.toggleSearchPanelDesc }
-    }
-    return { label: labels.openExtensionPopup, desc: labels.openExtensionPopupDesc }
-  }
-
   return (
     <div className="shortcut-settings">
       {shortcuts.map((shortcut, index) => {
-        const { label, desc } = getLabel(index)
         return (
           <div key={shortcut.id} className="shortcut-item">
             <div className="shortcut-info">
-              <div className="shortcut-label">{label}</div>
-              <div className="shortcut-desc">{desc}</div>
+              <div className="shortcut-label">{labels.toggleSearchPanel}</div>
+              <div className="shortcut-desc">{labels.toggleSearchPanelDesc}</div>
               {conflictIndex === index && (
                 <div className="shortcut-error">{labels.shortcutConflict}</div>
               )}

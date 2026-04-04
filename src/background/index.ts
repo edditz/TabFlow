@@ -1,5 +1,58 @@
 // Background service worker for TabFlow extension
 
+interface ShortcutKey {
+  key: string
+  ctrl?: boolean
+  shift?: boolean
+  alt?: boolean
+  meta?: boolean
+}
+
+interface ShortcutConfig {
+  id: string
+  shortcut: ShortcutKey | null
+}
+
+const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
+  { id: 'toggle-search-panel', shortcut: { key: 'a', ctrl: true, meta: true } }
+]
+
+// Convert ShortcutKey to Chrome extension shortcut format
+function toChromeFormat(shortcut: ShortcutKey | null): string {
+  if (!shortcut || !shortcut.key) return ''
+  const parts: string[] = []
+  if (shortcut.ctrl) parts.push('Ctrl')
+  if (shortcut.alt) parts.push('Alt')
+  if (shortcut.shift) parts.push('Shift')
+  if (shortcut.meta) parts.push('Command')
+  let key = shortcut.key.toUpperCase()
+  if (key === ' ') key = 'Space'
+  if (key.startsWith('ARROW')) key = key.replace('ARROW', '')
+  parts.push(key)
+  return parts.join('+')
+}
+
+// Sync shortcuts from storage to chrome.commands
+function syncShortcuts(shortcuts: ShortcutConfig[]): void {
+  const commands = chrome.commands as typeof chrome.commands & {
+    update: (detail: { name: string; shortcut: string }) => void
+  }
+  for (const s of shortcuts) {
+    const chromeShortcut = toChromeFormat(s.shortcut)
+    if (s.id && chromeShortcut) {
+      commands.update({ name: s.id, shortcut: chromeShortcut })
+    }
+  }
+}
+
+// Load and sync shortcuts on startup
+chrome.storage.sync.get({ shortcuts: DEFAULT_SHORTCUTS }, data => {
+  const shortcuts = (data.shortcuts as ShortcutConfig[])?.length === 1
+    ? data.shortcuts
+    : DEFAULT_SHORTCUTS
+  syncShortcuts(shortcuts)
+})
+
 // Category color mapping for tab groups
 function getCategoryColor(category: string): chrome.tabGroups.ColorEnum {
   const colorMap: Record<string, chrome.tabGroups.ColorEnum> = {
@@ -123,6 +176,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       }
     })()
     return true // Required for async response
+  }
+
+  if (message.type === 'UPDATE_SHORTCUTS') {
+    syncShortcuts(message.shortcuts as ShortcutConfig[])
+    sendResponse({ success: true })
+    return true
   }
 
   if (message.type === 'UNGROUP_ALL') {

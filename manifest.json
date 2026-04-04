@@ -40,13 +40,6 @@
     "tabGroups"
   ],
   "commands": {
-    "_execute_action": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+Y",
-        "mac": "Command+Shift+Y"
-      },
-      "description": "Open TabFlow search panel"
-    },
     "toggle-search-panel": {
       "suggested_key": {
         "default": "Ctrl+Shift+Z",
