@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { formatShortcut } from '../options/components/ShortcutRecorder'
 import type { ShortcutConfig } from '../options/components/ShortcutSettings'
-import { Search, Settings } from 'lucide-react'
+import { Search, Settings, FolderX } from 'lucide-react'
 import './App.css'
 
 const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
@@ -33,6 +33,11 @@ export function App() {
     window.close()
   }
 
+  const handleUngroupAll = async () => {
+    await chrome.runtime.sendMessage({ type: 'UNGROUP_ALL' })
+    window.close()
+  }
+
   return (
     <div className="popup-container">
       <header className="popup-header">
@@ -52,6 +57,11 @@ export function App() {
         <button className="popup-btn" onClick={handleOpenOptions}>
           <span className="popup-btn-icon"><Settings size={18} strokeWidth={2} /></span>
           <span className="popup-btn-text">Settings</span>
+        </button>
+
+        <button className="popup-btn" onClick={handleUngroupAll}>
+          <span className="popup-btn-icon"><FolderX size={18} strokeWidth={2} /></span>
+          <span className="popup-btn-text">Ungroup All</span>
         </button>
       </div>
     </div>

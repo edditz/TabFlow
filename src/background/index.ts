@@ -125,6 +125,23 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true // Required for async response
   }
 
+  if (message.type === 'UNGROUP_ALL') {
+    ;(async () => {
+      try {
+        const tabs = await chrome.tabs.query({ currentWindow: true })
+        const groupedTabs = tabs.filter(tab => tab.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE)
+        if (groupedTabs.length > 0) {
+          await chrome.tabs.ungroup(groupedTabs.map(tab => tab.id!))
+        }
+        sendResponse({ success: true, ungroupedCount: groupedTabs.length })
+      } catch (error) {
+        console.error('[TabFlow] Error ungrouping tabs:', error)
+        sendResponse({ success: false, error: String(error) })
+      }
+    })()
+    return true
+  }
+
   return false
 })
 
