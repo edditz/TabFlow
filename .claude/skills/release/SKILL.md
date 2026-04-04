@@ -1,6 +1,7 @@
 ---
 name: release
 description: Analyze commits since last release, determine semver bump, generate release notes, create tag, and trigger GitHub Actions build
+user-invocable: true
 ---
 
 # Release Skill
