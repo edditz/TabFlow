@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { formatShortcut } from '../options/components/ShortcutRecorder'
 import type { ShortcutConfig } from '../options/components/ShortcutSettings'
+import { useTranslation } from '../i18n'
 import { Search, Settings, FolderX } from 'lucide-react'
 import './App.css'
 
@@ -9,6 +10,7 @@ const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
 ]
 
 export function App() {
+  const { t } = useTranslation()
   const [shortcut, setShortcut] = useState<string>('')
 
   useEffect(() => {
@@ -50,18 +52,18 @@ export function App() {
       <div className="popup-actions">
         <button className="popup-btn" onClick={handleOpenSearch}>
           <span className="popup-btn-icon"><Search size={18} strokeWidth={2} /></span>
-          <span className="popup-btn-text">Search Tabs</span>
+          <span className="popup-btn-text">{t.popupSearchTabs}</span>
           {shortcut && <span className="popup-shortcut">{shortcut}</span>}
         </button>
 
         <button className="popup-btn" onClick={handleOpenOptions}>
           <span className="popup-btn-icon"><Settings size={18} strokeWidth={2} /></span>
-          <span className="popup-btn-text">Settings</span>
+          <span className="popup-btn-text">{t.popupSettings}</span>
         </button>
 
         <button className="popup-btn" onClick={handleUngroupAll}>
           <span className="popup-btn-icon"><FolderX size={18} strokeWidth={2} /></span>
-          <span className="popup-btn-text">Ungroup All</span>
+          <span className="popup-btn-text">{t.popupUngroupAll}</span>
         </button>
       </div>
     </div>

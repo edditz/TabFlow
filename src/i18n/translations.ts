@@ -107,6 +107,11 @@ export interface TranslationKeys {
   categoryDocs: string
   categoryOther: string
 
+  // Popup
+  popupSearchTabs: string
+  popupSettings: string
+  popupUngroupAll: string
+
   // Drag and Drop
   moveToCategory: string
 
@@ -224,6 +229,11 @@ export const translations: Record<Language, TranslationKeys> = {
     categoryDocs: 'Docs',
     categoryOther: 'Other',
 
+    // Popup
+    popupSearchTabs: 'Search Tabs',
+    popupSettings: 'Settings',
+    popupUngroupAll: 'Ungroup All',
+
     // Drag and Drop
     moveToCategory: 'Move to {category}',
 
@@ -338,6 +348,11 @@ export const translations: Record<Language, TranslationKeys> = {
     categoryNews: '新闻',
     categoryDocs: '文档',
     categoryOther: '其他',
+
+    // Popup
+    popupSearchTabs: '搜索标签页',
+    popupSettings: '设置',
+    popupUngroupAll: '取消所有分组',
 
     // Drag and Drop
     moveToCategory: '移动到 {category}',
