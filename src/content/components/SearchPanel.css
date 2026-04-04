@@ -416,6 +416,36 @@
   }
 }
 
+/* Item close animation */
+.tt-result-item.closing {
+  animation: tt-item-close 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes tt-item-close {
+  0% {
+    opacity: 1;
+    max-height: 60px;
+    margin-bottom: 0;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  50% {
+    opacity: 0;
+    max-height: 60px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  100% {
+    opacity: 0;
+    max-height: 0;
+    margin-bottom: -8px;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+  }
+}
+
 /* Exit animations */
 .tt-overlay.tt-closing {
   animation: tt-overlay-exit 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;

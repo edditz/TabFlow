@@ -80,6 +80,7 @@ export function SearchPanel({
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<TabResult[]>([])
   const [closedTabs, setClosedTabs] = useState<ClosedTab[]>([])
+  const [closingTabIds, setClosingTabIds] = useState<Set<number>>(new Set())
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [isKeyboardNav, setIsKeyboardNav] = useState(false)
   const [stats, setStats] = useState<{
@@ -383,7 +384,17 @@ export function SearchPanel({
                 <div
                   key={tab.id}
                   ref={index === selectedIndex ? selectedItemRef : null}
-                  className={`tt-result-item ${index === selectedIndex ? 'selected' : ''}`}
+                  className={`tt-result-item ${index === selectedIndex ? 'selected' : ''} ${closingTabIds.has(tab.id) ? 'closing' : ''}`}
+                  onAnimationEnd={() => {
+                    if (closingTabIds.has(tab.id)) {
+                      setResults(prev => prev.filter(t => t.id !== tab.id))
+                      setClosingTabIds(prev => {
+                        const next = new Set(prev)
+                        next.delete(tab.id)
+                        return next
+                      })
+                    }
+                  }}
                   onMouseEnter={() => {
                     if (!isKeyboardNav) {
                       setSelectedIndex(index)
@@ -418,8 +429,9 @@ export function SearchPanel({
                     className="tt-result-delete"
                     onClick={async e => {
                       e.stopPropagation()
+                      if (closingTabIds.has(tab.id)) return
+                      setClosingTabIds(prev => new Set(prev).add(tab.id))
                       await chrome.runtime.sendMessage({ type: 'CLOSE_TAB', tabId: tab.id })
-                      setResults(prev => prev.filter(t => t.id !== tab.id))
                     }}
                     title={t.closeTab}
                   >
