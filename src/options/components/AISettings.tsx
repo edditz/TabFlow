@@ -17,7 +17,6 @@ interface AISettingsProps {
     apiKey: string
     apiKeyPlaceholder: string
     modelName: string
-    modelNameHint: string
     testConnection: string
     connectionSuccess: string
     connectionFailed: string
@@ -103,7 +102,6 @@ export function AISettings({ settings, onChange, labels }: AISettingsProps) {
           <div className="setting-item">
             <div className="setting-info">
               <div className="setting-label">{labels.modelName}</div>
-              <div className="setting-desc">{labels.modelNameHint}</div>
             </div>
             <input
               type="text"

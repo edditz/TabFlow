@@ -81,7 +81,6 @@ export interface TranslationKeys {
   apiKey: string
   apiKeyPlaceholder: string
   modelName: string
-  modelNameHint: string
   testConnection: string
   connectionSuccess: string
   connectionFailed: string
@@ -197,13 +196,12 @@ export const translations: Record<Language, TranslationKeys> = {
     // AI Classification Settings
     aiSettings: 'AI Classification Settings',
     enableAiClassification: 'Enable AI Smart Classification',
-    enableAiClassificationDesc: 'Use AI to classify tabs that don\'t match built-in rules',
+    enableAiClassificationDesc: 'Use AI to automatically classify and group tabs',
     apiEndpoint: 'API Endpoint',
     apiEndpointHint: 'Supports any OpenAI-compatible endpoint',
     apiKey: 'API Key',
     apiKeyPlaceholder: 'Enter your API key',
     modelName: 'Model Name',
-    modelNameHint: 'Common: gpt-3.5-turbo, gpt-4, claude-3-haiku-20240307',
     testConnection: 'Test Connection',
     connectionSuccess: 'Connection successful',
     connectionFailed: 'Connection failed',
@@ -317,13 +315,12 @@ export const translations: Record<Language, TranslationKeys> = {
     // AI Classification Settings
     aiSettings: 'AI 分类设置',
     enableAiClassification: '启用 AI 智能分类',
-    enableAiClassificationDesc: '使用 AI 对不匹配内置规则的标签进行分类',
+    enableAiClassificationDesc: '使用 AI 自动对标签进行智能分类和分组',
     apiEndpoint: 'API 端点',
     apiEndpointHint: '支持任意 OpenAI 兼容端点',
     apiKey: 'API Key',
     apiKeyPlaceholder: '输入您的 API 密钥',
     modelName: '模型名称',
-    modelNameHint: '常用: gpt-3.5-turbo, gpt-4, claude-3-haiku-20240307',
     testConnection: '测试连接',
     connectionSuccess: '连接成功',
     connectionFailed: '连接失败',

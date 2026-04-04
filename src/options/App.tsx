@@ -323,7 +323,6 @@ export function App() {
           apiKey: t.apiKey,
           apiKeyPlaceholder: t.apiKeyPlaceholder,
           modelName: t.modelName,
-          modelNameHint: t.modelNameHint,
           testConnection: t.testConnection,
           connectionSuccess: t.connectionSuccess,
           connectionFailed: t.connectionFailed
