@@ -1,0 +1,6 @@
+export { SidebarHeader } from './SidebarHeader'
+export { TabItem } from './TabItem'
+export { GroupHeader } from './GroupHeader'
+export { RecentTabs } from './RecentTabs'
+export { ContextMenu } from './ContextMenu'
+export type { MenuItem } from './ContextMenu'
