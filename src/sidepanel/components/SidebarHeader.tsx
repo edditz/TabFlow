@@ -8,7 +8,7 @@ interface SidebarHeaderProps {
   labels: {
     sidebarTitle: string
     layoutCompact: string
-    layoutDetailed: string
+    layoutCard: string
     layoutTree: string
   }
 }
@@ -19,7 +19,7 @@ const LAYOUT_OPTIONS: {
   labelKey: keyof SidebarHeaderProps['labels']
 }[] = [
   { value: 'compact', icon: List, labelKey: 'layoutCompact' },
-  { value: 'detailed', icon: LayoutGrid, labelKey: 'layoutDetailed' },
+  { value: 'detailed', icon: LayoutGrid, labelKey: 'layoutCard' },
   { value: 'tree', icon: GitBranch, labelKey: 'layoutTree' }
 ]
 

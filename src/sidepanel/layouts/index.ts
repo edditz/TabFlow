@@ -1,3 +1,3 @@
 export { CompactLayout } from './CompactLayout'
-export { DetailedLayout } from './DetailedLayout'
+export { CardLayout } from './CardLayout'
 export { TreeLayout } from './TreeLayout'

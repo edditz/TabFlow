@@ -121,7 +121,7 @@ export interface TranslationKeys {
   sidebarTitle: string
   sidebarLayout: string
   layoutCompact: string
-  layoutDetailed: string
+  layoutCard: string
   layoutTree: string
   recentTabs: string
   noGroupsYet: string
@@ -150,6 +150,18 @@ export interface TranslationKeys {
   sidebarDefaultExpandedDesc: string
   sidebarRecentCount: string
   sidebarRecentCountDesc: string
+  sidebarShowGroupTag: string
+  sidebarShowGroupTagDesc: string
+  sidebarShowAudioIndicator: string
+  sidebarShowAudioIndicatorDesc: string
+  sidebarShowPinnedIndicator: string
+  sidebarShowPinnedIndicatorDesc: string
+  sidebarShowMemory: string
+  sidebarShowMemoryDesc: string
+  justNow: string
+  minutesAgo: string
+  hoursAgo: string
+  daysAgo: string
   groupCollapsed: string
   groupExpanded: string
   tabCount: string
@@ -277,7 +289,7 @@ export const translations: Record<Language, TranslationKeys> = {
     sidebarTitle: 'TabFlow',
     sidebarLayout: 'Layout',
     layoutCompact: 'Compact',
-    layoutDetailed: 'Detailed',
+    layoutCard: 'Card',
     layoutTree: 'Tree',
     recentTabs: 'Recently Closed',
     noGroupsYet: 'No tab groups',
@@ -306,6 +318,18 @@ export const translations: Record<Language, TranslationKeys> = {
     sidebarDefaultExpandedDesc: 'Expand all groups by default',
     sidebarRecentCount: 'Recent Tabs Count',
     sidebarRecentCountDesc: 'Number of recently closed tabs to show',
+    sidebarShowGroupTag: 'Show Group Tag',
+    sidebarShowGroupTagDesc: 'Display group name tag on each card',
+    sidebarShowAudioIndicator: 'Show Audio Indicator',
+    sidebarShowAudioIndicatorDesc: 'Show speaker icon when tab is playing audio',
+    sidebarShowPinnedIndicator: 'Show Pinned Indicator',
+    sidebarShowPinnedIndicatorDesc: 'Show pin icon for pinned tabs',
+    sidebarShowMemory: 'Show Memory Usage',
+    sidebarShowMemoryDesc: 'Display estimated memory usage per tab',
+    justNow: 'just now',
+    minutesAgo: '{n} min ago',
+    hoursAgo: '{n}h ago',
+    daysAgo: '{n}d ago',
     groupCollapsed: 'Collapsed',
     groupExpanded: 'Expanded',
     tabCount: '{count} tabs'
@@ -431,7 +455,7 @@ export const translations: Record<Language, TranslationKeys> = {
     sidebarTitle: 'TabFlow',
     sidebarLayout: '布局',
     layoutCompact: '紧凑',
-    layoutDetailed: '详细',
+    layoutCard: '卡片',
     layoutTree: '树形',
     recentTabs: '最近关闭',
     noGroupsYet: '暂无标签分组',
@@ -460,6 +484,18 @@ export const translations: Record<Language, TranslationKeys> = {
     sidebarDefaultExpandedDesc: '默认展开所有分组',
     sidebarRecentCount: '最近关闭数量',
     sidebarRecentCountDesc: '显示最近关闭的标签页数量',
+    sidebarShowGroupTag: '显示分组标签',
+    sidebarShowGroupTagDesc: '在每张卡片上显示分组名称标签',
+    sidebarShowAudioIndicator: '显示音频指示',
+    sidebarShowAudioIndicatorDesc: '标签播放音频时显示扬声器图标',
+    sidebarShowPinnedIndicator: '显示固定指示',
+    sidebarShowPinnedIndicatorDesc: '固定标签显示图钉图标',
+    sidebarShowMemory: '显示内存占用',
+    sidebarShowMemoryDesc: '显示每个标签的估算内存使用量',
+    justNow: '刚刚',
+    minutesAgo: '{n} 分钟前',
+    hoursAgo: '{n} 小时前',
+    daysAgo: '{n} 天前',
     groupCollapsed: '已折叠',
     groupExpanded: '已展开',
     tabCount: '{count} 个标签'

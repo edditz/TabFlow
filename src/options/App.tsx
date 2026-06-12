@@ -357,7 +357,7 @@ export function App() {
             })}
           >
             <option value="compact">{t.layoutCompact}</option>
-            <option value="detailed">{t.layoutDetailed}</option>
+            <option value="detailed">{t.layoutCard}</option>
             <option value="tree">{t.layoutTree}</option>
           </select>
         </div>
@@ -400,6 +400,62 @@ export function App() {
             onChange={checked => updateSetting('sidebarSettings', {
               ...settings.sidebarSettings,
               sidebarShowCloseButton: checked
+            })}
+          />
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <div className="setting-label">{t.sidebarShowGroupTag}</div>
+            <div className="setting-desc">{t.sidebarShowGroupTagDesc}</div>
+          </div>
+          <Switch
+            checked={settings.sidebarSettings.sidebarShowGroupTag}
+            onChange={checked => updateSetting('sidebarSettings', {
+              ...settings.sidebarSettings,
+              sidebarShowGroupTag: checked
+            })}
+          />
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <div className="setting-label">{t.sidebarShowAudioIndicator}</div>
+            <div className="setting-desc">{t.sidebarShowAudioIndicatorDesc}</div>
+          </div>
+          <Switch
+            checked={settings.sidebarSettings.sidebarShowAudioIndicator}
+            onChange={checked => updateSetting('sidebarSettings', {
+              ...settings.sidebarSettings,
+              sidebarShowAudioIndicator: checked
+            })}
+          />
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <div className="setting-label">{t.sidebarShowPinnedIndicator}</div>
+            <div className="setting-desc">{t.sidebarShowPinnedIndicatorDesc}</div>
+          </div>
+          <Switch
+            checked={settings.sidebarSettings.sidebarShowPinnedIndicator}
+            onChange={checked => updateSetting('sidebarSettings', {
+              ...settings.sidebarSettings,
+              sidebarShowPinnedIndicator: checked
+            })}
+          />
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <div className="setting-label">{t.sidebarShowMemory}</div>
+            <div className="setting-desc">{t.sidebarShowMemoryDesc}</div>
+          </div>
+          <Switch
+            checked={settings.sidebarSettings.sidebarShowMemory}
+            onChange={checked => updateSetting('sidebarSettings', {
+              ...settings.sidebarSettings,
+              sidebarShowMemory: checked
             })}
           />
         </div>

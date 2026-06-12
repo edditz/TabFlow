@@ -6,7 +6,7 @@ import { useRecentTabs } from './hooks/useRecentTabs'
 import { useSidebarSettings } from './hooks/useSidebarSettings'
 import { SidebarHeader } from './components/SidebarHeader'
 import { CompactLayout } from './layouts/CompactLayout'
-import { DetailedLayout } from './layouts/DetailedLayout'
+import { CardLayout } from './layouts/CardLayout'
 import { TreeLayout } from './layouts/TreeLayout'
 import { ContextMenu, type MenuItem } from './components/ContextMenu'
 import { useTranslation } from '../i18n'
@@ -173,7 +173,7 @@ export function App() {
   const layoutLabels = useMemo(() => ({
     sidebarTitle: t.sidebarTitle,
     layoutCompact: t.layoutCompact,
-    layoutDetailed: t.layoutDetailed,
+    layoutCard: t.layoutCard,
     layoutTree: t.layoutTree
   }), [t])
 
@@ -208,15 +208,23 @@ export function App() {
             />
           )}
           {settings.sidebarLayout === 'detailed' && (
-            <DetailedLayout
+            <CardLayout
               groups={groups}
               activeTabId={activeTabId}
               onActivateTab={activateTab}
               onCloseTab={closeTab}
               onTabContextMenu={handleTabContextMenu}
               showFavicon={settings.sidebarShowFavicon}
-              showDomain={settings.sidebarShowDomain}
+              showGroupTag={settings.sidebarShowGroupTag}
+              showAudioIndicator={settings.sidebarShowAudioIndicator}
+              showPinnedIndicator={settings.sidebarShowPinnedIndicator}
               showCloseButton={settings.sidebarShowCloseButton}
+              labels={{
+                justNow: t.justNow,
+                minutesAgo: t.minutesAgo,
+                hoursAgo: t.hoursAgo,
+                daysAgo: t.daysAgo
+              }}
             />
           )}
           {settings.sidebarLayout === 'tree' && (
