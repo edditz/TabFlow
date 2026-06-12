@@ -68,6 +68,9 @@ function getCategoryColor(category: string): chrome.tabGroups.ColorEnum {
   return colorMap[category] || 'grey'
 }
 
+// Configure side panel behavior
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+
 // Listen for keyboard shortcut commands
 chrome.commands.onCommand.addListener(command => {
   console.log('Command received:', command)
@@ -78,6 +81,15 @@ chrome.commands.onCommand.addListener(command => {
       const activeTab = tabs[0]
       if (activeTab?.id) {
         chrome.tabs.sendMessage(activeTab.id, { type: 'TOGGLE_SEARCH_PANEL' })
+      }
+    })
+  }
+
+  if (command === 'toggle-side-panel') {
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      const activeTab = tabs[0]
+      if (activeTab?.windowId) {
+        chrome.sidePanel.open({ windowId: activeTab.windowId })
       }
     })
   }
