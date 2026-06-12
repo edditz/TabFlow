@@ -115,6 +115,12 @@ export function App() {
       if (changes.theme) {
         setActualTheme(getActualTheme(changes.theme.newValue))
       }
+      if (changes.sidebarSettings) {
+        setSettings(prev => ({
+          ...prev,
+          sidebarSettings: { ...prev.sidebarSettings, ...changes.sidebarSettings.newValue }
+        }))
+      }
     })
 
     // Listen for system theme changes
