@@ -103,26 +103,26 @@ export function App() {
     const tabId = contextTabIdRef.current
     const groupId = contextGroupIdRef.current
 
-    if (actionId === 'close-tab' && tabId != null) {
+    if (actionId === 'close-tab' && tabId !== null) {
       closeTab(tabId)
     }
 
     if (actionId.startsWith('move-to-')) {
       const targetGroupId = parseInt(actionId.replace('move-to-', ''), 10)
-      if (tabId != null) {
+      if (tabId !== null) {
         await moveTabToGroup(tabId, targetGroupId)
       }
     }
 
-    if (actionId === 'remove-from-group' && tabId != null) {
+    if (actionId === 'remove-from-group' && tabId !== null) {
       await moveTabToGroup(tabId, chrome.tabGroups.TAB_GROUP_ID_NONE)
     }
 
-    if (actionId === 'close-other-tabs' && tabId != null) {
+    if (actionId === 'close-other-tabs' && tabId !== null) {
       const currentGroup = groups.find(g => g.tabs.some(tab => tab.id === tabId))
       if (currentGroup) {
         const otherTabIds = currentGroup.tabs
-          .filter(tab => tab.id !== tabId && tab.id != null)
+          .filter(tab => tab.id !== tabId && tab.id !== null)
           .map(tab => tab.id as number)
         if (otherTabIds.length > 0) {
           chrome.tabs.remove(otherTabIds)
@@ -130,38 +130,38 @@ export function App() {
       }
     }
 
-    if (actionId === 'copy-url' && tabId != null) {
+    if (actionId === 'copy-url' && tabId !== null) {
       const tab = tabs.find(tb => tb.id === tabId)
       if (tab?.url) {
         await navigator.clipboard.writeText(tab.url)
       }
     }
 
-    if (actionId === 'ungroup' && groupId != null) {
+    if (actionId === 'ungroup' && groupId !== null) {
       const group = groups.find(g => g.id === groupId)
       if (group) {
         const tabIds = group.tabs
-          .filter(tab => tab.id != null)
+          .filter(tab => tab.id !== null)
           .map(tab => tab.id as number)
         ungroupTabs(tabIds)
       }
     }
 
-    if (actionId === 'close-group-tabs' && groupId != null) {
+    if (actionId === 'close-group-tabs' && groupId !== null) {
       const group = groups.find(g => g.id === groupId)
       if (group) {
         closeGroupTabs(group.tabs)
       }
     }
 
-    if (actionId === 'rename-group' && groupId != null) {
+    if (actionId === 'rename-group' && groupId !== null) {
       const newName = prompt('Enter new group name:')
       if (newName) {
         renameGroup(groupId, newName)
       }
     }
 
-    if (actionId === 'change-color' && groupId != null) {
+    if (actionId === 'change-color' && groupId !== null) {
       const colors: chrome.tabGroups.ColorEnum[] = ['grey', 'blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan']
       const color = prompt(`Choose color: ${colors.join(', ')}`)
       if (color && colors.includes(color as chrome.tabGroups.ColorEnum)) {
