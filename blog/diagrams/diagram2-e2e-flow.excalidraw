@@ -1,0 +1,801 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "mcp-excalidraw-server",
+  "elements": [
+    {
+      "id": "ai-flow-zone",
+      "type": "rectangle",
+      "x": 200,
+      "y": 80,
+      "width": 700,
+      "height": 920,
+      "backgroundColor": "#a5d8ff",
+      "strokeColor": "#1971c2",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "opacity": 20,
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "ci-flow-zone",
+      "type": "rectangle",
+      "x": 200,
+      "y": 1160,
+      "width": 700,
+      "height": 580,
+      "backgroundColor": "#b2f2bb",
+      "strokeColor": "#2f9e44",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "opacity": 20,
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "ai-zone-label",
+      "type": "text",
+      "x": 470,
+      "y": 90,
+      "strokeColor": "#1971c2",
+      "text": "AI Skill (本地)",
+      "fontSize": 20,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "ci-zone-label",
+      "type": "text",
+      "x": 440,
+      "y": 1170,
+      "strokeColor": "#2f9e44",
+      "text": "GitHub Actions (云端)",
+      "fontSize": 20,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "start-label",
+      "type": "text",
+      "x": 400,
+      "y": 30,
+      "strokeColor": "#1e1e1e",
+      "text": "开发者输入 /release",
+      "fontSize": 22,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "step-collect",
+      "type": "rectangle",
+      "x": 390,
+      "y": 130,
+      "width": 320,
+      "height": 50,
+      "backgroundColor": "#ffffff",
+      "strokeColor": "#1971c2",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "git log → 收集 commits"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "step-analyze",
+      "type": "rectangle",
+      "x": 360,
+      "y": 230,
+      "width": 380,
+      "height": 50,
+      "backgroundColor": "#ffffff",
+      "strokeColor": "#1971c2",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "分析 commit 类型 → 判断版本号"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "step-confirm1",
+      "type": "rectangle",
+      "x": 390,
+      "y": 330,
+      "width": 320,
+      "height": 50,
+      "backgroundColor": "#ffd8a8",
+      "strokeColor": "#e8590c",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "等待用户确认版本号 ← 人"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "step-update",
+      "type": "rectangle",
+      "x": 360,
+      "y": 430,
+      "width": 380,
+      "height": 50,
+      "backgroundColor": "#ffffff",
+      "strokeColor": "#1971c2",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "更新 package.json + manifest.json"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "step-notes",
+      "type": "rectangle",
+      "x": 390,
+      "y": 530,
+      "width": 320,
+      "height": 50,
+      "backgroundColor": "#ffffff",
+      "strokeColor": "#1971c2",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "生成双语 Release Notes"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "step-confirm2",
+      "type": "rectangle",
+      "x": 390,
+      "y": 630,
+      "width": 320,
+      "height": 50,
+      "backgroundColor": "#ffd8a8",
+      "strokeColor": "#e8590c",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "等待用户审核 Notes ← 人"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "step-tag",
+      "type": "rectangle",
+      "x": 390,
+      "y": 730,
+      "width": 320,
+      "height": 50,
+      "backgroundColor": "#ffffff",
+      "strokeColor": "#1971c2",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "git commit + git tag -a"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "step-confirm3",
+      "type": "rectangle",
+      "x": 390,
+      "y": 830,
+      "width": 320,
+      "height": 50,
+      "backgroundColor": "#ffd8a8",
+      "strokeColor": "#e8590c",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "等待用户确认 push ← 人"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "step-push",
+      "type": "rectangle",
+      "x": 390,
+      "y": 930,
+      "width": 320,
+      "height": 50,
+      "backgroundColor": "#ffffff",
+      "strokeColor": "#1971c2",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "git push && git push --tags"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "ci-trigger",
+      "type": "rectangle",
+      "x": 410,
+      "y": 1210,
+      "width": 280,
+      "height": 50,
+      "backgroundColor": "#ffffff",
+      "strokeColor": "#2f9e44",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "触发：on push tags v*"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "ci-build",
+      "type": "rectangle",
+      "x": 390,
+      "y": 1310,
+      "width": 320,
+      "height": 50,
+      "backgroundColor": "#ffffff",
+      "strokeColor": "#2f9e44",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "checkout → npm ci → build"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "ci-verify",
+      "type": "rectangle",
+      "x": 410,
+      "y": 1410,
+      "width": 280,
+      "height": 50,
+      "backgroundColor": "#ffffff",
+      "strokeColor": "#2f9e44",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "验证 dist/ 非空"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "ci-package",
+      "type": "rectangle",
+      "x": 390,
+      "y": 1510,
+      "width": 320,
+      "height": 50,
+      "backgroundColor": "#ffffff",
+      "strokeColor": "#2f9e44",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "打包 tabflow-v1.1.0.zip"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "ci-extract",
+      "type": "rectangle",
+      "x": 390,
+      "y": 1610,
+      "width": 320,
+      "height": 50,
+      "backgroundColor": "#ffffff",
+      "strokeColor": "#2f9e44",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "从 tag 提取 Release Notes"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "ci-release",
+      "type": "rectangle",
+      "x": 390,
+      "y": 1710,
+      "width": 320,
+      "height": 50,
+      "backgroundColor": "#ffffff",
+      "strokeColor": "#2f9e44",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "label": {
+        "text": "gh release create"
+      },
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "end-label",
+      "type": "text",
+      "x": 410,
+      "y": 1810,
+      "strokeColor": "#2f9e44",
+      "text": "GitHub Release 页面上线",
+      "fontSize": 22,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T15:00:15.040Z",
+      "updatedAt": "2026-04-08T15:00:15.040Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-start-collect",
+      "type": "arrow",
+      "x": 406.145770236779,
+      "y": 35.12147519731584,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          107.70845952644203,
+          89.75704960536831
+        ]
+      ],
+      "start": {
+        "id": "start-label"
+      },
+      "end": {
+        "id": "step-collect"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-collect-analyze",
+      "type": "arrow",
+      "x": 550,
+      "y": 188,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "step-collect"
+      },
+      "end": {
+        "id": "step-analyze"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-analyze-confirm1",
+      "type": "arrow",
+      "x": 550,
+      "y": 288,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "step-analyze"
+      },
+      "end": {
+        "id": "step-confirm1"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-confirm1-update",
+      "type": "arrow",
+      "x": 550,
+      "y": 388,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "step-confirm1"
+      },
+      "end": {
+        "id": "step-update"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-update-notes",
+      "type": "arrow",
+      "x": 550,
+      "y": 488,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "step-update"
+      },
+      "end": {
+        "id": "step-notes"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-notes-confirm2",
+      "type": "arrow",
+      "x": 550,
+      "y": 588,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "step-notes"
+      },
+      "end": {
+        "id": "step-confirm2"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-confirm2-tag",
+      "type": "arrow",
+      "x": 550,
+      "y": 688,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "step-confirm2"
+      },
+      "end": {
+        "id": "step-tag"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-tag-confirm3",
+      "type": "arrow",
+      "x": 550,
+      "y": 788,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "step-tag"
+      },
+      "end": {
+        "id": "step-confirm3"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-confirm3-push",
+      "type": "arrow",
+      "x": 550,
+      "y": 888,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "step-confirm3"
+      },
+      "end": {
+        "id": "step-push"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-push-trigger",
+      "type": "arrow",
+      "x": 550,
+      "y": 988,
+      "strokeColor": "#e8590c",
+      "strokeWidth": 3,
+      "strokeStyle": "dashed",
+      "label": {
+        "text": "tag v1.1.0 推送到 GitHub"
+      },
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          214
+        ]
+      ],
+      "start": {
+        "id": "step-push"
+      },
+      "end": {
+        "id": "ci-trigger"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-trigger-build",
+      "type": "arrow",
+      "x": 550,
+      "y": 1268,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "ci-trigger"
+      },
+      "end": {
+        "id": "ci-build"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-build-verify",
+      "type": "arrow",
+      "x": 550,
+      "y": 1368,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "ci-build"
+      },
+      "end": {
+        "id": "ci-verify"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-verify-package",
+      "type": "arrow",
+      "x": 550,
+      "y": 1468,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "ci-verify"
+      },
+      "end": {
+        "id": "ci-package"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-package-extract",
+      "type": "arrow",
+      "x": 550,
+      "y": 1568,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "ci-package"
+      },
+      "end": {
+        "id": "ci-extract"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-extract-release",
+      "type": "arrow",
+      "x": 550,
+      "y": 1668,
+      "strokeColor": "#868e96",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          34
+        ]
+      ],
+      "start": {
+        "id": "ci-extract"
+      },
+      "end": {
+        "id": "ci-release"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    },
+    {
+      "id": "arrow-release-end",
+      "type": "arrow",
+      "x": 496.28149357310303,
+      "y": 1763.7777713001233,
+      "strokeColor": "#2f9e44",
+      "strokeWidth": 2,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -79.22965381287275,
+          42.444457399753446
+        ]
+      ],
+      "start": {
+        "id": "ci-release"
+      },
+      "end": {
+        "id": "end-label"
+      },
+      "createdAt": "2026-04-08T15:00:46.770Z",
+      "updatedAt": "2026-04-08T15:00:46.770Z",
+      "version": 1
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff",
+    "gridSize": null
+  }
+}

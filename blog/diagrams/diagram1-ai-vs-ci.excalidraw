@@ -1,0 +1,244 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "mcp-excalidraw-server",
+  "elements": [
+    {
+      "id": "ai-zone",
+      "type": "rectangle",
+      "x": 40,
+      "y": 40,
+      "width": 480,
+      "height": 380,
+      "backgroundColor": "#a5d8ff",
+      "strokeColor": "#1971c2",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "opacity": 30,
+      "createdAt": "2026-04-08T14:53:54.431Z",
+      "updatedAt": "2026-04-08T14:53:54.431Z",
+      "version": 1
+    },
+    {
+      "id": "ci-zone",
+      "type": "rectangle",
+      "x": 580,
+      "y": 40,
+      "width": 480,
+      "height": 380,
+      "backgroundColor": "#b2f2bb",
+      "strokeColor": "#2f9e44",
+      "strokeWidth": 2,
+      "roughness": 0,
+      "opacity": 30,
+      "createdAt": "2026-04-08T14:53:54.431Z",
+      "updatedAt": "2026-04-08T14:53:54.431Z",
+      "version": 1
+    },
+    {
+      "id": "ai-title",
+      "type": "text",
+      "x": 180,
+      "y": 60,
+      "strokeColor": "#1971c2",
+      "text": "AI (本地)",
+      "fontSize": 28,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.432Z",
+      "updatedAt": "2026-04-08T14:53:54.432Z",
+      "version": 1
+    },
+    {
+      "id": "ci-title",
+      "type": "text",
+      "x": 730,
+      "y": 60,
+      "strokeColor": "#2f9e44",
+      "text": "CI/CD (云端)",
+      "fontSize": 28,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.432Z",
+      "updatedAt": "2026-04-08T14:53:54.432Z",
+      "version": 1
+    },
+    {
+      "id": "ai-task1",
+      "type": "text",
+      "x": 80,
+      "y": 130,
+      "strokeColor": "#1e1e1e",
+      "text": "✦ 分析提交，判断版本号",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.432Z",
+      "updatedAt": "2026-04-08T14:53:54.432Z",
+      "version": 1
+    },
+    {
+      "id": "ai-task2",
+      "type": "text",
+      "x": 80,
+      "y": 175,
+      "strokeColor": "#1e1e1e",
+      "text": "✦ 生成 Release Notes",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.432Z",
+      "updatedAt": "2026-04-08T14:53:54.432Z",
+      "version": 1
+    },
+    {
+      "id": "ai-task3",
+      "type": "text",
+      "x": 80,
+      "y": 220,
+      "strokeColor": "#1e1e1e",
+      "text": "✦ 创建 tag",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.432Z",
+      "updatedAt": "2026-04-08T14:53:54.432Z",
+      "version": 1
+    },
+    {
+      "id": "ai-task4",
+      "type": "text",
+      "x": 80,
+      "y": 265,
+      "strokeColor": "#1e1e1e",
+      "text": "✦ 人确认后 push",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.432Z",
+      "updatedAt": "2026-04-08T14:53:54.432Z",
+      "version": 1
+    },
+    {
+      "id": "ai-role",
+      "type": "text",
+      "x": 100,
+      "y": 340,
+      "strokeColor": "#1971c2",
+      "text": "负责：理解、决策、沟通",
+      "fontSize": 16,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.432Z",
+      "updatedAt": "2026-04-08T14:53:54.432Z",
+      "version": 1
+    },
+    {
+      "id": "ci-task1",
+      "type": "text",
+      "x": 620,
+      "y": 130,
+      "strokeColor": "#1e1e1e",
+      "text": "✦ 拉取代码",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.432Z",
+      "updatedAt": "2026-04-08T14:53:54.432Z",
+      "version": 1
+    },
+    {
+      "id": "ci-task2",
+      "type": "text",
+      "x": 620,
+      "y": 175,
+      "strokeColor": "#1e1e1e",
+      "text": "✦ 安装依赖、构建",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.432Z",
+      "updatedAt": "2026-04-08T14:53:54.432Z",
+      "version": 1
+    },
+    {
+      "id": "ci-task3",
+      "type": "text",
+      "x": 620,
+      "y": 220,
+      "strokeColor": "#1e1e1e",
+      "text": "✦ 打包产物",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.432Z",
+      "updatedAt": "2026-04-08T14:53:54.432Z",
+      "version": 1
+    },
+    {
+      "id": "ci-task4",
+      "type": "text",
+      "x": 620,
+      "y": 265,
+      "strokeColor": "#1e1e1e",
+      "text": "✦ 创建 GitHub Release",
+      "fontSize": 18,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.432Z",
+      "updatedAt": "2026-04-08T14:53:54.432Z",
+      "version": 1
+    },
+    {
+      "id": "ci-role",
+      "type": "text",
+      "x": 640,
+      "y": 340,
+      "strokeColor": "#2f9e44",
+      "text": "负责：执行、验证、交付",
+      "fontSize": 16,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.432Z",
+      "updatedAt": "2026-04-08T14:53:54.432Z",
+      "version": 1
+    },
+    {
+      "id": "tag-arrow",
+      "type": "arrow",
+      "x": 528,
+      "y": 230,
+      "width": 60,
+      "height": 0,
+      "strokeColor": "#e8590c",
+      "strokeWidth": 2,
+      "label": {
+        "text": "git tag"
+      },
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          44,
+          2.842170943040401e-14
+        ]
+      ],
+      "start": {
+        "id": "ai-zone"
+      },
+      "end": {
+        "id": "ci-zone"
+      },
+      "createdAt": "2026-04-08T14:53:54.433Z",
+      "updatedAt": "2026-04-08T14:53:54.433Z",
+      "version": 1
+    },
+    {
+      "id": "tag-label",
+      "type": "text",
+      "x": 518,
+      "y": 200,
+      "strokeColor": "#e8590c",
+      "text": "git tag",
+      "fontSize": 14,
+      "fontFamily": 2,
+      "createdAt": "2026-04-08T14:53:54.433Z",
+      "updatedAt": "2026-04-08T14:53:54.433Z",
+      "version": 1
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff",
+    "gridSize": null
+  }
+}
