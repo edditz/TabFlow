@@ -209,7 +209,7 @@ body {
 }
 
 .tab-close-btn {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 18px;
@@ -221,11 +221,14 @@ body {
   color: var(--muted-foreground);
   font-size: 14px;
   flex-shrink: 0;
-  transition: all 0.15s;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s, background-color 0.15s, color 0.15s;
 }
 
 .tab-item:hover .tab-close-btn {
-  display: flex;
+  opacity: 1;
+  visibility: visible;
 }
 
 .tab-close-btn:hover {
