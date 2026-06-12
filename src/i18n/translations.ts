@@ -116,6 +116,43 @@ export interface TranslationKeys {
   classificationError: string
   classificationErrorHint: string
   retry: string
+
+  // Sidebar
+  sidebarTitle: string
+  sidebarLayout: string
+  layoutCompact: string
+  layoutDetailed: string
+  layoutTree: string
+  recentTabs: string
+  noGroupsYet: string
+  ungrouped: string
+  newGroup: string
+  renameGroup: string
+  changeColor: string
+  closeGroup: string
+  closeGroupTabs: string
+  ungroup: string
+  moveToGroup: string
+  removeFromGroup: string
+  closeOtherTabs: string
+  copyUrl: string
+  noTabsOpen: string
+  noTabsOpenHint: string
+  sidebarSettings: string
+  sidebarLayoutDesc: string
+  sidebarShowDomain: string
+  sidebarShowDomainDesc: string
+  sidebarShowFavicon: string
+  sidebarShowFaviconDesc: string
+  sidebarShowCloseButton: string
+  sidebarShowCloseButtonDesc: string
+  sidebarDefaultExpanded: string
+  sidebarDefaultExpandedDesc: string
+  sidebarRecentCount: string
+  sidebarRecentCountDesc: string
+  groupCollapsed: string
+  groupExpanded: string
+  tabCount: string
 }
 
 export const translations: Record<Language, TranslationKeys> = {
@@ -234,7 +271,44 @@ export const translations: Record<Language, TranslationKeys> = {
     // Classification Error
     classificationError: 'Classification Failed',
     classificationErrorHint: 'Failed to communicate with AI service. Please check your settings.',
-    retry: 'Retry'
+    retry: 'Retry',
+
+    // Sidebar
+    sidebarTitle: 'TabFlow',
+    sidebarLayout: 'Layout',
+    layoutCompact: 'Compact',
+    layoutDetailed: 'Detailed',
+    layoutTree: 'Tree',
+    recentTabs: 'Recently Closed',
+    noGroupsYet: 'No tab groups',
+    ungrouped: 'Ungrouped',
+    newGroup: 'New Group',
+    renameGroup: 'Rename',
+    changeColor: 'Change Color',
+    closeGroup: 'Ungroup',
+    closeGroupTabs: 'Close All Tabs',
+    ungroup: 'Ungroup',
+    moveToGroup: 'Move to Group',
+    removeFromGroup: 'Remove from Group',
+    closeOtherTabs: 'Close Other Tabs',
+    copyUrl: 'Copy URL',
+    noTabsOpen: 'No tabs open',
+    noTabsOpenHint: 'Open a tab to see it here',
+    sidebarSettings: 'Sidebar Settings',
+    sidebarLayoutDesc: 'Choose the sidebar layout style',
+    sidebarShowDomain: 'Show Domain',
+    sidebarShowDomainDesc: 'Display the domain name under each tab',
+    sidebarShowFavicon: 'Show Favicon',
+    sidebarShowFaviconDesc: 'Display website icons for each tab',
+    sidebarShowCloseButton: 'Show Close Button',
+    sidebarShowCloseButtonDesc: 'Show close button on hover',
+    sidebarDefaultExpanded: 'Expand All Groups',
+    sidebarDefaultExpandedDesc: 'Expand all groups by default',
+    sidebarRecentCount: 'Recent Tabs Count',
+    sidebarRecentCountDesc: 'Number of recently closed tabs to show',
+    groupCollapsed: 'Collapsed',
+    groupExpanded: 'Expanded',
+    tabCount: '{count} tabs'
   },
   zh: {
     // Header
@@ -351,6 +425,43 @@ export const translations: Record<Language, TranslationKeys> = {
     // Classification Error
     classificationError: '分类失败',
     classificationErrorHint: '无法与 AI 服务通信，请检查您的设置。',
-    retry: '重试'
+    retry: '重试',
+
+    // Sidebar
+    sidebarTitle: 'TabFlow',
+    sidebarLayout: '布局',
+    layoutCompact: '紧凑',
+    layoutDetailed: '详细',
+    layoutTree: '树形',
+    recentTabs: '最近关闭',
+    noGroupsYet: '暂无标签分组',
+    ungrouped: '未分组',
+    newGroup: '新建分组',
+    renameGroup: '重命名',
+    changeColor: '更改颜色',
+    closeGroup: '取消分组',
+    closeGroupTabs: '关闭所有标签',
+    ungroup: '取消分组',
+    moveToGroup: '移动到分组',
+    removeFromGroup: '从分组中移除',
+    closeOtherTabs: '关闭其他标签',
+    copyUrl: '复制链接',
+    noTabsOpen: '没有打开的标签页',
+    noTabsOpenHint: '打开一个标签页即可在此显示',
+    sidebarSettings: '侧边栏设置',
+    sidebarLayoutDesc: '选择侧边栏的布局样式',
+    sidebarShowDomain: '显示域名',
+    sidebarShowDomainDesc: '在每个标签下方显示域名',
+    sidebarShowFavicon: '显示图标',
+    sidebarShowFaviconDesc: '为每个标签显示网站图标',
+    sidebarShowCloseButton: '显示关闭按钮',
+    sidebarShowCloseButtonDesc: '悬停时显示关闭按钮',
+    sidebarDefaultExpanded: '展开所有分组',
+    sidebarDefaultExpandedDesc: '默认展开所有分组',
+    sidebarRecentCount: '最近关闭数量',
+    sidebarRecentCountDesc: '显示最近关闭的标签页数量',
+    groupCollapsed: '已折叠',
+    groupExpanded: '已展开',
+    tabCount: '{count} 个标签'
   }
 }
