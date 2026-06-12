@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Keyboard, Settings, Search, Clock } from 'lucide-react'
+import { Keyboard, Settings, Search, Clock, LayoutGrid } from 'lucide-react'
 import './App.css'
 import { useTranslation } from '../i18n'
 import {
@@ -11,6 +11,8 @@ import { Switch } from './components/Switch'
 import { AISettings as AISettingsComponent } from './components/AISettings'
 import type { AISettings } from '../classification'
 import { DEFAULT_AI_SETTINGS } from '../classification'
+import type { SidebarSettings, SidebarLayout } from '../sidepanel/types'
+import { DEFAULT_SIDEBAR_SETTINGS } from '../sidepanel/types'
 
 export type UrlDisplayStyle = 'none' | 'domain' | 'full'
 
@@ -25,6 +27,7 @@ interface Settings {
   recentClosedTimeWindow: number
   recentClosedMaxResults: number
   aiSettings: AISettings
+  sidebarSettings: SidebarSettings
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -37,7 +40,8 @@ const DEFAULT_SETTINGS: Settings = {
   enableRecentClosed: true,
   recentClosedTimeWindow: 24,
   recentClosedMaxResults: 10,
-  aiSettings: DEFAULT_AI_SETTINGS
+  aiSettings: DEFAULT_AI_SETTINGS,
+  sidebarSettings: DEFAULT_SIDEBAR_SETTINGS
 }
 
 // Sync shortcuts to chrome.commands via background service worker
@@ -324,6 +328,108 @@ export function App() {
             </div>
           </>
         )}
+      </section>
+
+      {/* Sidebar Settings */}
+      <section className="options-section">
+        <div className="section-header">
+          <LayoutGrid className="section-icon" size={16} strokeWidth={2} />
+          <h2 className="section-title">{t.sidebarSettings}</h2>
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <div className="setting-label">{t.sidebarLayout}</div>
+            <div className="setting-desc">{t.sidebarLayoutDesc}</div>
+          </div>
+          <select
+            className="setting-select"
+            value={settings.sidebarSettings.sidebarLayout}
+            onChange={e => updateSetting('sidebarSettings', {
+              ...settings.sidebarSettings,
+              sidebarLayout: e.target.value as SidebarLayout
+            })}
+          >
+            <option value="compact">{t.layoutCompact}</option>
+            <option value="detailed">{t.layoutDetailed}</option>
+            <option value="tree">{t.layoutTree}</option>
+          </select>
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <div className="setting-label">{t.sidebarShowDomain}</div>
+            <div className="setting-desc">{t.sidebarShowDomainDesc}</div>
+          </div>
+          <Switch
+            checked={settings.sidebarSettings.sidebarShowDomain}
+            onChange={checked => updateSetting('sidebarSettings', {
+              ...settings.sidebarSettings,
+              sidebarShowDomain: checked
+            })}
+          />
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <div className="setting-label">{t.sidebarShowFavicon}</div>
+            <div className="setting-desc">{t.sidebarShowFaviconDesc}</div>
+          </div>
+          <Switch
+            checked={settings.sidebarSettings.sidebarShowFavicon}
+            onChange={checked => updateSetting('sidebarSettings', {
+              ...settings.sidebarSettings,
+              sidebarShowFavicon: checked
+            })}
+          />
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <div className="setting-label">{t.sidebarShowCloseButton}</div>
+            <div className="setting-desc">{t.sidebarShowCloseButtonDesc}</div>
+          </div>
+          <Switch
+            checked={settings.sidebarSettings.sidebarShowCloseButton}
+            onChange={checked => updateSetting('sidebarSettings', {
+              ...settings.sidebarSettings,
+              sidebarShowCloseButton: checked
+            })}
+          />
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <div className="setting-label">{t.sidebarDefaultExpanded}</div>
+            <div className="setting-desc">{t.sidebarDefaultExpandedDesc}</div>
+          </div>
+          <Switch
+            checked={settings.sidebarSettings.sidebarDefaultExpanded}
+            onChange={checked => updateSetting('sidebarSettings', {
+              ...settings.sidebarSettings,
+              sidebarDefaultExpanded: checked
+            })}
+          />
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <div className="setting-label">{t.sidebarRecentCount}</div>
+            <div className="setting-desc">{t.sidebarRecentCountDesc}</div>
+          </div>
+          <select
+            className="setting-select"
+            value={settings.sidebarSettings.sidebarRecentCount}
+            onChange={e => updateSetting('sidebarSettings', {
+              ...settings.sidebarSettings,
+              sidebarRecentCount: Number(e.target.value)
+            })}
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+          </select>
+        </div>
       </section>
 
       {/* AI Classification Settings */}
