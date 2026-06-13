@@ -22,16 +22,18 @@
 
 /* Dark Theme */
 [data-theme='dark'] {
-  --background: #0f0f11;
-  --foreground: #e8e8ea;
-  --card: #1a182e;
-  --border: #2b283d;
-  --border-light: #2b283d;
-  --muted-foreground: #888799;
-  --primary: #5749f4;
+  --background: #0d0d10;
+  --foreground: #f0f0f3;
+  --card: #1b1b20;
+  --border: #2e2e35;
+  --border-light: #22222a;
+  --muted-foreground: #9d9da8;
+  --primary: #7c8cf8;
   --primary-foreground: #ffffff;
-  --input: #2b283d;
-  --hover: rgba(255, 255, 255, 0.05);
+  --input: #22222a;
+  --radius-xs: 6px;
+  --radius-l: 12px;
+  --hover: rgba(255, 255, 255, 0.08);
 }
 
 body {
