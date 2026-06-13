@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef } from 'react'
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 import './App.css'
 import { useTabs } from './hooks/useTabs'
 import { useTabGroups } from './hooks/useTabGroups'
@@ -20,8 +20,7 @@ export function App() {
     renameGroup,
     changeGroupColor,
     ungroupTabs,
-    moveTabToGroup,
-    closeGroupTabs
+    moveTabToGroup
   } = useTabGroups(tabs)
   const { recentTabs, restoreTab } = useRecentTabs(settings.sidebarRecentCount)
 
@@ -35,6 +34,44 @@ export function App() {
   // Track which tab/group the context menu is for
   const contextTabIdRef = useRef<number | null>(null)
   const contextGroupIdRef = useRef<number | null>(null)
+
+  // Track tabs being closed for exit animation
+  const [closingTabIds, setClosingTabIds] = useState<Set<number>>(new Set())
+  const closingTimeoutsRef = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map())
+
+  // Cleanup closing timeouts on unmount
+  useEffect(() => {
+    const timeouts = closingTimeoutsRef.current
+    return () => {
+      timeouts.forEach(t => clearTimeout(t))
+    }
+  }, [])
+
+  // Wrap closeTab with exit animation delay
+  const handleCloseTab = useCallback((tabId: number) => {
+    setClosingTabIds(prev => {
+      const next = new Set(prev)
+      next.add(tabId)
+      return next
+    })
+
+    // Clear any existing timeout for this tab
+    if (closingTimeoutsRef.current.has(tabId)) {
+      clearTimeout(closingTimeoutsRef.current.get(tabId))
+    }
+
+    const timeout = setTimeout(() => {
+      closeTab(tabId)
+      setClosingTabIds(prev => {
+        const next = new Set(prev)
+        next.delete(tabId)
+        return next
+      })
+      closingTimeoutsRef.current.delete(tabId)
+    }, 250)
+
+    closingTimeoutsRef.current.set(tabId, timeout)
+  }, [closeTab])
 
   const handleToggleGroup = useCallback((groupId: number) => {
     setCollapsedGroups(prev => {
@@ -97,14 +134,14 @@ export function App() {
     ]
 
     setContextMenu({ x: e.clientX, y: e.clientY, items })
-  }, [groups, t])
+  }, [t])
 
   const handleContextAction = useCallback(async (actionId: string) => {
     const tabId = contextTabIdRef.current
     const groupId = contextGroupIdRef.current
 
     if (actionId === 'close-tab' && tabId !== null) {
-      closeTab(tabId)
+      handleCloseTab(tabId)
     }
 
     if (actionId.startsWith('move-to-')) {
@@ -124,8 +161,8 @@ export function App() {
         const otherTabIds = currentGroup.tabs
           .filter(tab => tab.id !== tabId && tab.id !== null)
           .map(tab => tab.id as number)
-        if (otherTabIds.length > 0) {
-          chrome.tabs.remove(otherTabIds)
+        for (const id of otherTabIds) {
+          handleCloseTab(id)
         }
       }
     }
@@ -150,7 +187,11 @@ export function App() {
     if (actionId === 'close-group-tabs' && groupId !== null) {
       const group = groups.find(g => g.id === groupId)
       if (group) {
-        closeGroupTabs(group.tabs)
+        for (const tab of group.tabs) {
+          if (tab.id !== undefined) {
+            handleCloseTab(tab.id)
+          }
+        }
       }
     }
 
@@ -168,7 +209,7 @@ export function App() {
         changeGroupColor(groupId, color as chrome.tabGroups.ColorEnum)
       }
     }
-  }, [closeTab, moveTabToGroup, groups, tabs, ungroupTabs, closeGroupTabs, renameGroup, changeGroupColor])
+  }, [handleCloseTab, moveTabToGroup, groups, tabs, ungroupTabs, renameGroup, changeGroupColor])
 
   const layoutLabels = useMemo(() => ({
     sidebarTitle: t.sidebarTitle,
@@ -197,8 +238,9 @@ export function App() {
             <CompactLayout
               groups={groups}
               activeTabId={activeTabId}
+              closingTabIds={closingTabIds}
               onActivateTab={activateTab}
-              onCloseTab={closeTab}
+              onCloseTab={handleCloseTab}
               onTabContextMenu={handleTabContextMenu}
               showFavicon={settings.sidebarShowFavicon}
               showCloseButton={settings.sidebarShowCloseButton}
@@ -208,8 +250,9 @@ export function App() {
             <CardLayout
               groups={groups}
               activeTabId={activeTabId}
+              closingTabIds={closingTabIds}
               onActivateTab={activateTab}
-              onCloseTab={closeTab}
+              onCloseTab={handleCloseTab}
               onTabContextMenu={handleTabContextMenu}
               showFavicon={settings.sidebarShowFavicon}
               showGroupTag={settings.sidebarShowGroupTag}
@@ -226,10 +269,11 @@ export function App() {
             <TreeLayout
               groups={groups}
               activeTabId={activeTabId}
+              closingTabIds={closingTabIds}
               collapsedGroups={collapsedGroups}
               onToggleGroup={handleToggleGroup}
               onActivateTab={activateTab}
-              onCloseTab={closeTab}
+              onCloseTab={handleCloseTab}
               onTabContextMenu={handleTabContextMenu}
               onGroupContextMenu={handleGroupContextMenu}
               showFavicon={settings.sidebarShowFavicon}

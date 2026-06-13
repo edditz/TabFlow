@@ -3,6 +3,7 @@ interface TabItemProps {
   url?: string
   favIconUrl?: string
   isActive: boolean
+  isClosing?: boolean
   showDomain?: boolean
   showFavicon?: boolean
   showCloseButton?: boolean
@@ -18,6 +19,7 @@ export function TabItem({
   url,
   favIconUrl,
   isActive,
+  isClosing = false,
   showDomain = false,
   showFavicon = true,
   showCloseButton = true,
@@ -36,7 +38,7 @@ export function TabItem({
 
   return (
     <div
-      className={`tab-item ${isActive ? 'active' : ''} variant-${variant}`}
+      className={`tab-item ${isActive ? 'active' : ''} ${isClosing ? 'tab-exit' : ''} variant-${variant}`}
       style={groupColor ? ({ '--group-color': groupColor } as React.CSSProperties) : undefined}
       onClick={onActivate}
       onContextMenu={onContextMenu}

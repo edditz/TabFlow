@@ -16,6 +16,7 @@ const GROUP_COLOR_MAP: Record<string, string> = {
 interface TreeLayoutProps {
   groups: TabGroup[]
   activeTabId?: number
+  closingTabIds: Set<number>
   collapsedGroups: Set<number>
   onToggleGroup: (groupId: number) => void
   onActivateTab: (tabId: number) => void
@@ -32,6 +33,7 @@ interface TreeLayoutProps {
 export function TreeLayout({
   groups,
   activeTabId,
+  closingTabIds,
   collapsedGroups,
   onToggleGroup,
   onActivateTab,
@@ -67,6 +69,7 @@ export function TreeLayout({
                     url={tab.url}
                     favIconUrl={tab.favIconUrl}
                     isActive={tab.id === activeTabId}
+                    isClosing={closingTabIds.has(tab.id!)}
                     showFavicon={showFavicon}
                     showCloseButton={showCloseButton}
                     groupColor={GROUP_COLOR_MAP[group.color]}

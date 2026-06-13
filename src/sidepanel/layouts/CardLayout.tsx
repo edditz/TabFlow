@@ -3,6 +3,7 @@ import type { TabGroup } from '../types'
 interface CardLayoutProps {
   groups: TabGroup[]
   activeTabId?: number
+  closingTabIds: Set<number>
   onActivateTab: (tabId: number) => void
   onCloseTab: (tabId: number) => void
   onTabContextMenu: (e: React.MouseEvent, tabId: number) => void
@@ -64,6 +65,7 @@ function getDomain(url: string | undefined): string {
 export function CardLayout({
   groups,
   activeTabId,
+  closingTabIds,
   onActivateTab,
   onCloseTab,
   onTabContextMenu,
@@ -86,11 +88,12 @@ export function CardLayout({
     <div className="layout-card">
       {allTabs.map(({ tab, groupColor, groupBgColor, groupTitle, isUngrouped }) => {
         const isActive = tab.id === activeTabId
+        const isClosing = closingTabIds.has(tab.id!)
 
         return (
           <div
             key={tab.id}
-            className={`card-tab ${isActive ? 'active' : ''}`}
+            className={`card-tab ${isActive ? 'active' : ''} ${isClosing ? 'card-exit' : ''}`}
             onClick={() => onActivateTab(tab.id!)}
             onContextMenu={e => onTabContextMenu(e, tab.id!)}
           >

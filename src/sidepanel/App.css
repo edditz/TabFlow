@@ -135,6 +135,20 @@ body {
   cursor: pointer;
   transition: background-color 0.15s;
   position: relative;
+  overflow: hidden;
+  max-height: 60px;
+}
+
+.tab-item.tab-exit {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 0;
+  transition: max-height 0.2s ease, opacity 0.15s ease, margin 0.2s ease, padding 0.2s ease;
+  pointer-events: none;
 }
 
 .tab-item:hover {
@@ -304,8 +318,25 @@ body {
 }
 
 /* Layouts */
-.layout-compact,
-.layout-detailed,
+.layout-compact {
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-compact > .tab-item {
+  margin-bottom: 2px;
+}
+
+.layout-compact > .tab-item:last-child {
+  margin-bottom: 0;
+}
+
+.layout-detailed {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .layout-tree {
   display: flex;
   flex-direction: column;
@@ -329,7 +360,14 @@ body {
 .layout-card {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+}
+
+.layout-card > .card-tab {
+  margin-bottom: 6px;
+}
+
+.layout-card > .card-tab:last-child {
+  margin-bottom: 0;
 }
 
 .card-tab {
@@ -342,6 +380,7 @@ body {
   transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s;
   position: relative;
   overflow: hidden;
+  max-height: 100px;
 }
 
 .card-tab:hover {
@@ -461,6 +500,17 @@ body {
   transition: opacity 0.15s, background-color 0.15s, color 0.15s;
 }
 
+.card-tab.card-exit {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  border-width: 0;
+  padding: 0;
+  transition: max-height 0.25s ease, opacity 0.15s ease, margin 0.25s ease, padding 0.25s ease, border-width 0.25s ease;
+  pointer-events: none;
+}
+
 .card-tab:hover .card-close-btn {
   opacity: 1;
 }
@@ -518,6 +568,19 @@ body {
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.15s;
+  overflow: hidden;
+  max-height: 60px;
+}
+
+.recent-tab-item.recent-exit {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: max-height 0.2s ease, opacity 0.15s ease, margin 0.2s ease, padding 0.2s ease;
+  pointer-events: none;
 }
 
 .recent-tab-item:hover {
