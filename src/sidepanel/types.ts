@@ -7,10 +7,8 @@ export interface SidebarSettings {
   sidebarShowCloseButton: boolean
   sidebarDefaultExpanded: boolean
   sidebarRecentCount: number
+  sidebarShowRecent: boolean
   sidebarShowGroupTag: boolean
-  sidebarShowAudioIndicator: boolean
-  sidebarShowPinnedIndicator: boolean
-  sidebarShowMemory: boolean
 }
 
 export const DEFAULT_SIDEBAR_SETTINGS: SidebarSettings = {
@@ -20,10 +18,8 @@ export const DEFAULT_SIDEBAR_SETTINGS: SidebarSettings = {
   sidebarShowCloseButton: true,
   sidebarDefaultExpanded: true,
   sidebarRecentCount: 10,
+  sidebarShowRecent: true,
   sidebarShowGroupTag: true,
-  sidebarShowAudioIndicator: true,
-  sidebarShowPinnedIndicator: true,
-  sidebarShowMemory: false
 }
 
 export interface TabGroup {

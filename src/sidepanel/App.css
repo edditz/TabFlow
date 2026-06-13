@@ -152,7 +152,7 @@ body {
   top: 4px;
   bottom: 4px;
   width: 2px;
-  background: var(--primary);
+  background: var(--group-color, var(--primary));
   border-radius: 1px;
 }
 

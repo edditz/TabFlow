@@ -5,6 +5,7 @@ See @README.md for project overview and @package.json for available npm commands
 ## 文档
 - @docs/ARCHITECTURE.md - 项目架构说明
 - @docs/COMPONENTS.md - 组件和工具的使用指南
+- @docs/components/SIDEBAR.md - 侧边栏面板组件、布局、Hook 和设置文档
 - @docs/THEME.md - 深浅色主题功能实现文档
 - @docs/I18N.md - 国际化实现文档
 - @docs/SMART_CLASSIFICATION.md - 智能标签分类功能文档

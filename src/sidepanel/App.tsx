@@ -197,12 +197,9 @@ export function App() {
             <CompactLayout
               groups={groups}
               activeTabId={activeTabId}
-              collapsedGroups={collapsedGroups}
-              onToggleGroup={handleToggleGroup}
               onActivateTab={activateTab}
               onCloseTab={closeTab}
               onTabContextMenu={handleTabContextMenu}
-              onGroupContextMenu={handleGroupContextMenu}
               showFavicon={settings.sidebarShowFavicon}
               showCloseButton={settings.sidebarShowCloseButton}
             />
@@ -216,8 +213,6 @@ export function App() {
               onTabContextMenu={handleTabContextMenu}
               showFavicon={settings.sidebarShowFavicon}
               showGroupTag={settings.sidebarShowGroupTag}
-              showAudioIndicator={settings.sidebarShowAudioIndicator}
-              showPinnedIndicator={settings.sidebarShowPinnedIndicator}
               showCloseButton={settings.sidebarShowCloseButton}
               labels={{
                 justNow: t.justNow,
@@ -231,20 +226,15 @@ export function App() {
             <TreeLayout
               groups={groups}
               activeTabId={activeTabId}
-              recentTabs={recentTabs}
               collapsedGroups={collapsedGroups}
               onToggleGroup={handleToggleGroup}
               onActivateTab={activateTab}
               onCloseTab={closeTab}
               onTabContextMenu={handleTabContextMenu}
               onGroupContextMenu={handleGroupContextMenu}
-              onRestoreTab={restoreTab}
               showFavicon={settings.sidebarShowFavicon}
               showCloseButton={settings.sidebarShowCloseButton}
               labels={{
-                recentTabs: t.recentTabs,
-                recentClosedEmpty: t.recentClosedEmpty,
-                restoreTab: t.restoreTab,
                 ungrouped: t.ungrouped
               }}
             />
@@ -252,7 +242,7 @@ export function App() {
         </>
       )}
 
-      {(settings.sidebarLayout === 'compact' || settings.sidebarLayout === 'detailed') && recentTabs.length > 0 && (
+      {settings.sidebarShowRecent && recentTabs.length > 0 && (
         <div className="sidebar-recent-section">
           <div className="sidebar-section-title">{t.recentTabs}</div>
           {recentTabs.slice(0, settings.sidebarRecentCount).map(tab => (

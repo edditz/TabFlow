@@ -8,8 +8,6 @@ interface CardLayoutProps {
   onTabContextMenu: (e: React.MouseEvent, tabId: number) => void
   showFavicon: boolean
   showGroupTag: boolean
-  showAudioIndicator: boolean
-  showPinnedIndicator: boolean
   showCloseButton: boolean
   labels: {
     justNow: string
@@ -71,8 +69,6 @@ export function CardLayout({
   onTabContextMenu,
   showFavicon,
   showGroupTag,
-  showAudioIndicator,
-  showPinnedIndicator,
   showCloseButton,
   labels
 }: CardLayoutProps) {
@@ -112,8 +108,6 @@ export function CardLayout({
                 )}
                 <div className="card-title">{tab.title || 'Untitled'}</div>
                 <div className="card-badges">
-                  {showAudioIndicator && tab.audible && <span className="card-badge-icon" title="Playing audio">🔊</span>}
-                  {showPinnedIndicator && tab.pinned && <span className="card-badge-icon" title="Pinned">📌</span>}
                 </div>
               </div>
               <div className="card-row-meta">

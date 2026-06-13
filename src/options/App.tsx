@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Keyboard, Settings, Search, Clock, LayoutGrid } from 'lucide-react'
+import { Keyboard, Search, LayoutGrid } from 'lucide-react'
 import './App.css'
 import { useTranslation } from '../i18n'
 import {
@@ -192,12 +192,15 @@ export function App() {
         />
       </section>
 
-      {/* General Settings */}
+      {/* Search Settings */}
       <section className="options-section">
         <div className="section-header">
-          <Settings className="section-icon" size={16} strokeWidth={2} />
-          <h2 className="section-title">{t.generalSettings}</h2>
+          <Search className="section-icon" size={16} strokeWidth={2} />
+          <h2 className="section-title">{t.searchSettings}</h2>
         </div>
+
+        {/* General */}
+        <div className="section-subtitle">{t.generalSettings}</div>
 
         <div className="setting-item">
           <div className="setting-info">
@@ -240,14 +243,9 @@ export function App() {
             <option value="zh">{t.languageZh}</option>
           </select>
         </div>
-      </section>
 
-      {/* Search Settings */}
-      <section className="options-section">
-        <div className="section-header">
-          <Search className="section-icon" size={16} strokeWidth={2} />
-          <h2 className="section-title">{t.searchSettings}</h2>
-        </div>
+        {/* Search */}
+        <div className="section-subtitle">{t.searchSettings}</div>
 
         <div className="setting-item">
           <div className="setting-info">
@@ -275,14 +273,9 @@ export function App() {
             <option value="full">{t.urlDisplayStyleFull}</option>
           </select>
         </div>
-      </section>
 
-      {/* Recently Closed Settings */}
-      <section className="options-section">
-        <div className="section-header">
-          <Clock className="section-icon" size={16} strokeWidth={2} />
-          <h2 className="section-title">{t.recentClosedSettings}</h2>
-        </div>
+        {/* Recently Closed */}
+        <div className="section-subtitle">{t.recentClosedSettings}</div>
 
         <div className="setting-item">
           <div className="setting-info">
@@ -362,20 +355,7 @@ export function App() {
           </select>
         </div>
 
-        <div className="setting-item">
-          <div className="setting-info">
-            <div className="setting-label">{t.sidebarShowDomain}</div>
-            <div className="setting-desc">{t.sidebarShowDomainDesc}</div>
-          </div>
-          <Switch
-            checked={settings.sidebarSettings.sidebarShowDomain}
-            onChange={checked => updateSetting('sidebarSettings', {
-              ...settings.sidebarSettings,
-              sidebarShowDomain: checked
-            })}
-          />
-        </div>
-
+        {/* Shared: Favicon (all layouts) */}
         <div className="setting-item">
           <div className="setting-info">
             <div className="setting-label">{t.sidebarShowFavicon}</div>
@@ -390,6 +370,7 @@ export function App() {
           />
         </div>
 
+        {/* Shared: Close Button (all layouts) */}
         <div className="setting-item">
           <div className="setting-info">
             <div className="setting-label">{t.sidebarShowCloseButton}</div>
@@ -404,94 +385,81 @@ export function App() {
           />
         </div>
 
+        {/* Recent Tabs (universal) */}
+        <div className="section-subtitle">{t.recentClosedSettings}</div>
+
         <div className="setting-item">
           <div className="setting-info">
-            <div className="setting-label">{t.sidebarShowGroupTag}</div>
-            <div className="setting-desc">{t.sidebarShowGroupTagDesc}</div>
+            <div className="setting-label">{t.sidebarShowRecent}</div>
+            <div className="setting-desc">{t.sidebarShowRecentDesc}</div>
           </div>
           <Switch
-            checked={settings.sidebarSettings.sidebarShowGroupTag}
+            checked={settings.sidebarSettings.sidebarShowRecent}
             onChange={checked => updateSetting('sidebarSettings', {
               ...settings.sidebarSettings,
-              sidebarShowGroupTag: checked
+              sidebarShowRecent: checked
             })}
           />
         </div>
 
-        <div className="setting-item">
-          <div className="setting-info">
-            <div className="setting-label">{t.sidebarShowAudioIndicator}</div>
-            <div className="setting-desc">{t.sidebarShowAudioIndicatorDesc}</div>
+        {settings.sidebarSettings.sidebarShowRecent && (
+          <div className="setting-item">
+            <div className="setting-info">
+              <div className="setting-label">{t.sidebarRecentCount}</div>
+              <div className="setting-desc">{t.sidebarRecentCountDesc}</div>
+            </div>
+            <select
+              className="setting-select"
+              value={settings.sidebarSettings.sidebarRecentCount}
+              onChange={e => updateSetting('sidebarSettings', {
+                ...settings.sidebarSettings,
+                sidebarRecentCount: Number(e.target.value)
+              })}
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+            </select>
           </div>
-          <Switch
-            checked={settings.sidebarSettings.sidebarShowAudioIndicator}
-            onChange={checked => updateSetting('sidebarSettings', {
-              ...settings.sidebarSettings,
-              sidebarShowAudioIndicator: checked
-            })}
-          />
-        </div>
+        )}
 
-        <div className="setting-item">
-          <div className="setting-info">
-            <div className="setting-label">{t.sidebarShowPinnedIndicator}</div>
-            <div className="setting-desc">{t.sidebarShowPinnedIndicatorDesc}</div>
+        {/* Tree: Group expand */}
+        {settings.sidebarSettings.sidebarLayout === 'tree' && (
+          <div className="setting-item">
+            <div className="setting-info">
+              <div className="setting-label">{t.sidebarDefaultExpanded}</div>
+              <div className="setting-desc">{t.sidebarDefaultExpandedDesc}</div>
+            </div>
+            <Switch
+              checked={settings.sidebarSettings.sidebarDefaultExpanded}
+              onChange={checked => updateSetting('sidebarSettings', {
+                ...settings.sidebarSettings,
+                sidebarDefaultExpanded: checked
+              })}
+            />
           </div>
-          <Switch
-            checked={settings.sidebarSettings.sidebarShowPinnedIndicator}
-            onChange={checked => updateSetting('sidebarSettings', {
-              ...settings.sidebarSettings,
-              sidebarShowPinnedIndicator: checked
-            })}
-          />
-        </div>
+        )}
 
-        <div className="setting-item">
-          <div className="setting-info">
-            <div className="setting-label">{t.sidebarShowMemory}</div>
-            <div className="setting-desc">{t.sidebarShowMemoryDesc}</div>
-          </div>
-          <Switch
-            checked={settings.sidebarSettings.sidebarShowMemory}
-            onChange={checked => updateSetting('sidebarSettings', {
-              ...settings.sidebarSettings,
-              sidebarShowMemory: checked
-            })}
-          />
-        </div>
+        {/* Card (detailed): Group tag, Audio, Pinned, Memory */}
+        {settings.sidebarSettings.sidebarLayout === 'detailed' && (
+          <>
+            <div className="setting-item">
+              <div className="setting-info">
+                <div className="setting-label">{t.sidebarShowGroupTag}</div>
+                <div className="setting-desc">{t.sidebarShowGroupTagDesc}</div>
+              </div>
+              <Switch
+                checked={settings.sidebarSettings.sidebarShowGroupTag}
+                onChange={checked => updateSetting('sidebarSettings', {
+                  ...settings.sidebarSettings,
+                  sidebarShowGroupTag: checked
+                })}
+              />
+            </div>
 
-        <div className="setting-item">
-          <div className="setting-info">
-            <div className="setting-label">{t.sidebarDefaultExpanded}</div>
-            <div className="setting-desc">{t.sidebarDefaultExpandedDesc}</div>
-          </div>
-          <Switch
-            checked={settings.sidebarSettings.sidebarDefaultExpanded}
-            onChange={checked => updateSetting('sidebarSettings', {
-              ...settings.sidebarSettings,
-              sidebarDefaultExpanded: checked
-            })}
-          />
-        </div>
 
-        <div className="setting-item">
-          <div className="setting-info">
-            <div className="setting-label">{t.sidebarRecentCount}</div>
-            <div className="setting-desc">{t.sidebarRecentCountDesc}</div>
-          </div>
-          <select
-            className="setting-select"
-            value={settings.sidebarSettings.sidebarRecentCount}
-            onChange={e => updateSetting('sidebarSettings', {
-              ...settings.sidebarSettings,
-              sidebarRecentCount: Number(e.target.value)
-            })}
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-          </select>
-        </div>
+          </>
+        )}
       </section>
 
       {/* AI Classification Settings */}

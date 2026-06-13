@@ -95,6 +95,14 @@ export async function testAIConnection(settings: AISettings): Promise<{ success:
       return { success: false, error: `HTTP ${response.status}: ${error}` }
     }
   } catch (error) {
+    if (error instanceof DOMException) {
+      if (error.name === 'TimeoutError') {
+        return { success: false, error: 'Request timed out after 10 seconds' }
+      }
+      if (error.name === 'AbortError') {
+        return { success: false, error: 'Request was cancelled' }
+      }
+    }
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
   }
 }
@@ -143,11 +151,16 @@ ${tabList}
       throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`)
     }
 
+    // Read as text first so we can inspect raw body on failure
+    const rawBody = await response.text()
     let data: { choices?: { message?: { content?: string } }[] }
     try {
-      data = await response.json()
+      data = JSON.parse(rawBody)
     } catch {
-      throw new Error('Failed to parse AI response as JSON')
+      throw new Error(
+        `Failed to parse AI response as JSON. ` +
+        `Status: ${response.status}, Body: ${rawBody.slice(0, 200)}`
+      )
     }
 
     const content = data.choices?.[0]?.message?.content
@@ -155,18 +168,36 @@ ${tabList}
       throw new Error('AI returned an empty response')
     }
 
-    // Parse JSON from response (handle markdown code blocks)
-    let jsonStr = content
-    const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/)
-    if (jsonMatch) {
-      jsonStr = jsonMatch[1].trim()
+    // Extract JSON from response — handles markdown code blocks, BOM, and bare JSON
+    let jsonStr = content.trim()
+
+    // Remove BOM if present
+    if (jsonStr.charCodeAt(0) === 0xFEFF) {
+      jsonStr = jsonStr.slice(1)
+    }
+
+    // Try markdown code block extraction first
+    const codeBlockMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/)
+    if (codeBlockMatch) {
+      jsonStr = codeBlockMatch[1].trim()
+    } else {
+      // No code block — try to extract the outermost {...} object
+      const braceStart = jsonStr.indexOf('{')
+      const braceEnd = jsonStr.lastIndexOf('}')
+      if (braceStart !== -1 && braceEnd > braceStart) {
+        jsonStr = jsonStr.slice(braceStart, braceEnd + 1)
+      }
     }
 
     let classifications: AIClassificationResponse
     try {
       classifications = JSON.parse(jsonStr)
-    } catch {
-      throw new Error('Failed to parse AI classification result')
+    } catch (parseError) {
+      throw new Error(
+        `Failed to parse AI classification result. ` +
+        `Parse error: ${parseError instanceof Error ? parseError.message : 'unknown'}. ` +
+        `Raw content: ${content.slice(0, 200)}`
+      )
     }
 
     for (const [index, category] of Object.entries(classifications)) {
@@ -178,8 +209,13 @@ ${tabList}
 
     return result
   } catch (error) {
-    if (error instanceof DOMException && error.name === 'TimeoutError') {
-      throw new Error('Request timed out after 10 seconds')
+    if (error instanceof DOMException) {
+      if (error.name === 'TimeoutError') {
+        throw new Error('Request timed out after 10 seconds')
+      }
+      if (error.name === 'AbortError') {
+        throw new Error('Request was cancelled')
+      }
     }
     throw error instanceof Error ? error : new Error('Unknown error occurred')
   }

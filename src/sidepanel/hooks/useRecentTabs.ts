@@ -6,6 +6,7 @@ export function useRecentTabs(maxResults: number = 10) {
 
   const refreshRecentTabs = useCallback(() => {
     chrome.sessions.getRecentlyClosed({ maxResults }, sessions => {
+      const seenUrls = new Set<string>()
       const tabs = sessions
         .filter(session => session.tab)
         .map(session => ({
@@ -15,6 +16,11 @@ export function useRecentTabs(maxResults: number = 10) {
           favIconUrl: session.tab!.favIconUrl,
           lastModified: session.lastModified || 0
         }))
+        .filter(tab => {
+          if (seenUrls.has(tab.url)) return false
+          seenUrls.add(tab.url)
+          return true
+        })
       setRecentTabs(tabs)
     })
   }, [maxResults])

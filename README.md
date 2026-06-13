@@ -7,6 +7,7 @@ A browser extension for enhanced tab management, supporting both Chrome and Edge
 ## Features
 
 - **Global Search Panel**: Quick search across all open tabs with real-time filtering by title, URL, or domain
+- **Sidebar Tab Manager**: Chrome Side Panel with compact, card, and tree layouts for browsing and managing open tabs, tab groups, and recently closed tabs
 - **Smart Tab Classification**: One-click tab grouping into Chrome Tab Groups with 7 built-in categories (Work, Dev, Social, Shopping, Entertainment, News, Docs) and drag-and-drop reordering
 - **AI-Powered Classification**: Optional AI integration (OpenAI-compatible) for tabs that don't match built-in rules
 - **Recently Closed Tabs**: Restore recently closed tabs with configurable time window and result limit
@@ -70,6 +71,7 @@ npm run format
 | Action | Windows/Linux | macOS |
 |--------|--------------|-------|
 | Toggle Search Panel | `Ctrl+Shift+Z` | `Cmd+Shift+Z` |
+| Toggle Side Panel | `Alt+L` | `Alt+L` |
 | Open Extension Popup | `Ctrl+Shift+Y` | `Cmd+Shift+Y` |
 
 ## Project Structure
@@ -80,6 +82,7 @@ tabflow/
 │   ├── background/     # Service worker
 │   ├── content/        # Content script (injected into pages)
 │   ├── popup/          # Extension popup
+│   ├── sidepanel/      # Side panel (sidebar tab manager)
 │   ├── options/        # Settings page
 │   ├── classification/ # Smart tab classification engine
 │   ├── i18n/           # Internationalization

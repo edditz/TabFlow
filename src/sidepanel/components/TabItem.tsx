@@ -37,10 +37,10 @@ export function TabItem({
   return (
     <div
       className={`tab-item ${isActive ? 'active' : ''} variant-${variant}`}
+      style={groupColor ? ({ '--group-color': groupColor } as React.CSSProperties) : undefined}
       onClick={onActivate}
       onContextMenu={onContextMenu}
     >
-      {groupColor && <div className="tab-color-bar" style={{ backgroundColor: groupColor }} />}
       {showFavicon && (
         <div className="tab-favicon">
           {favIconUrl ? (
