@@ -1,5 +1,5 @@
 import { useTranslation } from '../i18n'
-import { Search, Settings, FolderX, PanelLeft } from 'lucide-react'
+import { Search, Settings, PanelLeft } from 'lucide-react'
 import './App.css'
 
 export function App() {
@@ -26,11 +26,6 @@ export function App() {
     window.close()
   }
 
-  const handleUngroupAll = async () => {
-    await chrome.runtime.sendMessage({ type: 'UNGROUP_ALL' })
-    window.close()
-  }
-
   return (
     <div className="popup-container">
       <header className="popup-header">
@@ -54,11 +49,6 @@ export function App() {
         <button className="popup-btn" onClick={handleOpenOptions}>
           <span className="popup-btn-icon"><Settings size={18} strokeWidth={2} /></span>
           <span className="popup-btn-text">{t.popupSettings}</span>
-        </button>
-
-        <button className="popup-btn" onClick={handleUngroupAll}>
-          <span className="popup-btn-icon"><FolderX size={18} strokeWidth={2} /></span>
-          <span className="popup-btn-text">{t.popupUngroupAll}</span>
         </button>
       </div>
     </div>
