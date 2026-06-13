@@ -73,7 +73,33 @@ function getCategoryColor(category: string): chrome.tabGroups.ColorEnum {
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false })
 
 // Track side panel open state for toggle (Chrome API has no close method)
+// Persist to storage so state survives browser restarts
 let sidePanelOpen = false
+
+// Load persisted side panel state on startup
+chrome.storage.local.get({ sidePanelOpen: false }, data => {
+  sidePanelOpen = data.sidePanelOpen
+})
+
+function setSidePanelOpen(open: boolean) {
+  sidePanelOpen = open
+  chrome.storage.local.set({ sidePanelOpen: open })
+}
+
+// Try to restore sidebar on browser launch if it was previously open
+chrome.runtime.onStartup.addListener(async () => {
+  const { sidePanelOpen: wasOpen } = await chrome.storage.local.get({ sidePanelOpen: false })
+  if (wasOpen) {
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      if (tab?.windowId) {
+        await chrome.sidePanel.open({ windowId: tab.windowId })
+      }
+    } catch {
+      // May fail without user gesture — state stays correct for next toggle
+    }
+  }
+})
 
 // Listen for keyboard shortcut commands
 chrome.commands.onCommand.addListener(command => {
@@ -97,10 +123,10 @@ chrome.commands.onCommand.addListener(command => {
           // Close: toggle enabled off to dismiss, then re-enable for next open
           await chrome.sidePanel.setOptions({ enabled: false })
           await chrome.sidePanel.setOptions({ enabled: true, path: 'src/sidepanel/index.html' })
-          sidePanelOpen = false
+          setSidePanelOpen(false)
         } else {
           await chrome.sidePanel.open({ windowId: activeTab.windowId })
-          sidePanelOpen = true
+          setSidePanelOpen(true)
         }
       }
     })
