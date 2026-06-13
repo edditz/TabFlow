@@ -72,6 +72,9 @@ function getCategoryColor(category: string): chrome.tabGroups.ColorEnum {
 // Configure side panel behavior
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
 
+// Track side panel open state for toggle (Chrome API has no close method)
+let sidePanelOpen = false
+
 // Listen for keyboard shortcut commands
 chrome.commands.onCommand.addListener(command => {
   console.log('Command received:', command)
@@ -87,10 +90,18 @@ chrome.commands.onCommand.addListener(command => {
   }
 
   if (command === 'toggle-side-panel') {
-    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+    chrome.tabs.query({ active: true, currentWindow: true }, async tabs => {
       const activeTab = tabs[0]
       if (activeTab?.windowId) {
-        chrome.sidePanel.open({ windowId: activeTab.windowId })
+        if (sidePanelOpen) {
+          // Close: toggle enabled off to dismiss, then re-enable for next open
+          await chrome.sidePanel.setOptions({ enabled: false })
+          await chrome.sidePanel.setOptions({ enabled: true, path: 'src/sidepanel/index.html' })
+          sidePanelOpen = false
+        } else {
+          await chrome.sidePanel.open({ windowId: activeTab.windowId })
+          sidePanelOpen = true
+        }
       }
     })
   }
