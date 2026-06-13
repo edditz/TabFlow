@@ -69,8 +69,8 @@ function getCategoryColor(category: string): chrome.tabGroups.ColorEnum {
   return colorMap[category] || 'grey'
 }
 
-// Configure side panel behavior
-chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+// Configure side panel behavior — only open via keyboard shortcut, not action click
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false })
 
 // Track side panel open state for toggle (Chrome API has no close method)
 let sidePanelOpen = false
