@@ -110,6 +110,7 @@ export interface TranslationKeys {
   popupSearchTabs: string
   popupSettings: string
   popupUngroupAll: string
+  popupOpenSidebar: string
 
   // Drag and Drop
   moveToCategory: string
@@ -276,6 +277,7 @@ export const translations: Record<Language, TranslationKeys> = {
     popupSearchTabs: 'Search Tabs',
     popupSettings: 'Settings',
     popupUngroupAll: 'Ungroup All',
+    popupOpenSidebar: 'Open Sidebar',
 
     // Drag and Drop
     moveToCategory: 'Move to {category}',
@@ -440,6 +442,7 @@ export const translations: Record<Language, TranslationKeys> = {
     popupSearchTabs: '搜索标签页',
     popupSettings: '设置',
     popupUngroupAll: '取消所有分组',
+    popupOpenSidebar: '打开侧边栏',
 
     // Drag and Drop
     moveToCategory: '移动到 {category}',

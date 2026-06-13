@@ -1,5 +1,5 @@
 import { useTranslation } from '../i18n'
-import { Search, Settings, FolderX } from 'lucide-react'
+import { Search, Settings, FolderX, PanelLeft } from 'lucide-react'
 import './App.css'
 
 export function App() {
@@ -9,6 +9,14 @@ export function App() {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
     if (tab?.id) {
       chrome.tabs.sendMessage(tab.id, { type: 'TOGGLE_SEARCH_PANEL' })
+    }
+    window.close()
+  }
+
+  const handleOpenSidebar = async () => {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+    if (tab?.windowId) {
+      await chrome.sidePanel.open({ windowId: tab.windowId })
     }
     window.close()
   }
@@ -36,6 +44,11 @@ export function App() {
         <button className="popup-btn" onClick={handleOpenSearch}>
           <span className="popup-btn-icon"><Search size={18} strokeWidth={2} /></span>
           <span className="popup-btn-text">{t.popupSearchTabs}</span>
+        </button>
+
+        <button className="popup-btn" onClick={handleOpenSidebar}>
+          <span className="popup-btn-icon"><PanelLeft size={18} strokeWidth={2} /></span>
+          <span className="popup-btn-text">{t.popupOpenSidebar}</span>
         </button>
 
         <button className="popup-btn" onClick={handleOpenOptions}>
