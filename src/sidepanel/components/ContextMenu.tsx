@@ -45,8 +45,8 @@ export function ContextMenu({ x, y, items, onClose, onAction }: ContextMenuProps
   const adjustedX = Math.min(x, window.innerWidth - 180)
 
   return (
-    <div className="context-menu-overlay">
-      <div className="context-menu" ref={menuRef} style={{ top: adjustedY, left: adjustedX }}>
+    <div className="context-menu-overlay" ref={menuRef} onClick={onClose}>
+      <div className="context-menu" style={{ top: adjustedY, left: adjustedX }} onClick={e => e.stopPropagation()}>
         {items.map((item) => (
           <div key={item.id}>
             {item.divider && <div className="context-menu-divider" />}
@@ -76,7 +76,7 @@ export function ContextMenu({ x, y, items, onClose, onAction }: ContextMenuProps
         ))}
       </div>
       {submenu && (
-        <div className="context-menu context-submenu" style={{ top: submenu.y, left: submenu.x }}>
+        <div className="context-menu context-submenu" style={{ top: submenu.y, left: submenu.x }} onClick={e => e.stopPropagation()}>
           {submenu.items.map((item) => (
             <button
               key={item.id}
