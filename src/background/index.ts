@@ -47,8 +47,9 @@ function syncShortcuts(shortcuts: ShortcutConfig[]): void {
 
 // Load and sync shortcuts on startup
 chrome.storage.sync.get({ shortcuts: DEFAULT_SHORTCUTS }, data => {
-  const shortcuts = (data.shortcuts as ShortcutConfig[])?.length === 1
-    ? data.shortcuts
+  const storedShortcuts = data.shortcuts as ShortcutConfig[] | undefined
+  const shortcuts = storedShortcuts?.length === DEFAULT_SHORTCUTS.length
+    ? storedShortcuts
     : DEFAULT_SHORTCUTS
   syncShortcuts(shortcuts)
 })

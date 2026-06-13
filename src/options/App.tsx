@@ -179,11 +179,13 @@ export function App() {
         </div>
 
         <ShortcutSettings
-          shortcuts={settings.shortcuts.length === 1 ? settings.shortcuts : DEFAULT_SHORTCUTS}
+          shortcuts={settings.shortcuts.length >= DEFAULT_SHORTCUTS.length ? settings.shortcuts : DEFAULT_SHORTCUTS}
           onChange={shortcuts => updateSetting('shortcuts', shortcuts)}
           labels={{
             toggleSearchPanel: t.toggleSearchPanel,
             toggleSearchPanelDesc: t.toggleSearchPanelDesc,
+            toggleSidePanel: t.toggleSidePanel,
+            toggleSidePanelDesc: t.toggleSidePanelDesc,
             clickToRecord: t.clickToRecord,
             recording: t.recording,
             resetToDefault: t.resetToDefault,

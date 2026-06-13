@@ -12,6 +12,8 @@ interface ShortcutSettingsProps {
   labels: {
     toggleSearchPanel: string
     toggleSearchPanelDesc: string
+    toggleSidePanel: string
+    toggleSidePanelDesc: string
     clickToRecord: string
     recording: string
     resetToDefault: string
@@ -23,12 +25,21 @@ interface ShortcutSettingsProps {
 export const DEFAULT_SHORTCUTS: ShortcutConfig[] = [
   {
     id: 'toggle-search-panel',
-    shortcut: { key: 'a', ctrl: true, meta: true }
+    shortcut: { key: 'z', ctrl: true, shift: true }
+  },
+  {
+    id: 'toggle-side-panel',
+    shortcut: { key: 'l', alt: true }
   }
 ]
 
 export function ShortcutSettings({ shortcuts, onChange, labels }: ShortcutSettingsProps) {
   const [conflictIndex, setConflictIndex] = useState<number | null>(null)
+
+  const shortcutLabelMap: Record<string, { label: string; desc: string }> = {
+    'toggle-search-panel': { label: labels.toggleSearchPanel, desc: labels.toggleSearchPanelDesc },
+    'toggle-side-panel': { label: labels.toggleSidePanel, desc: labels.toggleSidePanelDesc }
+  }
 
   // Check for conflicts
   useEffect(() => {
@@ -59,11 +70,12 @@ export function ShortcutSettings({ shortcuts, onChange, labels }: ShortcutSettin
   return (
     <div className="shortcut-settings">
       {shortcuts.map((shortcut, index) => {
+        const info = shortcutLabelMap[shortcut.id]
         return (
           <div key={shortcut.id} className="shortcut-item">
             <div className="shortcut-info">
-              <div className="shortcut-label">{labels.toggleSearchPanel}</div>
-              <div className="shortcut-desc">{labels.toggleSearchPanelDesc}</div>
+              <div className="shortcut-label">{info?.label ?? shortcut.id}</div>
+              <div className="shortcut-desc">{info?.desc ?? ''}</div>
               {conflictIndex === index && (
                 <div className="shortcut-error">{labels.shortcutConflict}</div>
               )}
