@@ -86,21 +86,6 @@ function setSidePanelOpen(open: boolean) {
   chrome.storage.local.set({ sidePanelOpen: open })
 }
 
-// Try to restore sidebar on browser launch if it was previously open
-chrome.runtime.onStartup.addListener(async () => {
-  const { sidePanelOpen: wasOpen } = await chrome.storage.local.get({ sidePanelOpen: false })
-  if (wasOpen) {
-    try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
-      if (tab?.windowId) {
-        await chrome.sidePanel.open({ windowId: tab.windowId })
-      }
-    } catch {
-      // May fail without user gesture — state stays correct for next toggle
-    }
-  }
-})
-
 // Listen for keyboard shortcut commands
 chrome.commands.onCommand.addListener(command => {
   console.log('Command received:', command)
