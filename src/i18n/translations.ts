@@ -72,53 +72,11 @@ export interface TranslationKeys {
   recentClosedEmpty: string
   restoreTab: string
 
-  // AI Classification Settings
-  aiSettings: string
-  enableAiClassification: string
-  enableAiClassificationDesc: string
-  apiEndpoint: string
-  apiEndpointHint: string
-  apiKey: string
-  apiKeyPlaceholder: string
-  modelName: string
-  testConnection: string
-  connectionSuccess: string
-  connectionFailed: string
-
-  // Smart Classification
-  smartClassify: string
-  backToSearch: string
-  analyzing: string
-  goToSettings: string
-  createTabGroups: string
-  cancel: string
-  noTabsToClassify: string
-  allTabsClassified: string
-  classificationComplete: string
-
-  // Category names
-  categoryWork: string
-  categoryDevelopment: string
-  categorySocial: string
-  categoryShopping: string
-  categoryEntertainment: string
-  categoryNews: string
-  categoryDocs: string
-  categoryOther: string
-
   // Popup
   popupSearchTabs: string
   popupSettings: string
   popupUngroupAll: string
   popupOpenSidebar: string
-
-  // Drag and Drop
-  moveToCategory: string
-
-  // Classification Error
-  classificationError: string
-  classificationErrorHint: string
-  retry: string
 
   // Sidebar
   sidebarTitle: string
@@ -239,53 +197,11 @@ export const translations: Record<Language, TranslationKeys> = {
     recentClosedEmpty: 'No recently closed tabs',
     restoreTab: 'Restore',
 
-    // AI Classification Settings
-    aiSettings: 'AI Classification Settings',
-    enableAiClassification: 'Enable AI Smart Classification',
-    enableAiClassificationDesc: 'Use AI to automatically classify and group tabs',
-    apiEndpoint: 'API Endpoint',
-    apiEndpointHint: 'Supports any OpenAI-compatible endpoint',
-    apiKey: 'API Key',
-    apiKeyPlaceholder: 'Enter your API key',
-    modelName: 'Model Name',
-    testConnection: 'Test Connection',
-    connectionSuccess: 'Connection successful',
-    connectionFailed: 'Connection failed',
-
-    // Smart Classification
-    smartClassify: 'Smart Classify',
-    backToSearch: 'Back to Search',
-    analyzing: 'Analyzing tabs...',
-    goToSettings: 'Go to Settings',
-    createTabGroups: 'Create Tab Groups',
-    cancel: 'Cancel',
-    noTabsToClassify: 'No tabs to classify',
-    allTabsClassified: 'All tabs are already classified',
-    classificationComplete: 'Classification complete!',
-
-    // Category names
-    categoryWork: 'Work',
-    categoryDevelopment: 'Development',
-    categorySocial: 'Social',
-    categoryShopping: 'Shopping',
-    categoryEntertainment: 'Entertainment',
-    categoryNews: 'News',
-    categoryDocs: 'Docs',
-    categoryOther: 'Other',
-
     // Popup
     popupSearchTabs: 'Search Tabs',
     popupSettings: 'Settings',
     popupUngroupAll: 'Ungroup All',
     popupOpenSidebar: 'Open Sidebar',
-
-    // Drag and Drop
-    moveToCategory: 'Move to {category}',
-
-    // Classification Error
-    classificationError: 'Classification Failed',
-    classificationErrorHint: 'Failed to communicate with AI service. Please check your settings.',
-    retry: 'Retry',
 
     // Sidebar
     sidebarTitle: 'TabFlow',
@@ -404,53 +320,11 @@ export const translations: Record<Language, TranslationKeys> = {
     recentClosedEmpty: '没有最近关闭的标签页',
     restoreTab: '恢复',
 
-    // AI Classification Settings
-    aiSettings: 'AI 分类设置',
-    enableAiClassification: '启用 AI 智能分类',
-    enableAiClassificationDesc: '使用 AI 自动对标签进行智能分类和分组',
-    apiEndpoint: 'API 端点',
-    apiEndpointHint: '支持任意 OpenAI 兼容端点',
-    apiKey: 'API Key',
-    apiKeyPlaceholder: '输入您的 API 密钥',
-    modelName: '模型名称',
-    testConnection: '测试连接',
-    connectionSuccess: '连接成功',
-    connectionFailed: '连接失败',
-
-    // Smart Classification
-    smartClassify: '智能分类',
-    backToSearch: '返回搜索',
-    analyzing: '正在分析标签...',
-    goToSettings: '去设置',
-    createTabGroups: '创建标签组',
-    cancel: '取消',
-    noTabsToClassify: '没有需要分类的标签',
-    allTabsClassified: '所有标签已分类',
-    classificationComplete: '分类完成！',
-
-    // Category names
-    categoryWork: '工作',
-    categoryDevelopment: '开发',
-    categorySocial: '社交',
-    categoryShopping: '购物',
-    categoryEntertainment: '娱乐',
-    categoryNews: '新闻',
-    categoryDocs: '文档',
-    categoryOther: '其他',
-
     // Popup
     popupSearchTabs: '搜索标签页',
     popupSettings: '设置',
     popupUngroupAll: '取消所有分组',
     popupOpenSidebar: '打开侧边栏',
-
-    // Drag and Drop
-    moveToCategory: '移动到 {category}',
-
-    // Classification Error
-    classificationError: '分类失败',
-    classificationErrorHint: '无法与 AI 服务通信，请检查您的设置。',
-    retry: '重试',
 
     // Sidebar
     sidebarTitle: 'TabFlow',

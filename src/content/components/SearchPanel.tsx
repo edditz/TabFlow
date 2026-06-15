@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import type { KeyboardEvent } from 'react'
-import { Search, X, File, AppWindow } from 'lucide-react'
+import { Search, X, File } from 'lucide-react'
 import { translations, type Language } from '../../i18n'
 import type { UrlDisplayStyle } from '../../options/App'
-import type { TabInfo } from '../../classification'
 import './SearchPanel.css'
 
 interface TabResult {
@@ -31,8 +30,6 @@ interface SearchPanelProps {
   enableRecentClosed: boolean
   recentClosedTimeWindow: number
   recentClosedMaxResults: number
-  showClassification: boolean
-  onShowClassification: (tabs: TabInfo[]) => void
 }
 
 // Extract domain from URL for display
@@ -72,9 +69,7 @@ export function SearchPanel({
   searchCurrentWindow,
   enableRecentClosed,
   recentClosedTimeWindow,
-  recentClosedMaxResults,
-  showClassification,
-  onShowClassification
+  recentClosedMaxResults
 }: SearchPanelProps) {
   const t = translations[language]
   const [query, setQuery] = useState('')
@@ -328,25 +323,6 @@ export function SearchPanel({
                     </span>
                   </>
                 )
-              )}
-              {showClassification && (
-                <button
-                  className="tt-classify-btn"
-                  onClick={() =>
-                    onShowClassification(
-                      results.map(tab => ({
-                        id: tab.id,
-                        title: tab.title,
-                        url: tab.url,
-                        favIconUrl: tab.favIconUrl
-                      }))
-                    )
-                  }
-                  title={t.smartClassify}
-                >
-                  <AppWindow size={16} />
-                  <span>{t.smartClassify}</span>
-                </button>
               )}
             </div>
         </div>

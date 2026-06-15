@@ -1,17 +1,13 @@
 import { createRoot } from 'react-dom/client'
 import { SearchPanel } from './components/SearchPanel'
-import { ClassificationPanel } from './components/ClassificationPanel'
 import { createAgentationInstance, type Annotation } from '../shared'
 import { translations, type Language } from '../i18n'
 import type { ShortcutConfig } from '../options/components/ShortcutSettings'
 import type { ShortcutKey } from '../options/components/ShortcutRecorder'
 import type { UrlDisplayStyle } from '../options/App'
-import type { TabInfo, CategoryGroup, AISettings } from '../classification'
-import { DEFAULT_AI_SETTINGS } from '../classification'
 
 // Import CSS as raw string for Shadow DOM injection
 import cssText from './components/SearchPanel.css?inline'
-import classificationCssText from './components/ClassificationPanel.css?inline'
 import toastCssText from './styles.css?inline'
 
 // Dev-only - uses custom VITE_DEV env var instead of built-in DEV
@@ -36,8 +32,6 @@ let agentationInstance: ReturnType<typeof createAgentationInstance> | null = nul
 // State
 let isVisible = false
 let isClosing = false
-let currentView: 'search' | 'classification' = 'search'
-let classificationTabs: TabInfo[] = []
 let keyboardListener: ((e: KeyboardEvent) => void) | null = null
 let wheelListener: ((e: WheelEvent) => void) | null = null
 let savedHtmlOverflow = ''
@@ -51,7 +45,6 @@ let currentShortcut: ShortcutKey | null = DEFAULT_SHORTCUTS[0].shortcut
 let currentEnableRecentClosed: boolean = true
 let currentRecentClosedTimeWindow: number = 24
 let currentRecentClosedMaxResults: number = 10
-let currentAiEnabled: boolean = false
 
 // Get actual theme based on setting and system preference
 function getActualTheme(): 'light' | 'dark' {
@@ -85,7 +78,7 @@ function init(): void {
 
   // Inject styles into Shadow DOM
   const styleElement = document.createElement('style')
-  styleElement.textContent = cssText + '\n' + classificationCssText + '\n' + toastCssText
+  styleElement.textContent = cssText + '\n' + toastCssText
   shadowRoot.appendChild(styleElement)
 
   // Create container for React app inside Shadow DOM
@@ -106,8 +99,7 @@ function init(): void {
       shortcuts: DEFAULT_SHORTCUTS,
       enableRecentClosed: true,
       recentClosedTimeWindow: 24,
-      recentClosedMaxResults: 10,
-      aiSettings: DEFAULT_AI_SETTINGS
+      recentClosedMaxResults: 10
     },
     data => {
       currentEnableSearchPanel = data.enableSearchPanel
@@ -118,8 +110,6 @@ function init(): void {
       currentEnableRecentClosed = data.enableRecentClosed
       currentRecentClosedTimeWindow = data.recentClosedTimeWindow
       currentRecentClosedMaxResults = data.recentClosedMaxResults
-      const ai = data.aiSettings as AISettings
-      currentAiEnabled = ai.enabled && !!ai.apiKey
       if (data.shortcuts && data.shortcuts.length > 0) {
         currentShortcut = data.shortcuts[0].shortcut
       }
@@ -170,11 +160,6 @@ function init(): void {
     }
     if (changes.recentClosedMaxResults) {
       currentRecentClosedMaxResults = changes.recentClosedMaxResults.newValue
-      render()
-    }
-    if (changes.aiSettings) {
-      const ai = changes.aiSettings.newValue as AISettings
-      currentAiEnabled = ai.enabled && !!ai.apiKey
       render()
     }
   })
@@ -242,7 +227,6 @@ function handleWheel(e: WheelEvent): void {
 
   // Event inside the panel — check scrollable container boundaries
   const scrollable =
-    shadowRoot.querySelector('.cp-content-wrapper') ||
     shadowRoot.querySelector('.tt-results') ||
     shadowRoot.querySelector('.tt-search-content')
 
@@ -319,8 +303,6 @@ function render(): void {
   if (!searchRoot) return
 
   if (isVisible) {
-    const t = translations[currentLanguage]
-
     // Unified container - only created once, content switches inside
     searchRoot.render(
       <div
@@ -356,73 +338,18 @@ function render(): void {
             }
           }}
         >
-          {currentView === 'search' ? (
-            <SearchPanel
-              onCloseComplete={closeWithAnimation}
-              registerCloseCallback={callback => {
-                closePanelCallback = callback
-              }}
-              language={currentLanguage}
-              urlDisplayStyle={currentUrlDisplayStyle}
-              searchCurrentWindow={currentSearchCurrentWindow}
-              enableRecentClosed={currentEnableRecentClosed}
-              recentClosedTimeWindow={currentRecentClosedTimeWindow}
-              recentClosedMaxResults={currentRecentClosedMaxResults}
-              showClassification={currentAiEnabled}
-              onShowClassification={(tabs: TabInfo[]) => {
-                classificationTabs = tabs
-                currentView = 'classification'
-                render()
-              }}
-            />
-          ) : (
-            <ClassificationPanel
-              tabs={classificationTabs}
-              onClose={closeWithAnimation}
-              onBack={() => {
-                currentView = 'search'
-                render()
-              }}
-              onConfirm={(groups: CategoryGroup[]) => {
-                chrome.runtime.sendMessage(
-                  {
-                    type: 'CLASSIFY_TABS',
-                    groups: groups.map(g => ({
-                      name: g.name,
-                      tabs: g.tabs,
-                      color: g.color
-                    }))
-                  },
-                  response => {
-                    if (response?.success) {
-                      closeWithAnimation()
-                    }
-                  }
-                )
-              }}
-              labels={{
-                smartClassify: t.smartClassify,
-                backToSearch: t.backToSearch,
-                analyzing: t.analyzing,
-                goToSettings: t.goToSettings,
-                createTabGroups: t.createTabGroups,
-                cancel: t.cancel,
-                noTabsToClassify: t.noTabsToClassify,
-                categoryWork: t.categoryWork,
-                categoryDevelopment: t.categoryDevelopment,
-                categorySocial: t.categorySocial,
-                categoryShopping: t.categoryShopping,
-                categoryEntertainment: t.categoryEntertainment,
-                categoryNews: t.categoryNews,
-                categoryDocs: t.categoryDocs,
-                categoryOther: t.categoryOther,
-                moveToCategory: t.moveToCategory,
-                classificationError: t.classificationError,
-                classificationErrorHint: t.classificationErrorHint,
-                retry: t.retry
-              }}
-            />
-          )}
+          <SearchPanel
+            onCloseComplete={closeWithAnimation}
+            registerCloseCallback={callback => {
+              closePanelCallback = callback
+            }}
+            language={currentLanguage}
+            urlDisplayStyle={currentUrlDisplayStyle}
+            searchCurrentWindow={currentSearchCurrentWindow}
+            enableRecentClosed={currentEnableRecentClosed}
+            recentClosedTimeWindow={currentRecentClosedTimeWindow}
+            recentClosedMaxResults={currentRecentClosedMaxResults}
+          />
         </div>
       </div>
     )
@@ -445,8 +372,6 @@ function render(): void {
 function hide(): void {
   isVisible = false
   isClosing = false
-  currentView = 'search'
-  classificationTabs = []
   closePanelCallback = null
   disableWheelPrevention()
   render()

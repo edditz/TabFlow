@@ -8,9 +8,6 @@ import {
   DEFAULT_SHORTCUTS
 } from './components/ShortcutSettings'
 import { Switch } from './components/Switch'
-import { AISettings as AISettingsComponent } from './components/AISettings'
-import type { AISettings } from '../classification'
-import { DEFAULT_AI_SETTINGS } from '../classification'
 import type { SidebarSettings, SidebarLayout } from '../sidepanel/types'
 import { DEFAULT_SIDEBAR_SETTINGS } from '../sidepanel/types'
 
@@ -26,7 +23,6 @@ interface Settings {
   enableRecentClosed: boolean
   recentClosedTimeWindow: number
   recentClosedMaxResults: number
-  aiSettings: AISettings
   sidebarSettings: SidebarSettings
 }
 
@@ -40,7 +36,6 @@ const DEFAULT_SETTINGS: Settings = {
   enableRecentClosed: true,
   recentClosedTimeWindow: 24,
   recentClosedMaxResults: 10,
-  aiSettings: DEFAULT_AI_SETTINGS,
   sidebarSettings: DEFAULT_SIDEBAR_SETTINGS
 }
 
@@ -72,35 +67,7 @@ export function App() {
   useEffect(() => {
     // Load initial settings
     chrome.storage.sync.get(DEFAULT_SETTINGS, data => {
-      let loadedSettings = data as Settings
-
-      // In development mode, auto-fill AI settings from environment variables
-      if (import.meta.env.VITE_DEV) {
-        const envAISettings: Partial<AISettings> = {}
-
-        if (import.meta.env.VITE_AI_ENABLED !== undefined) {
-          envAISettings.enabled = import.meta.env.VITE_AI_ENABLED === 'true'
-        }
-        if (import.meta.env.VITE_AI_ENDPOINT) {
-          envAISettings.endpoint = import.meta.env.VITE_AI_ENDPOINT
-        }
-        if (import.meta.env.VITE_AI_API_KEY) {
-          envAISettings.apiKey = import.meta.env.VITE_AI_API_KEY
-        }
-        if (import.meta.env.VITE_AI_MODEL) {
-          envAISettings.model = import.meta.env.VITE_AI_MODEL
-        }
-
-        // If any env vars are set, merge and save to storage
-        if (Object.keys(envAISettings).length > 0) {
-          loadedSettings = {
-            ...loadedSettings,
-            aiSettings: { ...loadedSettings.aiSettings, ...envAISettings }
-          }
-          // Save to storage so UI shows the values
-          chrome.storage.sync.set({ aiSettings: loadedSettings.aiSettings })
-        }
-      }
+      const loadedSettings = data as Settings
 
       setSettings(loadedSettings)
       setActualTheme(getActualTheme(loadedSettings.theme))
@@ -463,25 +430,6 @@ export function App() {
           </>
         )}
       </section>
-
-      {/* AI Classification Settings */}
-      <AISettingsComponent
-        settings={settings.aiSettings}
-        onChange={aiSettings => updateSetting('aiSettings', aiSettings)}
-        labels={{
-          aiSettings: t.aiSettings,
-          enableAiClassification: t.enableAiClassification,
-          enableAiClassificationDesc: t.enableAiClassificationDesc,
-          apiEndpoint: t.apiEndpoint,
-          apiEndpointHint: t.apiEndpointHint,
-          apiKey: t.apiKey,
-          apiKeyPlaceholder: t.apiKeyPlaceholder,
-          modelName: t.modelName,
-          testConnection: t.testConnection,
-          connectionSuccess: t.connectionSuccess,
-          connectionFailed: t.connectionFailed
-        }}
-      />
 
       <footer className="options-footer">
         <span>TabFlow v{chrome.runtime.getManifest().version}</span>
