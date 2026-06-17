@@ -47,6 +47,25 @@ export function App() {
     }
   }, [])
 
+  // Only clear the closing flag once the tab has actually been removed from
+  // the `tabs` array. `chrome.tabs.remove` is async, so clearing it the moment
+  // the exit animation ends (while the tab is still rendered) makes the row
+  // snap back from max-height:0 to full height for a frame — visible as a
+  // jitter/shake, most noticeable when closing the active tab.
+  useEffect(() => {
+    if (closingTabIds.size === 0) return
+    const currentTabIds = new Set(
+      tabs.map(tab => tab.id).filter((id): id is number => id !== undefined)
+    )
+    const staleIds = [...closingTabIds].filter(id => !currentTabIds.has(id))
+    if (staleIds.length === 0) return
+    setClosingTabIds(prev => {
+      const next = new Set(prev)
+      staleIds.forEach(id => next.delete(id))
+      return next
+    })
+  }, [tabs, closingTabIds])
+
   // Wrap closeTab with exit animation delay
   const handleCloseTab = useCallback((tabId: number) => {
     setClosingTabIds(prev => {
@@ -60,13 +79,10 @@ export function App() {
       clearTimeout(closingTimeoutsRef.current.get(tabId))
     }
 
+    // The closing flag is cleared by the effect above once `tabs` no longer
+    // contains this id, NOT here — see comment on that effect.
     const timeout = setTimeout(() => {
       closeTab(tabId)
-      setClosingTabIds(prev => {
-        const next = new Set(prev)
-        next.delete(tabId)
-        return next
-      })
       closingTimeoutsRef.current.delete(tabId)
     }, 250)
 
