@@ -1,3 +1,4 @@
+import { X } from 'lucide-react'
 import type { TabGroup } from '../types'
 
 interface CardLayoutProps {
@@ -127,7 +128,7 @@ export function CardLayout({
                 onClick={e => { e.stopPropagation(); onCloseTab(tab.id!) }}
                 title="Close"
               >
-                ×
+                <X size={14} />
               </button>
             )}
           </div>

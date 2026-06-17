@@ -1,3 +1,5 @@
+import { X } from 'lucide-react'
+
 interface TabItemProps {
   title: string
   url?: string
@@ -71,7 +73,7 @@ export function TabItem({
           }}
           title="Close"
         >
-          ×
+          <X size={14} />
         </button>
       )}
     </div>
