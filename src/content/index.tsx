@@ -329,8 +329,7 @@ function render(): void {
           onAnimationEnd={(e: React.AnimationEvent<HTMLDivElement>) => {
             // Remove transform after entry animation completes.
             // The animation leaves transform: translateY(0) scale(1) on the element,
-            // which creates a containing block for position:fixed children,
-            // breaking dnd-kit's DragOverlay positioning.
+            // which creates a containing block for position:fixed children.
             if (e.animationName === 'tt-container-enter') {
               const el = e.currentTarget
               el.style.animation = 'none'

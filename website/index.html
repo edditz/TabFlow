@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TabFlow — Where chaos finds its flow</title>
+  <meta name="description" content="TabFlow reimagines tab management for Chrome & Edge. Global search, a sidebar manager with three layouts, and keyboard-first control. Open source, MIT." />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0a0a0b" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="TabFlow — Where chaos finds its flow" />
+  <meta property="og:description" content="Enhanced tab management for Chrome & Edge. Search, group, restore. Open source." />
+  <meta property="og:type" content="website" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+
+  <!-- Fonts: Fraunces (display serif), Geist (sans), Geist Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=Geist:wght@300..600&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./styles.css" />
+  <!--
+    TabFlow brand website — static, zero build.
+    Deploy: serve the /website folder on GitHub Pages (base path /website/).
+    TODO for owner: replace CTA hrefs with real Chrome Web Store + Edge Add-ons URLs (search for TODO below).
+  -->
+</head>
+<body>
+  <!-- Skip link for a11y -->
+  <a class="skip-link" href="#main" data-i18n="skipToContent">Skip to content</a>
+
+  <!-- Grain overlay (fixed, low opacity) -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ============================================================ -->
+  <!-- NAV                                                          -->
+  <!-- ============================================================ -->
+  <header class="nav" id="nav" data-nav>
+    <div class="nav__inner">
+      <a class="brand" href="#top" aria-label="TabFlow home">
+        <!-- Flow glyph mark: 3 converging lines into a node -->
+        <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+          <g fill="none" stroke-linecap="round" stroke-width="3.4">
+            <path d="M8 16 C 26 16, 30 32, 46 32" stroke="currentColor"/>
+            <path d="M8 32 L 46 32" stroke="currentColor" opacity="0.6"/>
+            <path d="M8 48 C 26 48, 30 32, 46 32" stroke="currentColor" opacity="0.6"/>
+          </g>
+          <circle cx="48" cy="32" r="6" fill="currentColor"/>
+        </svg>
+        <span class="brand__word">TabFlow</span>
+      </a>
+
+      <nav class="nav__links" aria-label="Primary" data-nav-links>
+        <a href="#features" data-i18n="navFeatures">Features</a>
+        <a href="#layouts" data-i18n="navLayouts">Layouts</a>
+        <a href="#shortcuts" data-i18n="navShortcuts">Shortcuts</a>
+        <a href="#faq" data-i18n="navFaq">FAQ</a>
+      </nav>
+
+      <div class="nav__actions">
+        <button class="lang-toggle" type="button" data-lang-toggle aria-label="Switch language">
+          <span data-lang-label>中文</span>
+        </button>
+        <a class="icon-link" href="https://github.com/edditz/TabFlow" target="_blank" rel="noopener noreferrer" aria-label="TabFlow on GitHub">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M12 2C6.48 2 2 6.58 2 12.26c0 4.5 2.87 8.32 6.84 9.67.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.36-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.04 10.04 0 0 0 22 12.26C22 6.58 17.52 2 12 2z"/>
+          </svg>
+        </a>
+        <!-- TODO: replace with Chrome Web Store URL -->
+        <a class="btn btn--primary btn--sm" href="#" data-cta-chrome data-i18n="navCta">Add to Chrome</a>
+        <button class="nav__menu-btn" type="button" data-menu-toggle aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="nav__mobile" id="mobileMenu" data-mobile-menu hidden>
+      <a href="#features" data-i18n="navFeatures">Features</a>
+      <a href="#layouts" data-i18n="navLayouts">Layouts</a>
+      <a href="#shortcuts" data-i18n="navShortcuts">Shortcuts</a>
+      <a href="#faq" data-i18n="navFaq">FAQ</a>
+      <a href="https://github.com/edditz/TabFlow" target="_blank" rel="noopener noreferrer">GitHub →</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <span id="top"></span>
+
+    <!-- ============================================================ -->
+    <!-- HERO                                                         -->
+    <!-- ============================================================ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <!-- Flow streams SVG: chaos -> order -->
+      <div class="hero__visual" aria-hidden="true">
+        <svg class="flow-streams" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" data-flow-streams>
+          <defs>
+            <filter id="streamGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2.4" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <radialGradient id="heroGlow" cx="78%" cy="50%" r="42%">
+              <stop offset="0%" stop-color="#ccff33" stop-opacity="0.16"/>
+              <stop offset="100%" stop-color="#ccff33" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <rect width="1200" height="640" fill="url(#heroGlow)"/>
+
+          <!-- 7 curved streams, each a group color -->
+          <g fill="none" stroke-linecap="round" filter="url(#streamGlow)">
+            <path class="stream" d="M-40 70  C 300 70,  420 320, 980 320" stroke="#9aa0a6" stroke-width="1.8" style="--len:1180"/>
+            <path class="stream" d="M-40 150 C 260 150, 460 320, 980 320" stroke="#5b9dff" stroke-width="1.8" style="--len:1160"/>
+            <path class="stream" d="M-40 230 C 240 230, 500 320, 980 320" stroke="#ff6b6b" stroke-width="2"    style="--len:1140"/>
+            <path class="stream" d="M-40 310 C 220 310, 520 320, 980 320" stroke="#ffd43b" stroke-width="2"    style="--len:1120"/>
+            <path class="stream" d="M-40 390 C 240 390, 500 320, 980 320" stroke="#51cf66" stroke-width="1.8" style="--len:1140"/>
+            <path class="stream" d="M-40 470 C 260 470, 460 320, 980 320" stroke="#ff79c6" stroke-width="1.8" style="--len:1160"/>
+            <path class="stream" d="M-40 560 C 300 560, 420 320, 980 320" stroke="#b197fc" stroke-width="1.6" style="--len:1180"/>
+          </g>
+
+          <!-- Convergence nodes (8 tab-group colors) -->
+          <g class="nodes">
+            <circle class="node" cx="1000" cy="150" r="6" fill="#9aa0a6"/>
+            <circle class="node" cx="1020" cy="210" r="6" fill="#5b9dff"/>
+            <circle class="node" cx="1030" cy="270" r="6" fill="#ff6b6b"/>
+            <circle class="node node--flow" cx="1036" cy="320" r="8" fill="#ccff33"/>
+            <circle class="node" cx="1030" cy="370" r="6" fill="#51cf66"/>
+            <circle class="node" cx="1020" cy="430" r="6" fill="#ff79c6"/>
+            <circle class="node" cx="1000" cy="490" r="6" fill="#b197fc"/>
+            <circle class="node" cx="970"  cy="545" r="6" fill="#66d9e8"/>
+          </g>
+
+          <!-- Floating tab chips -->
+          <g class="chips">
+            <g class="chip" style="--cx:240;--cy:120;--dx:60;--delay:0s">
+              <rect x="-34" y="-9" width="68" height="18" rx="5" fill="#16161b" stroke="rgba(245,243,238,0.12)"/>
+              <circle cx="-25" cy="0" r="3" fill="#5b9dff"/>
+              <rect x="-17" y="-2" width="38" height="4" rx="2" fill="#b6b4ab"/>
+            </g>
+            <g class="chip" style="--cx:380;--cy:250;--dx:90;--delay:1.4s">
+              <rect x="-34" y="-9" width="68" height="18" rx="5" fill="#16161b" stroke="rgba(245,243,238,0.12)"/>
+              <circle cx="-25" cy="0" r="3" fill="#ff79c6"/>
+              <rect x="-17" y="-2" width="30" height="4" rx="2" fill="#b6b4ab"/>
+            </g>
+            <g class="chip" style="--cx:180;--cy:430;--dx:70;--delay:2.8s">
+              <rect x="-34" y="-9" width="68" height="18" rx="5" fill="#16161b" stroke="rgba(245,243,238,0.12)"/>
+              <circle cx="-25" cy="0" r="3" fill="#51cf66"/>
+              <rect x="-17" y="-2" width="42" height="4" rx="2" fill="#b6b4ab"/>
+            </g>
+            <g class="chip" style="--cx:520;--cy:180;--dx:50;--delay:0.7s">
+              <rect x="-30" y="-8" width="60" height="16" rx="5" fill="#16161b" stroke="rgba(245,243,238,0.12)"/>
+              <circle cx="-22" cy="0" r="2.6" fill="#ffd43b"/>
+              <rect x="-14" y="-2" width="32" height="4" rx="2" fill="#b6b4ab"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="hero__content container">
+        <p class="eyebrow" data-i18n="heroEyebrow">TAB MANAGEMENT, REIMAGINED · v1.1.1</p>
+        <h1 class="hero__title display" id="hero-title">
+          <span data-i18n="heroTitlePrefix">Where chaos finds its</span>
+          <em class="hero__title-em" data-i18n="heroTitleEm">flow</em><span>.</span>
+        </h1>
+        <p class="hero__lead lead" data-i18n="heroLead">Search every open tab, organize them into groups, and restore what you closed — in Chrome & Edge.</p>
+
+        <div class="hero__cta">
+          <!-- TODO: replace with Chrome Web Store URL -->
+          <a class="btn btn--primary btn--lg" href="#" data-cta-chrome data-magnetic>
+            <span data-i18n="ctaAddChrome">Add to Chrome</span>
+            <svg class="btn__arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <!-- TODO: replace with Microsoft Edge Add-ons URL -->
+          <a class="btn btn--ghost btn--lg" href="#" data-cta-edge data-i18n="ctaAddEdge">Add to Edge</a>
+        </div>
+
+        <p class="hero__meta" data-i18n="heroMeta">Open source · MIT · Works on Chrome &amp; Edge</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- TRUST STRIP                                                  -->
+    <!-- ============================================================ -->
+    <section class="trust" aria-label="At a glance">
+      <div class="trust__track" data-marquee>
+        <span data-i18n="trust1">WORKS ON CHROME &amp; EDGE</span><span aria-hidden="true">·</span>
+        <span data-i18n="trust2">MIT LICENSED</span><span aria-hidden="true">·</span>
+        <span data-i18n="trust3">KEYBOARD-FIRST</span><span aria-hidden="true">·</span>
+        <span data-i18n="trust4">NO TRACKING</span><span aria-hidden="true">·</span>
+        <span data-i18n="trust1">WORKS ON CHROME &amp; EDGE</span><span aria-hidden="true">·</span>
+        <span data-i18n="trust2">MIT LICENSED</span><span aria-hidden="true">·</span>
+        <span data-i18n="trust3">KEYBOARD-FIRST</span><span aria-hidden="true">·</span>
+        <span data-i18n="trust4">NO TRACKING</span><span aria-hidden="true">·</span>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- FEATURES (asymmetric bento)                                  -->
+    <!-- ============================================================ -->
+    <section class="section features" id="features" aria-labelledby="features-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="eyebrow" data-i18n="featuresEyebrow">CAPABILITIES</p>
+          <h2 class="section__title display" id="features-title" data-i18n="featuresTitle">Everything your tabs need</h2>
+        </header>
+
+        <div class="bento">
+          <!-- Tile 1: large -->
+          <article class="tile tile--lg reveal" style="--i:0">
+            <div class="tile__icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M16.5 16.5 21 21"/></svg>
+            </div>
+            <p class="eyebrow tile__eyebrow" data-i18n="f1Eyebrow">SEARCH</p>
+            <h3 class="tile__title" data-i18n="f1Title">Global Search Panel</h3>
+            <p class="tile__desc" data-i18n="f1Desc">Instantly filter every open tab by title, URL, or domain.</p>
+            <div class="tile__demo mini-search" aria-hidden="true">
+              <span class="mini-search__icon">
+                <svg viewBox="0 0 24 24" width="14" height="14"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M16.5 16.5 21 21"/></svg>
+              </span>
+              <span class="mini-search__input">github</span>
+              <span class="mini-search__hint">⌘⇧Z</span>
+            </div>
+          </article>
+
+          <!-- Tile 2 -->
+          <article class="tile reveal" style="--i:1">
+            <div class="tile__icon"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2" d="M3 9h18"/></svg></div>
+            <p class="eyebrow tile__eyebrow" data-i18n="f2Eyebrow">SIDEBAR</p>
+            <h3 class="tile__title" data-i18n="f2Title">Sidebar Tab Manager</h3>
+            <p class="tile__desc" data-i18n="f2Desc">A Chrome Side Panel with three layouts to browse &amp; manage tabs.</p>
+          </article>
+
+          <!-- Tile 3 -->
+          <article class="tile reveal" style="--i:2">
+            <div class="tile__icon"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 1 0 3-6.7"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M3 4v4h4"/></svg></div>
+            <p class="eyebrow tile__eyebrow" data-i18n="f3Eyebrow">RECOVERY</p>
+            <h3 class="tile__title" data-i18n="f3Title">Recently Closed</h3>
+            <p class="tile__desc" data-i18n="f3Desc">Restore closed tabs in one click, within your chosen window.</p>
+          </article>
+
+          <!-- Tile 4 -->
+          <article class="tile reveal" style="--i:3">
+            <div class="tile__icon"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="4" width="8" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="4" width="8" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="8" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="13" width="8" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+            <p class="eyebrow tile__eyebrow" data-i18n="f4Eyebrow">LAYOUTS</p>
+            <h3 class="tile__title" data-i18n="f4Title">Three Layouts</h3>
+            <p class="tile__desc" data-i18n="f4Desc">Compact, Card, and Tree — switch instantly.</p>
+          </article>
+
+          <!-- Tile 5 -->
+          <article class="tile reveal" style="--i:4">
+            <div class="tile__icon"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 3a9 9 0 1 0 9 9"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 3v6h6"/></svg></div>
+            <p class="eyebrow tile__eyebrow" data-i18n="f5Eyebrow">APPEARANCE</p>
+            <h3 class="tile__title" data-i18n="f5Title">Themes</h3>
+            <p class="tile__desc" data-i18n="f5Desc">Light, Dark, System — isolated via Shadow DOM.</p>
+          </article>
+
+          <!-- Tile 6 -->
+          <article class="tile reveal" style="--i:5">
+            <div class="tile__icon"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M5 8h14M7 8v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V8M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></div>
+            <p class="eyebrow tile__eyebrow" data-i18n="f6Eyebrow">I18N</p>
+            <h3 class="tile__title" data-i18n="f6Title">Bilingual</h3>
+            <p class="tile__desc" data-i18n="f6Desc">Full English &amp; Chinese with live switching.</p>
+          </article>
+
+          <!-- Tile 7 -->
+          <article class="tile reveal" style="--i:6">
+            <div class="tile__icon"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="7" width="18" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 11h2M7 14h4"/></svg></div>
+            <p class="eyebrow tile__eyebrow" data-i18n="f7Eyebrow">SPEED</p>
+            <h3 class="tile__title" data-i18n="f7Title">Custom Shortcuts</h3>
+            <p class="tile__desc" data-i18n="f7Desc">Rebind every shortcut, with Mac symbols &amp; conflict detection.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- LAYOUTS SHOWCASE                                             -->
+    <!-- ============================================================ -->
+    <section class="section layouts" id="layouts" aria-labelledby="layouts-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="eyebrow" data-i18n="layoutsEyebrow">SIDEBAR</p>
+          <h2 class="section__title display" id="layouts-title" data-i18n="layoutsTitle">Three ways to see your tabs</h2>
+        </header>
+
+        <!-- Segmented control -->
+        <div class="segmented reveal" role="tablist" aria-label="Layout">
+          <button class="segmented__btn is-active" role="tab" aria-selected="true" data-layout-tab="compact" data-i18n="layoutCompact">Compact</button>
+          <button class="segmented__btn" role="tab" aria-selected="false" data-layout-tab="card" data-i18n="layoutCard">Card</button>
+          <button class="segmented__btn" role="tab" aria-selected="false" data-layout-tab="tree" data-i18n="layoutTree">Tree</button>
+        </div>
+
+        <!-- Mock windows -->
+        <div class="mock-stage reveal">
+          <!-- COMPACT -->
+          <div class="mock is-active" data-layout-panel="compact" role="tabpanel">
+            <div class="mock__chrome">
+              <span class="mock__dot mock__dot--r"></span>
+              <span class="mock__dot mock__dot--y"></span>
+              <span class="mock__dot mock__dot--g"></span>
+              <span class="mock__title">TabFlow — Side Panel</span>
+            </div>
+            <div class="mock__body mock__body--sidebar">
+              <div class="sb-group">
+                <div class="sb-group__head"><span class="sb-dot" style="--c:var(--c-blue)"></span><span class="sb-group__name" data-i18n="catWork">Work</span><span class="sb-group__count">3</span></div>
+                <div class="sb-row"><span class="sb-fav" style="--c:var(--c-blue)"></span><span class="sb-title">Linear — Issues</span></div>
+                <div class="sb-row"><span class="sb-fav" style="--c:var(--c-blue)"></span><span class="sb-title">Notion — Docs</span></div>
+                <div class="sb-row"><span class="sb-fav" style="--c:var(--c-blue)"></span><span class="sb-title">Figma — File</span></div>
+              </div>
+              <div class="sb-group">
+                <div class="sb-group__head"><span class="sb-dot" style="--c:var(--c-purple)"></span><span class="sb-group__name" data-i18n="catDev">Dev</span><span class="sb-group__count">3</span></div>
+                <div class="sb-row"><span class="sb-fav" style="--c:var(--c-purple)"></span><span class="sb-title">GitHub — PR #142</span></div>
+                <div class="sb-row"><span class="sb-fav" style="--c:var(--c-purple)"></span><span class="sb-title">MDN — fetch()</span></div>
+                <div class="sb-row"><span class="sb-fav" style="--c:var(--c-purple)"></span><span class="sb-title">Stack Overflow</span></div>
+              </div>
+              <div class="sb-group">
+                <div class="sb-group__head"><span class="sb-dot" style="--c:var(--c-pink)"></span><span class="sb-group__name" data-i18n="catSocial">Social</span><span class="sb-group__count">2</span></div>
+                <div class="sb-row"><span class="sb-fav" style="--c:var(--c-pink)"></span><span class="sb-title">X / Home</span></div>
+                <div class="sb-row"><span class="sb-fav" style="--c:var(--c-pink)"></span><span class="sb-title">Discord</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD -->
+          <div class="mock" data-layout-panel="card" role="tabpanel" hidden>
+            <div class="mock__chrome">
+              <span class="mock__dot mock__dot--r"></span>
+              <span class="mock__dot mock__dot--y"></span>
+              <span class="mock__dot mock__dot--g"></span>
+              <span class="mock__title">TabFlow — Card</span>
+            </div>
+            <div class="mock__body mock__body--cards">
+              <div class="card-mock">
+                <span class="card-mock__bar" style="--c:var(--c-blue)"></span>
+                <div class="card-mock__row1"><span class="sb-fav" style="--c:var(--c-blue)"></span><span class="card-mock__title">Linear — Issues</span></div>
+                <div class="card-mock__row2"><span class="card-mock__domain">linear.app</span><span class="card-mock__tag" style="--c:var(--c-blue)" data-i18n="catWork">Work</span><span class="card-mock__time">2m</span></div>
+              </div>
+              <div class="card-mock">
+                <span class="card-mock__bar" style="--c:var(--c-purple)"></span>
+                <div class="card-mock__row1"><span class="sb-fav" style="--c:var(--c-purple)"></span><span class="card-mock__title">GitHub — PR #142</span></div>
+                <div class="card-mock__row2"><span class="card-mock__domain">github.com</span><span class="card-mock__tag" style="--c:var(--c-purple)" data-i18n="catDev">Dev</span><span class="card-mock__time">8m</span></div>
+              </div>
+              <div class="card-mock">
+                <span class="card-mock__bar" style="--c:var(--c-green)"></span>
+                <div class="card-mock__row1"><span class="sb-fav" style="--c:var(--c-green)"></span><span class="card-mock__title">Amazon — Cart</span></div>
+                <div class="card-mock__row2"><span class="card-mock__domain">amazon.com</span><span class="card-mock__tag" style="--c:var(--c-green)" data-i18n="catShopping">Shopping</span><span class="card-mock__time">1h</span></div>
+              </div>
+              <div class="card-mock">
+                <span class="card-mock__bar" style="--c:var(--c-red)"></span>
+                <div class="card-mock__row1"><span class="sb-fav" style="--c:var(--c-red)"></span><span class="card-mock__title">YouTube — Music</span></div>
+                <div class="card-mock__row2"><span class="card-mock__domain">youtube.com</span><span class="card-mock__tag" style="--c:var(--c-red)" data-i18n="catEntertainment">Entertainment</span><span class="card-mock__time">3h</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TREE -->
+          <div class="mock" data-layout-panel="tree" role="tabpanel" hidden>
+            <div class="mock__chrome">
+              <span class="mock__dot mock__dot--r"></span>
+              <span class="mock__dot mock__dot--y"></span>
+              <span class="mock__dot mock__dot--g"></span>
+              <span class="mock__title">TabFlow — Tree</span>
+            </div>
+            <div class="mock__body mock__body--sidebar">
+              <div class="tree-tabs">
+                <span class="tree-tabs__tab is-active">Tabs</span>
+                <span class="tree-tabs__tab" data-i18n="recentTabs">Recent</span>
+              </div>
+              <div class="sb-group">
+                <div class="sb-group__head"><span class="sb-dot" style="--c:var(--c-yellow)"></span><span class="sb-group__name" data-i18n="catNews">News</span><span class="sb-group__count">2</span><span class="sb-chevron">▾</span></div>
+                <div class="sb-row sb-row--indent"><span class="sb-fav" style="--c:var(--c-yellow)"></span><span class="sb-title">Hacker News</span></div>
+                <div class="sb-row sb-row--indent"><span class="sb-fav" style="--c:var(--c-yellow)"></span><span class="sb-title">The Verge</span></div>
+              </div>
+              <div class="sb-group">
+                <div class="sb-group__head"><span class="sb-dot" style="--c:var(--c-cyan)"></span><span class="sb-group__name" data-i18n="catDocs">Docs</span><span class="sb-group__count">2</span><span class="sb-chevron">▾</span></div>
+                <div class="sb-row sb-row--indent"><span class="sb-fav" style="--c:var(--c-cyan)"></span><span class="sb-title">React Docs</span></div>
+                <div class="sb-row sb-row--indent"><span class="sb-fav" style="--c:var(--c-cyan)"></span><span class="sb-title">Vite Guide</span></div>
+              </div>
+              <div class="sb-group">
+                <div class="sb-group__head"><span class="sb-dot" style="--c:var(--c-grey)"></span><span class="sb-group__name" data-i18n="ungrouped">Ungrouped</span><span class="sb-group__count">1</span><span class="sb-chevron">▾</span></div>
+                <div class="sb-row sb-row--indent"><span class="sb-fav" style="--c:var(--c-grey)"></span><span class="sb-title">gmail.com</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SHORTCUTS                                                    -->
+    <!-- ============================================================ -->
+    <section class="section shortcuts" id="shortcuts" aria-labelledby="shortcuts-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="eyebrow" data-i18n="shortcutsEyebrow">KEYBOARD-FIRST</p>
+          <h2 class="section__title display" id="shortcuts-title" data-i18n="shortcutsTitle">At your fingertips</h2>
+        </header>
+
+        <div class="os-toggle reveal" role="tablist" aria-label="Operating system">
+          <button class="os-toggle__btn is-active" role="tab" aria-selected="true" data-os="mac">Mac</button>
+          <button class="os-toggle__btn" role="tab" aria-selected="false" data-os="win">Windows</button>
+        </div>
+
+        <div class="shortcut-grid reveal">
+          <div class="shortcut">
+            <span class="shortcut__label" data-i18n="sc1Label">Toggle Search Panel</span>
+            <span class="shortcut__keys">
+              <span class="keys-mac"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>Z</kbd></span>
+              <span class="keys-win"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>Z</kbd></span>
+            </span>
+          </div>
+          <div class="shortcut">
+            <span class="shortcut__label" data-i18n="sc2Label">Toggle Side Panel</span>
+            <span class="shortcut__keys">
+              <span class="keys-mac"><kbd>⌥</kbd><kbd>L</kbd></span>
+              <span class="keys-win"><kbd>Alt</kbd><kbd>L</kbd></span>
+            </span>
+          </div>
+          <div class="shortcut">
+            <span class="shortcut__label" data-i18n="sc3Label">Open Popup</span>
+            <span class="shortcut__keys">
+              <span class="keys-mac"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>Y</kbd></span>
+              <span class="keys-win"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>Y</kbd></span>
+            </span>
+          </div>
+        </div>
+        <p class="shortcut__caption reveal" data-i18n="shortcutsCaption">Fully rebindable in settings — with conflict detection.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- BY THE NUMBERS                                               -->
+    <!-- ============================================================ -->
+    <section class="numbers" aria-label="By the numbers">
+      <div class="container numbers__inner reveal">
+        <div class="number"><span class="number__val">3</span><span class="number__label" data-i18n="num1">LAYOUTS</span></div>
+        <span class="numbers__sep" aria-hidden="true">—</span>
+        <span class="numbers__sep" aria-hidden="true">—</span>
+        <div class="number"><span class="number__val">2</span><span class="number__label" data-i18n="num2">LANGUAGES</span></div>
+        <span class="numbers__sep" aria-hidden="true">—</span>
+        <div class="number"><span class="number__val">∞</span><span class="number__label" data-i18n="num3">TABS</span></div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- FAQ                                                          -->
+    <!-- ============================================================ -->
+    <section class="section faq" id="faq" aria-labelledby="faq-title">
+      <div class="container container--narrow">
+        <header class="section__head reveal">
+          <p class="eyebrow" data-i18n="faqEyebrow">QUESTIONS</p>
+          <h2 class="section__title display" id="faq-title" data-i18n="faqTitle">Good to know</h2>
+        </header>
+
+        <div class="faq__list reveal">
+          <details class="faq__item">
+            <summary><span data-i18n="q1">Is TabFlow free?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a"><p data-i18n="a1">Yes, 100% free and open source under MIT.</p></div>
+          </details>
+          <details class="faq__item">
+            <summary><span data-i18n="q2">Does it work on Edge?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a"><p data-i18n="a2">Yes, Chrome and Edge.</p></div>
+          </details>
+          <details class="faq__item">
+            <summary><span data-i18n="q3">Is my data sent anywhere?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a"><p data-i18n="a3">No tracking. Your data stays in your browser.</p></div>
+          </details>
+          <details class="faq__item">
+            <summary><span data-i18n="q4">How do I install it?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a"><p data-i18n="a4">Load the unpacked build, or grab it from the releases. See GitHub for steps.</p></div>
+          </details>
+          <details class="faq__item">
+            <summary><span data-i18n="q5">Can I customize shortcuts?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a"><p data-i18n="a5">Yes — every shortcut, with conflict detection.</p></div>
+          </details>
+          <details class="faq__item">
+            <summary><span data-i18n="q6">Which languages?</span><span class="faq__icon" aria-hidden="true"></span></summary>
+            <div class="faq__a"><p data-i18n="a6">English &amp; Chinese, with live switching.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- FINAL CTA                                                    -->
+    <!-- ============================================================ -->
+    <section class="final-cta" aria-labelledby="final-title">
+      <div class="final-cta__glow" aria-hidden="true"></div>
+      <div class="container final-cta__inner reveal">
+        <h2 class="display final-cta__title" id="final-title" data-i18n="finalTitle">Ready to find your flow?</h2>
+        <div class="final-cta__btns">
+          <!-- TODO: replace with Chrome Web Store URL -->
+          <a class="btn btn--primary btn--lg" href="#" data-cta-chrome data-i18n="ctaAddChrome">Add to Chrome</a>
+          <!-- TODO: replace with Microsoft Edge Add-ons URL -->
+          <a class="btn btn--ghost btn--lg" href="#" data-cta-edge data-i18n="ctaAddEdge">Add to Edge</a>
+          <a class="btn btn--ghost btn--lg" href="https://github.com/edditz/TabFlow" target="_blank" rel="noopener noreferrer" data-i18n="ctaGithub">Star on GitHub</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER                                                       -->
+  <!-- ============================================================ -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a class="brand" href="#top" aria-label="TabFlow home">
+          <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <g fill="none" stroke-linecap="round" stroke-width="3.4">
+              <path d="M8 16 C 26 16, 30 32, 46 32" stroke="currentColor"/>
+              <path d="M8 32 L 46 32" stroke="currentColor" opacity="0.6"/>
+              <path d="M8 48 C 26 48, 30 32, 46 32" stroke="currentColor" opacity="0.6"/>
+            </g>
+            <circle cx="48" cy="32" r="6" fill="currentColor"/>
+          </svg>
+          <span class="brand__word">TabFlow</span>
+        </a>
+        <p class="footer__tagline" data-i18n="footerTagline">Where chaos finds its flow.</p>
+      </div>
+
+      <div class="footer__cols">
+        <div class="footer__col">
+          <p class="footer__colhead" data-i18n="footerProduct">Product</p>
+          <a href="#features" data-i18n="navFeatures">Features</a>
+          <a href="#layouts" data-i18n="navLayouts">Layouts</a>
+          <a href="#shortcuts" data-i18n="navShortcuts">Shortcuts</a>
+          <a href="#faq" data-i18n="navFaq">FAQ</a>
+        </div>
+        <div class="footer__col">
+          <p class="footer__colhead" data-i18n="footerResources">Resources</p>
+          <a href="https://github.com/edditz/TabFlow" target="_blank" rel="noopener noreferrer" data-i18n="footerGithub">GitHub</a>
+          <a href="https://github.com/edditz/TabFlow/releases" target="_blank" rel="noopener noreferrer" data-i18n="footerReleases">Releases</a>
+          <a href="https://github.com/edditz/TabFlow/blob/main/README.md" target="_blank" rel="noopener noreferrer" data-i18n="footerDocs">Documentation</a>
+        </div>
+      </div>
+
+      <div class="footer__meta">
+        <p>MIT Licensed · v1.1.1 · <span data-i18n="footerMadeBy">Made by</span> <a href="https://github.com/edditz/TabFlow" target="_blank" rel="noopener noreferrer">edditz</a></p>
+        <button class="lang-toggle lang-toggle--footer" type="button" data-lang-toggle aria-label="Switch language">
+          <span data-lang-label>中文</span>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./script.js" defer></script>
+</body>
+</html>

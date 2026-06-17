@@ -75,13 +75,12 @@ tabflow/
 - 向活动标签页发送消息以切换搜索面板
 - 通过 `chrome.sidePanel` API 控制侧边栏面板
 - 处理标签页信息查询、激活、关闭、最近关闭恢复等消息
-- 处理智能分类的 Tab Groups 创建和取消分组
 - 配置 `sidePanel.setPanelBehavior({ openPanelOnActionClick: true })`
 
 ### 2. Content Script
 - 注入到所有网页
 - 监听 `Ctrl+Shift+Z` 快捷键
-- 渲染 React 搜索面板组件（含智能分类面板）
+- 渲染 React 搜索面板组件
 - 使用 Shadow DOM 实现样式隔离
 - 接收来自 background 的消息
 
@@ -97,13 +96,12 @@ tabflow/
 
 ### 4. Popup
 - 点击扩展图标弹出
-- 提供快速访问搜索和分类功能
+- 提供快速访问搜索功能
 - 纯 React 组件
 
 ### 5. Options
 - 保存用户设置到 Chrome Storage
 - 提供主题、搜索选项、侧边栏设置等配置项
-- 包含 AI 分类设置（API 端点、Key、模型）
 - 包含快捷键配置
 
 ## 消息通信流程
@@ -124,10 +122,10 @@ tabflow/
                     │ React render           │ React render
                     ▼                        ▼
              ┌─────────────┐          ┌─────────────┐
-             │SearchPanel /│          │Sidebar App  │
-             │Classification│         │ - Compact   │
-             │  Component  │          │ - Card      │
-             └─────────────┘          │ - Tree      │
+             │SearchPanel  │          │Sidebar App  │
+             │  Component  │          │ - Compact   │
+             └─────────────┘          │ - Card      │
+                                      │ - Tree      │
                                       └─────────────┘
 ```
 

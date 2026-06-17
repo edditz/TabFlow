@@ -446,7 +446,7 @@ body {
   border-color: var(--primary);
 }
 
-/* AI Settings */
+/* Input Settings */
 .setting-input {
   width: 100%;
   max-width: 300px;

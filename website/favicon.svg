@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="TabFlow">
+  <!-- Background ink rounded square -->
+  <rect width="64" height="64" rx="14" fill="#0a0a0b"/>
+  <!-- Three converging flow streams into a node -->
+  <g fill="none" stroke-linecap="round" stroke-width="3.2">
+    <path d="M10 18 C 26 18, 30 32, 46 32" stroke="#ccff33"/>
+    <path d="M10 32 L 46 32" stroke="#5b9dff" opacity="0.85"/>
+    <path d="M10 46 C 26 46, 30 32, 46 32" stroke="#ff79c6" opacity="0.85"/>
+  </g>
+  <!-- Convergence node (flow dot) -->
+  <circle cx="48" cy="32" r="6.5" fill="#ccff33"/>
+  <circle cx="48" cy="32" r="6.5" fill="none" stroke="#ccff33" stroke-opacity="0.5" stroke-width="6" filter="blur(2px)"/>
+</svg>

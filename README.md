@@ -8,8 +8,6 @@ A browser extension for enhanced tab management, supporting both Chrome and Edge
 
 - **Global Search Panel**: Quick search across all open tabs with real-time filtering by title, URL, or domain
 - **Sidebar Tab Manager**: Chrome Side Panel with compact, card, and tree layouts for browsing and managing open tabs, tab groups, and recently closed tabs
-- **Smart Tab Classification**: One-click tab grouping into Chrome Tab Groups with 7 built-in categories (Work, Dev, Social, Shopping, Entertainment, News, Docs) and drag-and-drop reordering
-- **AI-Powered Classification**: Optional AI integration (OpenAI-compatible) for tabs that don't match built-in rules
 - **Recently Closed Tabs**: Restore recently closed tabs with configurable time window and result limit
 - **Customizable Settings**: Theme (Light/Dark/System), language (English/Chinese), search scope, URL display style, and more
 - **Custom Keyboard Shortcuts**: User-configurable shortcuts with Mac symbol display and conflict detection
@@ -84,7 +82,6 @@ tabflow/
 │   ├── popup/          # Extension popup
 │   ├── sidepanel/      # Side panel (sidebar tab manager)
 │   ├── options/        # Settings page
-│   ├── classification/ # Smart tab classification engine
 │   ├── i18n/           # Internationalization
 │   └── shared/         # Shared utilities
 ├── icons/              # Extension icons
@@ -99,7 +96,6 @@ tabflow/
 - [Vite](https://vitejs.dev/) - Build tool
 - [CRXJS](https://crxjs.dev/) - Chrome extension support for Vite
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
-- [dnd-kit](https://dndkit.com/) - Drag and drop for classification
 
 ## License
 
